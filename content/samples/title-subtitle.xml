@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns="http://www.loc.gov/MARC21/slim">
+  <controlfield tag="001">FRBNF000000002</controlfield>
+  <datafield tag="200" ind1=" " ind2=" ">
+    <subfield code="a">Le nom de la rose</subfield>
+    <subfield code="e">roman</subfield>
+    <subfield code="e">édition illustrée</subfield>
+    <subfield code="f">Umberto Eco</subfield>
+  </datafield>
+</record>

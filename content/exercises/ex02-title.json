@@ -1,0 +1,22 @@
+{
+  "id": "ex02-title",
+  "order": 2,
+  "title": "Afficher le titre",
+  "concepts": ["namespace MARCXML", "XPath", "xsl:value-of"],
+  "instructions": "Affichez le contenu de la sous-zone 200$a dans le HTML produit.",
+  "clarification": "Le code initial crée une balise HTML p contenant \"Votre titre apparaîtra ici.\". L'objectif de l'exercice est de remplacer cette phrase par le contenu de la zone 200$a.",
+  "files": {
+    "xml": "content/samples/simple.xml",
+    "entryXslt": "content/xslt/ex02/main.xsl",
+    "projectFiles": ["content/xslt/ex02/main.xsl"]
+  },
+  "validation": [
+    {"type": "textContains", "value": "Le nom de la rose"}
+  ],
+  "hints": [
+    "Cherchez la zone 200.",
+    "Sélectionnez marc:datafield[@tag='200'].",
+    "Ajoutez marc:subfield[@code='a'] dans xsl:value-of."
+  ],
+  "solution": "content/solutions/ex02/main.xsl"
+}

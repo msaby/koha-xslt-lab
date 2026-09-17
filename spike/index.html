@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Koha XSLT Lab - Spike moteur</title>
+    <style>
+      :root { color-scheme: light; font-family: system-ui, sans-serif; }
+      body { margin: 0 auto; max-width: 62rem; padding: 2rem; color: #18212b; }
+      header { border-bottom: 1px solid #c8d0d8; margin-bottom: 1.5rem; }
+      h1 { margin-bottom: .35rem; }
+      .status { padding: .8rem 1rem; background: #eef4f8; border-left: 4px solid #356b8c; }
+      .status[data-state="pass"] { background: #edf7ef; border-color: #287a3e; }
+      .status[data-state="fail"] { background: #fff0ee; border-color: #a52a1a; }
+      table { width: 100%; border-collapse: collapse; margin-top: 1.25rem; }
+      th, td { border-bottom: 1px solid #d9dfe5; padding: .7rem; text-align: left; vertical-align: top; }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+      pre { white-space: pre-wrap; background: #f5f7f9; padding: 1rem; }
+      .pass { color: #17652a; font-weight: 700; }
+      .fail { color: #a52a1a; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p>Phase 0</p>
+      <h1>Spike du moteur XSLT</h1>
+      <p>Vérification de XSLTProcessor avec MARCXML UNIMARC et les dépendances XSLT relatives.</p>
+    </header>
+    <main>
+      <p id="status" class="status" role="status">Tests en cours...</p>
+      <table>
+        <thead><tr><th>Test</th><th>Résultat</th><th>Détail</th></tr></thead>
+        <tbody id="results"></tbody>
+      </table>
+      <h2>Sortie de la dernière transformation</h2>
+      <pre id="output">Aucune sortie.</pre>
+    </main>
+    <script type="module" src="./spike.js"></script>
+  </body>
+</html>

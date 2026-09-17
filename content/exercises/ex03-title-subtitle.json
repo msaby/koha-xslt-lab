@@ -1,0 +1,22 @@
+{
+  "id": "ex03-title-subtitle",
+  "order": 3,
+  "title": "Afficher le titre et le sous-titre",
+  "concepts": ["XPath", "xsl:value-of", "xsl:text"],
+  "instructions": "Affichez le titre et le sous-titre dans un seul élément HTML p.",
+  "clarification": "Récupérez 200$a et le premier 200$e, puis insérez le séparateur \" : \" entre les deux valeurs.",
+  "files": {
+    "xml": "content/samples/title-subtitle.xml",
+    "entryXslt": "content/xslt/ex03/main.xsl",
+    "projectFiles": ["content/xslt/ex03/main.xsl"]
+  },
+  "validation": [
+    {"type": "textContains", "value": "Le nom de la rose : roman"}
+  ],
+  "hints": [
+    "Le titre et le sous-titre sont deux sous-zones de la zone 200.",
+    "Conservez le même chemin XPath pour 200$a et 200$e.",
+    "Utilisez [1] pour sélectionner le premier 200$e et xsl:text pour écrire le séparateur."
+  ],
+  "solution": "content/solutions/ex03/main.xsl"
+}

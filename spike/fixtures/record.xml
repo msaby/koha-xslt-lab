@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns="http://www.loc.gov/MARC21/slim">
+  <datafield tag="200" ind1=" " ind2=" ">
+    <subfield code="a">Fables</subfield>
+    <subfield code="f">Jean de La Fontaine</subfield>
+  </datafield>
+</record>

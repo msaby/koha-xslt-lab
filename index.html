@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Laboratoire local XSLT 1.0 pour notices UNIMARC/MARCXML.">
+    <title>Koha XSLT Lab</title>
+    <link rel="stylesheet" href="src/app/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Koha XSLT Lab</p>
+        <h1>Transformer une notice, comprendre chaque étape.</h1>
+      </div>
+      <div class="topbar-side">
+        <p class="privacy-note">Les données restent dans ce navigateur.</p>
+        <nav id="mode-toolbar" class="mode-toolbar" aria-label="Changer de mode" hidden>
+          <button id="free-mode-button" class="mode-button" type="button">Utilisation libre</button>
+          <button id="guided-mode-button" class="mode-button" type="button">Parcours guidé</button>
+        </nav>
+      </div>
+    </header>
+    <section id="mode-choice" class="mode-choice" aria-labelledby="mode-choice-title">
+      <p class="eyebrow">Commencer</p>
+      <h2 id="mode-choice-title">Comment souhaitez-vous travailler ?</h2>
+      <p>Choisissez un espace libre pour expérimenter ou un parcours guidé pour apprendre pas à pas.</p>
+      <div class="mode-choice-actions">
+        <button id="choose-free-mode" class="mode-card" type="button">
+          <strong>Utilisation libre</strong>
+          <span>Écrivez votre MARCXML et votre XSLT, puis observez le résultat.</span>
+        </button>
+        <button id="choose-guided-mode" class="mode-card" type="button">
+          <strong>Parcours guidé</strong>
+          <span>Suivez les exercices progressifs avec indices et validation.</span>
+        </button>
+      </div>
+    </section>
+    <section id="exercise-strip" class="exercise-strip" aria-labelledby="exercise-title" hidden>
+      <div>
+        <p class="eyebrow">Parcours guidé</p>
+        <label class="exercise-picker">Exercice
+          <select id="exercise-select" aria-label="Choisir un exercice">
+            <option value="ex01-identifier">1 · Identifiant de la notice</option>
+            <option value="ex02-title">2 · Titre de la notice</option>
+            <option value="ex03-title-subtitle">3 · Titre et sous-titre</option>
+            <option value="ex04-all-subtitles">4 · Tous les sous-titres</option>
+          </select>
+        </label>
+        <h2 id="exercise-title">Afficher l'identifiant de la notice</h2>
+        <p id="exercise-instructions">Chargez l’exercice pour travailler sur la zone 001.</p>
+        <p id="exercise-clarification" class="exercise-clarification"></p>
+      </div>
+      <div class="exercise-actions">
+        <button id="validate-exercise" class="secondary-button" type="button" disabled>Valider le résultat</button>
+      </div>
+      <p id="exercise-status" class="exercise-status" role="status"></p>
+      <details class="exercise-help">
+        <summary>Afficher les indices</summary>
+        <ol id="hint-list"></ol>
+      </details>
+      <div class="solution-help">
+        <button id="show-solution" class="text-button" type="button" disabled>Afficher la solution</button>
+        <pre id="solution-output" hidden></pre>
+      </div>
+    </section>
+    <main id="workspace" class="workspace" hidden>
+      <section class="editor-panel" aria-labelledby="editor-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Laboratoire libre</p>
+            <h2 id="editor-title">Sources de transformation</h2>
+          </div>
+          <button id="transform-button" class="primary-button" type="button">Transformer <span>Ctrl+Entrée</span></button>
+        </div>
+        <div class="editors">
+          <label class="editor-card">
+            <span class="editor-label">MARCXML UNIMARC</span>
+            <textarea id="xml-editor" spellcheck="false" aria-label="Éditeur MARCXML"></textarea>
+          </label>
+          <label class="editor-card">
+            <span class="editor-label">Feuille XSLT 1.0</span>
+            <textarea id="xslt-editor" spellcheck="false" aria-label="Éditeur XSLT"></textarea>
+          </label>
+        </div>
+        <p id="error-summary" class="error-summary" role="alert" hidden></p>
+      </section>
+      <section class="result-panel" aria-labelledby="result-title">
+        <div class="section-heading compact">
+          <div>
+            <p class="eyebrow">Résultat local</p>
+            <h2 id="result-title">Sortie</h2>
+          </div>
+          <span id="run-status" class="run-status">Prêt</span>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Sortie de transformation">
+          <button class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="preview-panel" data-tab="preview-panel">Aperçu</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="html-panel" data-tab="html-panel">HTML généré</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="errors-panel" data-tab="errors-panel">Erreurs</button>
+        </div>
+        <div id="preview-panel" class="tab-panel is-visible" role="tabpanel">
+          <iframe id="preview" title="Aperçu HTML transformé" sandbox=""></iframe>
+        </div>
+        <div id="html-panel" class="tab-panel" role="tabpanel" hidden>
+          <pre id="html-output">Aucune transformation.</pre>
+        </div>
+        <div id="errors-panel" class="tab-panel" role="tabpanel" hidden>
+          <pre id="errors-output">Aucune erreur.</pre>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="src/app/app.js"></script>
+  </body>
+</html>
