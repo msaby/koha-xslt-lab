@@ -57,6 +57,7 @@ test('chaque notice remplace le XML, conserve la XSLT et attend une transformati
   for (const name of JSON.parse(fs.readFileSync(path.join(root, 'content/samples/index.json')))) {
     get('sample-select').value = name;
     await context.loadSample();
+    assert.equal(get('sample-select').value, name);
     assert.equal(get('xml-editor').value, fs.readFileSync(path.join(root, 'content/samples', name), 'utf8'));
     assert.equal(get('xslt-editor').value, xslt);
     assert.equal(get('run-status').textContent, 'À transformer');
@@ -139,6 +140,7 @@ test('chaque XSLT remplace la feuille sans modifier le XML ni transformer', asyn
   for (const name of JSON.parse(fs.readFileSync(path.join(root, 'content/xslt/samples/index.json')))) {
     get('xslt-sample-select').value = name;
     await context.loadSample(xsltExample);
+    assert.equal(get('xslt-sample-select').value, name);
     assert.equal(get('xslt-editor').value, fs.readFileSync(path.join(root, 'content/xslt/samples', name), 'utf8'));
     assert.equal(get('xml-editor').value, xml);
     assert.equal(get('run-status').textContent, 'À transformer');
@@ -185,4 +187,30 @@ test('la XSLT reçue après passage au parcours guidé est ignorée', async () =
   finish({ ok: true, text: async () => 'Feuille tardive' });
   await pending;
   assert.equal(get('xslt-editor').value, exerciseXslt);
+  assert.equal(get('xslt-sample-select').value, '');
 });
+
+for (const kind of ['xml', 'xslt']) {
+  test(`${kind} : annulation et erreur rétablissent la dernière sélection chargée`, async () => {
+    const { context, get, xsltExample } = setup();
+    const example = kind === 'xslt' ? xsltExample : undefined;
+    const select = get(kind === 'xslt' ? 'xslt-sample-select' : 'sample-select');
+    const editor = get(kind === 'xslt' ? 'xslt-editor' : 'xml-editor');
+    const first = kind === 'xslt' ? 'identite.xsl' : 'jardin-des-nuages.xml';
+    const second = kind === 'xslt' ? 'titre-auteur.xsl' : 'cuisine-des-etoiles.xml';
+    select.value = first;
+    await context.loadSample(example);
+    editor.value += '\n<!-- modification -->';
+    const edited = editor.value;
+    context.window.confirm = () => false;
+    select.value = second;
+    await context.loadSample(example);
+    assert.equal(select.value, first);
+    assert.equal(editor.value, edited);
+    context.fetch = async () => ({ ok: false, status: 404 });
+    select.value = second;
+    await context.loadSample(example);
+    assert.equal(select.value, first);
+    assert.equal(editor.value, edited);
+  });
+}

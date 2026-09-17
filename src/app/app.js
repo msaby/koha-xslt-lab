@@ -50,7 +50,7 @@ const xmlExample = {
   picker: document.querySelector("#sample-picker"),
   select: document.querySelector("#sample-select"),
   status: document.querySelector("#sample-status"),
-  editor: xmlEditor, loadedSource: sampleXml, catalogLoaded: false,
+  editor: xmlEditor, loadedSource: sampleXml, loadedFilename: "", catalogLoaded: false,
   directory: "content/samples", extension: /\.xml$/i,
   listName: "des notices", itemName: "la notice", sourceName: "le XML",
   preserved: "Votre XML est conservé.", loaded: "Notice chargée.",
@@ -60,7 +60,7 @@ const xsltExample = {
   picker: document.querySelector("#xslt-sample-picker"),
   select: document.querySelector("#xslt-sample-select"),
   status: document.querySelector("#xslt-sample-status"),
-  editor: xsltEditor, loadedSource: sampleXslt, catalogLoaded: false,
+  editor: xsltEditor, loadedSource: sampleXslt, loadedFilename: "", catalogLoaded: false,
   directory: "content/xslt/samples", extension: /\.xsl$/i,
   listName: "des feuilles XSLT", itemName: "la feuille XSLT", sourceName: "la XSLT",
   preserved: "Votre XSLT est conservée.", loaded: "Feuille XSLT chargée.",
@@ -108,8 +108,12 @@ async function loadExercise() {
   const solution = await solutionResponse.text();
   xmlEditor.value = await xmlResponse.text();
   xmlExample.loadedSource = xmlEditor.value;
+  xmlExample.loadedFilename = "";
+  xmlExample.select.value = "";
   xsltEditor.value = await xsltResponse.text();
   xsltExample.loadedSource = xsltEditor.value;
+  xsltExample.loadedFilename = "";
+  xsltExample.select.value = "";
   exerciseTitle.textContent = currentExercise.title;
   exerciseInstruction.textContent = currentExercise.instruction;
   hintList.replaceChildren(...currentExercise.hints.map((hint) => {
@@ -179,7 +183,10 @@ async function loadSampleCatalog(example = xmlExample) {
 async function loadSample(example = xmlExample) {
   const { select: sampleSelect, status: sampleStatus, editor } = example;
   const filename = sampleSelect.value;
-  if (!filename) return;
+  if (!filename) {
+    sampleSelect.value = example.loadedFilename;
+    return;
+  }
   const requestModeVersion = modeVersion;
   sampleSelect.disabled = true;
   sampleStatus.textContent = `Chargement de ${example.itemName}…`;
@@ -194,6 +201,7 @@ async function loadSample(example = xmlExample) {
     }
     editor.value = source;
     example.loadedSource = editor.value;
+    example.loadedFilename = filename;
     latestHtml = "";
     preview.srcdoc = "";
     htmlOutput.textContent = "Cliquez sur Transformer pour afficher le résultat.";
@@ -208,7 +216,7 @@ async function loadSample(example = xmlExample) {
     }
   } finally {
     if (requestModeVersion !== modeVersion) sampleStatus.textContent = "";
-    sampleSelect.value = "";
+    sampleSelect.value = example.loadedFilename;
     sampleSelect.disabled = false;
   }
 }

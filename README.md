@@ -25,6 +25,8 @@ Les trois notices fictives sont stockées dans `content/samples/` et répertori�
 
 Les fichiers proposés sont `jardin-des-nuages.xml`, `atlas-des-iles-imaginaires.xml` et `cuisine-des-etoiles.xml`. Le menu est réservé au mode libre ; les exercices chargent leur propre notice. En cas d’annulation ou d’échec du chargement, le XML actuel est conservé.
 
+Dans les menus de notices et de feuilles XSLT, le fichier chargé reste sélectionné. Une annulation ou une erreur rétablit la sélection précédente. Le chargement d’un exercice réinitialise les deux menus, puisque les sources sont remplacées par celles de l’exercice.
+
 ## Feuilles XSLT d’exemple
 
 En mode libre, le menu « Charger une feuille XSLT d’exemple » fonctionne comme celui des notices : noms de fichiers sans extension, remplacement de la XSLT uniquement, confirmation si elle a été modifiée, conservation des sources en cas d’annulation ou d’erreur. Le copier-coller reste possible et la transformation est déclenchée avec « Transformer ».
