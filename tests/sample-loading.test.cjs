@@ -39,7 +39,7 @@ function setup() {
   });
   vm.runInContext(source, context);
   document.querySelector('#exercise-select').value = 'ex01-identifier';
-  return { context, get: (id) => document.querySelector(`#${id}`) };
+  return { context, xsltExample: vm.runInContext('xsltExample', context), get: (id) => document.querySelector(`#${id}`) };
 }
 
 test('le catalogue affiche exactement trois noms sans extension', async () => {
@@ -90,8 +90,10 @@ test('le menu est visible seulement en mode libre', async () => {
   const { context, get } = setup();
   await context.enterMode('free');
   assert.equal(get('sample-picker').hidden, false);
+  assert.equal(get('xslt-sample-picker').hidden, false);
   await context.enterMode('guided');
   assert.equal(get('sample-picker').hidden, true);
+  assert.equal(get('xslt-sample-picker').hidden, true);
 });
 
 test('un chargement tardif ne remplace pas la notice du parcours guidé', async () => {
@@ -120,4 +122,67 @@ test('les modifications effectuées pendant le chargement déclenchent la confir
   finish({ ok: true, text: async () => '<record />' });
   await pending;
   assert.equal(get('xml-editor').value, 'Saisie pendant le chargement');
+});
+
+test('le catalogue XSLT affiche quatre noms sans extension', async () => {
+  const { context, get, xsltExample } = setup();
+  await context.loadSampleCatalog(xsltExample);
+  assert.deepEqual(Array.from(get('xslt-sample-select').options).slice(1).map((o) => o.textContent), [
+    'identite', 'titre-auteur', 'titre-sous-titres', 'tous-les-champs',
+  ]);
+});
+
+test('chaque XSLT remplace la feuille sans modifier le XML ni transformer', async () => {
+  const { context, get, xsltExample } = setup();
+  const xml = get('xml-editor').value;
+  context.transformSources = () => { throw new Error('Transformation non demandée'); };
+  for (const name of JSON.parse(fs.readFileSync(path.join(root, 'content/xslt/samples/index.json')))) {
+    get('xslt-sample-select').value = name;
+    await context.loadSample(xsltExample);
+    assert.equal(get('xslt-editor').value, fs.readFileSync(path.join(root, 'content/xslt/samples', name), 'utf8'));
+    assert.equal(get('xml-editor').value, xml);
+    assert.equal(get('run-status').textContent, 'À transformer');
+  }
+});
+
+test('annuler puis confirmer protège la XSLT modifiée', async () => {
+  const { context, get, xsltExample } = setup();
+  get('xslt-editor').value = 'Ma feuille modifiée';
+  context.window.confirm = () => false;
+  get('xslt-sample-select').value = 'identite.xsl';
+  await context.loadSample(xsltExample);
+  assert.equal(get('xslt-editor').value, 'Ma feuille modifiée');
+  assert.equal(get('xslt-sample-select').value, '');
+  context.window.confirm = () => true;
+  get('xslt-sample-select').value = 'identite.xsl';
+  await context.loadSample(xsltExample);
+  assert.match(get('xslt-editor').value, /xsl:copy/);
+});
+
+test('une erreur de chargement XSLT conserve les deux sources', async () => {
+  const { context, get, xsltExample } = setup();
+  const xml = get('xml-editor').value;
+  const xslt = get('xslt-editor').value;
+  context.fetch = async () => ({ ok: false, status: 404 });
+  get('xslt-sample-select').value = 'absent.xsl';
+  await context.loadSample(xsltExample);
+  assert.equal(get('xml-editor').value, xml);
+  assert.equal(get('xslt-editor').value, xslt);
+  assert.match(get('xslt-sample-status').textContent, /404/);
+  assert.equal(get('xslt-sample-select').disabled, false);
+});
+
+test('la XSLT reçue après passage au parcours guidé est ignorée', async () => {
+  const { context, get, xsltExample } = setup();
+  const originalFetch = context.fetch;
+  let finish;
+  context.fetch = () => new Promise((resolve) => { finish = resolve; });
+  get('xslt-sample-select').value = 'identite.xsl';
+  const pending = context.loadSample(xsltExample);
+  context.fetch = originalFetch;
+  await context.enterMode('guided');
+  const exerciseXslt = get('xslt-editor').value;
+  finish({ ok: true, text: async () => 'Feuille tardive' });
+  await pending;
+  assert.equal(get('xslt-editor').value, exerciseXslt);
 });

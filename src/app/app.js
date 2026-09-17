@@ -46,11 +46,26 @@ const chooseFreeModeButton = document.querySelector("#choose-free-mode");
 const chooseGuidedModeButton = document.querySelector("#choose-guided-mode");
 const freeModeButton = document.querySelector("#free-mode-button");
 const guidedModeButton = document.querySelector("#guided-mode-button");
-const samplePicker = document.querySelector("#sample-picker");
-const sampleSelect = document.querySelector("#sample-select");
-const sampleStatus = document.querySelector("#sample-status");
-let loadedXml = sampleXml;
-let sampleCatalogLoaded = false;
+const xmlExample = {
+  picker: document.querySelector("#sample-picker"),
+  select: document.querySelector("#sample-select"),
+  status: document.querySelector("#sample-status"),
+  editor: xmlEditor, loadedSource: sampleXml, catalogLoaded: false,
+  directory: "content/samples", extension: /\.xml$/i,
+  listName: "des notices", itemName: "la notice", sourceName: "le XML",
+  preserved: "Votre XML est conservé.", loaded: "Notice chargée.",
+  confirmation: "Remplacer le XML que vous avez modifié par cette notice d’exemple ?",
+};
+const xsltExample = {
+  picker: document.querySelector("#xslt-sample-picker"),
+  select: document.querySelector("#xslt-sample-select"),
+  status: document.querySelector("#xslt-sample-status"),
+  editor: xsltEditor, loadedSource: sampleXslt, catalogLoaded: false,
+  directory: "content/xslt/samples", extension: /\.xsl$/i,
+  listName: "des feuilles XSLT", itemName: "la feuille XSLT", sourceName: "la XSLT",
+  preserved: "Votre XSLT est conservée.", loaded: "Feuille XSLT chargée.",
+  confirmation: "Remplacer la XSLT que vous avez modifiée par cette feuille d’exemple ?",
+};
 let modeVersion = 0;
 let currentExercise = null;
 let latestHtml = "";
@@ -92,8 +107,9 @@ async function loadExercise() {
   const solutionResponse = await fetch(currentExercise.solution);
   const solution = await solutionResponse.text();
   xmlEditor.value = await xmlResponse.text();
-  loadedXml = xmlEditor.value;
+  xmlExample.loadedSource = xmlEditor.value;
   xsltEditor.value = await xsltResponse.text();
+  xsltExample.loadedSource = xsltEditor.value;
   exerciseTitle.textContent = currentExercise.title;
   exerciseInstruction.textContent = currentExercise.instruction;
   hintList.replaceChildren(...currentExercise.hints.map((hint) => {
@@ -115,7 +131,9 @@ function updateModeButtons(mode) {
 
 async function enterMode(mode) {
   modeVersion += 1;
-  samplePicker.hidden = mode !== "free";
+  const enteredModeVersion = modeVersion;
+  xmlExample.picker.hidden = mode !== "free";
+  xsltExample.picker.hidden = mode !== "free";
   modeChoice.hidden = true;
   modeToolbar.hidden = false;
   workspace.hidden = false;
@@ -127,50 +145,55 @@ async function enterMode(mode) {
     return;
   }
   if (mode === "free") {
-    if (!sampleCatalogLoaded) await loadSampleCatalog();
+    await Promise.all([xmlExample, xsltExample].map((example) =>
+      example.catalogLoaded ? undefined : loadSampleCatalog(example)
+    ));
+    if (enteredModeVersion !== modeVersion) return;
     await runTransformation();
   }
 }
 
-async function loadSampleCatalog() {
+async function loadSampleCatalog(example = xmlExample) {
+  const { select: sampleSelect, status: sampleStatus } = example;
   sampleSelect.disabled = true;
-  sampleStatus.textContent = "Chargement de la liste des notices…";
+  sampleStatus.textContent = `Chargement de la liste ${example.listName}…`;
   try {
-    const response = await fetch("content/samples/index.json");
+    const response = await fetch(`${example.directory}/index.json`);
     if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
     const filenames = await response.json();
     const options = filenames.map((filename) => {
       const option = document.createElement("option");
       option.value = filename;
-      option.textContent = filename.replace(/\.xml$/i, "");
+      option.textContent = filename.replace(example.extension, "");
       return option;
     });
     sampleSelect.replaceChildren(sampleSelect.options[0], ...options);
-    sampleCatalogLoaded = true;
+    example.catalogLoaded = true;
     sampleSelect.disabled = false;
     sampleStatus.textContent = "";
   } catch (error) {
-    sampleStatus.textContent = `Impossible de charger la liste des notices : ${error.message}. Vous pouvez toujours coller votre XML.`;
+    sampleStatus.textContent = `Impossible de charger la liste ${example.listName} : ${error.message}. Vous pouvez toujours saisir ou coller ${example.sourceName}.`;
   }
 }
 
-async function loadSample() {
+async function loadSample(example = xmlExample) {
+  const { select: sampleSelect, status: sampleStatus, editor } = example;
   const filename = sampleSelect.value;
   if (!filename) return;
   const requestModeVersion = modeVersion;
   sampleSelect.disabled = true;
-  sampleStatus.textContent = "Chargement de la notice…";
+  sampleStatus.textContent = `Chargement de ${example.itemName}…`;
   try {
-    const response = await fetch(`content/samples/${encodeURIComponent(filename)}`);
+    const response = await fetch(`${example.directory}/${encodeURIComponent(filename)}`);
     if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
-    const xml = await response.text();
+    const source = await response.text();
     if (requestModeVersion !== modeVersion) return;
-    if (xmlEditor.value !== loadedXml && !window.confirm("Remplacer le XML que vous avez modifié par cette notice d’exemple ?")) {
-      sampleStatus.textContent = "Chargement annulé. Votre XML est conservé.";
+    if (editor.value !== example.loadedSource && !window.confirm(example.confirmation)) {
+      sampleStatus.textContent = `Chargement annulé. ${example.preserved}`;
       return;
     }
-    xmlEditor.value = xml;
-    loadedXml = xmlEditor.value;
+    editor.value = source;
+    example.loadedSource = editor.value;
     latestHtml = "";
     preview.srcdoc = "";
     htmlOutput.textContent = "Cliquez sur Transformer pour afficher le résultat.";
@@ -178,10 +201,10 @@ async function loadSample() {
     errorSummary.hidden = true;
     runStatus.textContent = "À transformer";
     runStatus.className = "run-status";
-    sampleStatus.textContent = "Notice chargée. Cliquez sur Transformer pour afficher le résultat.";
+    sampleStatus.textContent = `${example.loaded} Cliquez sur Transformer pour afficher le résultat.`;
   } catch (error) {
     if (requestModeVersion === modeVersion) {
-      sampleStatus.textContent = `Impossible de charger la notice : ${error.message}. Votre XML est conservé.`;
+      sampleStatus.textContent = `Impossible de charger ${example.itemName} : ${error.message}. ${example.preserved}`;
     }
   } finally {
     if (requestModeVersion !== modeVersion) sampleStatus.textContent = "";
@@ -215,7 +238,9 @@ async function runTransformation() {
 }
 
 transformButton.addEventListener("click", runTransformation);
-sampleSelect.addEventListener("change", loadSample);
+for (const example of [xmlExample, xsltExample]) {
+  example.select.addEventListener("change", () => loadSample(example));
+}
 exerciseSelect.addEventListener("change", () => loadExercise().catch(setError));
 chooseFreeModeButton.addEventListener("click", () => enterMode("free").catch(setError));
 chooseGuidedModeButton.addEventListener("click", () => enterMode("guided").catch(setError));

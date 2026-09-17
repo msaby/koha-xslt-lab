@@ -61,6 +61,7 @@ h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .primary-button:disabled { opacity: .65; cursor: wait; }
 .primary-button span { display: block; margin-top: .2rem; font-size: .68rem; font-weight: 400; opacity: .8; }
 .editors { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.sample-pickers { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 1rem; }
 .sample-picker { display: flex; flex-direction: column; align-items: flex-start; gap: .5rem; margin-bottom: 1rem; font: .85rem/1.4 ui-sans-serif, system-ui, sans-serif; }
 .sample-picker label { color: var(--blue); font-weight: 700; }
 .sample-picker select { max-width: 100%; padding: .5rem; border: 1px solid var(--line); color: var(--ink); background: var(--panel); font: inherit; }
@@ -85,3 +86,4 @@ pre { min-height: 31rem; margin: 0; padding: 1rem; overflow: auto; white-space: 
 @media (max-width: 56rem) { .topbar { align-items: start; flex-direction: column; } .topbar-side { align-items: start; flex-direction: column; } .exercise-strip { grid-template-columns: 1fr; } .workspace { grid-template-columns: 1fr; } .editor-panel, .result-panel { padding: 1.5rem 5vw; } }
 @media (max-width: 38rem) { .section-heading { align-items: start; flex-direction: column; } .editors { grid-template-columns: 1fr; } textarea, .tab-panel, iframe, pre { min-height: 20rem; } }
 @media (max-width: 38rem) { .mode-choice-actions { grid-template-columns: 1fr; } }
+@media (max-width: 38rem) { .sample-pickers { grid-template-columns: 1fr; } }

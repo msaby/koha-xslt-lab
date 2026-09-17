@@ -26,6 +26,30 @@
 }
 ```
 
+La consigne unique est stockée dans `instruction` et affichée dans le bloc HTML `exercise-instruction`.
+
+## Catalogue de notices d’exemple
+
+`content/samples/index.json` est un tableau de noms de fichiers, dans l’ordre du menu du mode libre :
+
+```json
+[
+  "jardin-des-nuages.xml",
+  "atlas-des-iles-imaginaires.xml",
+  "cuisine-des-etoiles.xml"
+]
+```
+
+Chaque entrée désigne un fichier XML directement dans `content/samples/`. Le libellé est dérivé du nom en retirant l’extension `.xml` ; il n’y a pas de champ de libellé séparé. Ajouter un fichier au dossier ne suffit pas : il doit aussi figurer dans ce catalogue.
+
+Les trois notices fictives utilisent un élément `record` avec le namespace `http://www.loc.gov/MARC21/slim` et des zones UNIMARC. Elles proposent respectivement un sous-titre, plusieurs sous-titres et aucun sous-titre. Les fichiers des exercices restent référencés par `files.xml` et ne sont pas automatiquement ajoutés au menu libre.
+
+## Catalogue de feuilles XSLT d’exemple
+
+`content/xslt/samples/index.json` contient un tableau de noms de fichiers `.xsl` : `identite.xsl`, `titre-auteur.xsl`, `titre-sous-titres.xsl` et `tous-les-champs.xsl`. Les chemins sont relatifs au dossier `content/xslt/samples/`, et les libellés du menu sont les noms sans extension. Ce catalogue indépendant est réservé au mode libre ; il ne modifie pas les feuilles de départ ou les solutions des exercices.
+
+Les exemples sont des feuilles XSLT 1.0 autonomes. `identite.xsl` produit du XML avec le template identité `@*|node()` et `xsl:copy`, sans suppression des espaces ni tri. Les trois autres produisent du HTML à partir de notices UNIMARC/MARCXML, seules ou dans une collection.
+
 ## Validateurs MVP
 
 - `textContains`
@@ -46,4 +70,4 @@ JSON minimal par zone : tag, libellé, description courte, sous-champs nécessai
 
 ## Versionnement
 
-Ajouter `contentSchemaVersion` au manifeste global. Toute modification incompatible des JSON doit incrémenter cette version.
+Le manifeste `content/exercises/index.json` porte actuellement `contentSchemaVersion: 3`. Toute modification incompatible du format des exercices doit incrémenter cette version. Le catalogue de notices est un tableau indépendant.

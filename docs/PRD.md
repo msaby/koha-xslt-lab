@@ -19,8 +19,14 @@ Au lancement, l'utilisateur choisit l'un des deux modes. Aucun exercice n'est af
 ### Laboratoire libre
 Deux éditeurs principaux : MARCXML et XSLT. Transformation à la demande, aperçu HTML, HTML généré et erreurs. Import/export de `.xml` et `.xsl`.
 
+Le menu « Charger une notice d’exemple », réservé au mode libre, propose les fichiers du catalogue `content/samples/index.json` sous leur nom sans extension. La sélection remplace uniquement le XML, avec confirmation si celui-ci a été modifié ; le copier-coller reste possible. Une annulation ou une erreur de chargement conserve le XML actuel. La transformation reste déclenchée par l’utilisateur.
+
+Le mode libre propose aussi « Charger une feuille XSLT d’exemple », avec les mêmes règles de sélection et de protection des saisies. Seule la XSLT est remplacée. Le catalogue comprend une transformation identité conservant les données et l’ordre des nœuds XML, ainsi que des présentations HTML simples.
+
 ### Exercices
 Parcours progressif avec consigne, fichiers de départ, validation du résultat, trois niveaux d'indices, solution consultable et progression enregistrée localement. L'exercice 1 est sélectionné et chargé par défaut lorsque le parcours guidé est choisi. Un sélecteur permet ensuite de charger les exercices disponibles.
+
+La consigne unique est suivie du bouton de validation aligné à gauche. Les indices et la solution sont consultables dans deux blocs dépliables au comportement identique. En cas d’erreur de transformation, l’onglet « Erreurs » s’ouvre et reçoit le focus.
 
 Les deux modes restent accessibles à tout moment depuis l'en-tête. Le changement de mode conserve les sources XML/XSLT actuellement éditées.
 

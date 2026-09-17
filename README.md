@@ -23,17 +23,62 @@ En mode « Utilisation libre », le menu « Charger une notice d’exemple » re
 
 Les trois notices fictives sont stockées dans `content/samples/` et répertoriées dans `content/samples/index.json`. Pour ajouter une notice, placez son fichier XML dans ce dossier et ajoutez son nom au tableau JSON. Le menu affiche automatiquement le nom du fichier sans l’extension `.xml`.
 
+Les fichiers proposés sont `jardin-des-nuages.xml`, `atlas-des-iles-imaginaires.xml` et `cuisine-des-etoiles.xml`. Le menu est réservé au mode libre ; les exercices chargent leur propre notice. En cas d’annulation ou d’échec du chargement, le XML actuel est conservé.
+
+## Feuilles XSLT d’exemple
+
+En mode libre, le menu « Charger une feuille XSLT d’exemple » fonctionne comme celui des notices : noms de fichiers sans extension, remplacement de la XSLT uniquement, confirmation si elle a été modifiée, conservation des sources en cas d’annulation ou d’erreur. Le copier-coller reste possible et la transformation est déclenchée avec « Transformer ».
+
+- `identite` : recopie le XML, ses éléments, attributs, textes, commentaires et instructions de traitement, en conservant l’ordre des nœuds et les champs répétés.
+- `titre-auteur` : affiche le titre et la mention de responsabilité en HTML.
+- `titre-sous-titres` : affiche le titre et tous les sous-titres séparés par « : ».
+- `tous-les-champs` : présente les zones, indicateurs et sous-zones en HTML, dans l’ordre de la notice.
+
+La transformation identité produit du XML, consultable dans l’onglet actuellement nommé « HTML généré ». Elle conserve la structure et les données, mais ne garantit pas un fichier identique octet par octet : la sérialisation peut changer les préfixes de namespace, les guillemets ou la forme des balises vides.
+
+Les fichiers sont dans `content/xslt/samples/`. Pour ajouter une feuille XSLT 1.0 autonome, y déposer le fichier `.xsl` puis ajouter son nom au tableau `content/xslt/samples/index.json`.
+
+## Lancement local et tests
+
+Depuis la racine du dépôt, avec Python installé :
+
+```sh
+python -m http.server 8000 --bind 127.0.0.1
+```
+
+Ouvrir <http://127.0.0.1:8000/>. Aucun build ni installation de dépendances n’est nécessaire : Python sert les fichiers et le navigateur exécute le JavaScript et les transformations XSLT.
+
+Avec Node.js installé, exécuter les tests du chargement des notices et des feuilles XSLT :
+
+```sh
+node tests/sample-loading.test.cjs
+```
+
+Ces tests utilisent un DOM simulé ; les vérifications dans un navigateur sont décrites dans le [plan de tests](docs/TEST_PLAN.md).
+
+Les transformations des exemples peuvent être vérifiées avec Python et `lxml` installé dans l’environnement de test :
+
+```sh
+python -m unittest discover -s tests -v
+```
+
+`lxml` n’est pas requis pour faire fonctionner le site.
+
+## Parcours guidé
+
+Chaque exercice affiche une consigne unique, puis le bouton « Valider le résultat », aligné à gauche. « Afficher les indices » et « Afficher la solution » sont deux blocs dépliables, utilisables également au clavier. En cas d’erreur de transformation, l’onglet « Erreurs » est sélectionné, reçoit le focus et affiche le message.
+
 ## Documents du projet
 
-- `PRD.md` — exigences produit et critères d'acceptation.
-- `ARCHITECTURE.md` — architecture technique et décisions.
-- `PEDAGOGY.md` — progression pédagogique et exercices.
-- `DATA_FORMATS.md` — formats JSON/XML/XSLT du contenu pédagogique.
-- `TEST_PLAN.md` — stratégie de tests.
-- `ROADMAP.md` — phases et backlog initial.
-- `CODEX_GUIDE.md` — méthode de travail recommandée avec Codex.
-- `AGENTS.md` — instructions persistantes à donner à Codex dans le dépôt.
+- [PRD](docs/PRD.md) — exigences produit et critères d'acceptation.
+- [Architecture](docs/ARCHITECTURE.md) — architecture technique et décisions.
+- [Pédagogie](docs/PEDAGOGY.md) — progression pédagogique et exercices.
+- [Formats de contenu](docs/DATA_FORMATS.md) — formats JSON/XML/XSLT du contenu pédagogique.
+- [Plan de tests](docs/TEST_PLAN.md) — stratégie de tests.
+- [Roadmap](docs/ROADMAP.md) — phases et backlog initial.
+- [Guide Codex](docs/CODEX_GUIDE.md) — méthode de travail recommandée avec Codex.
+- [Instructions Codex](docs/AGENTS.md) — instructions pour la documentation du projet.
 
 ## Démarrage du développement
 
-Commencer impérativement par le spike décrit dans `ARCHITECTURE.md` : vérifier le comportement de `XSLTProcessor` avec MARCXML et surtout `xsl:include`/`xsl:import` lorsque les fichiers sont servis comme ils le seront sur GitHub Pages. Ne pas construire l'application complète avant cette validation.
+Le spike initial est conservé dans `spike/` et accessible à <http://127.0.0.1:8000/spike/> lorsque le serveur local tourne. Il vérifie le namespace MARCXML, `xsl:include` et `xsl:import` avec le moteur partagé. La décision provisoire et les vérifications navigateur et GitHub Pages restant à effectuer sont décrites dans [ADR-001](docs/ADR-001-xslt-engine.md).
