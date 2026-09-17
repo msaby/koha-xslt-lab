@@ -10,7 +10,7 @@ Matrice Chrome/Firefox/Edge : parsing MARCXML namespace ; XSLT simple ; template
 
 Depuis la racine du dépôt : `node tests/sample-loading.test.cjs`.
 
-Les dix-sept tests de `tests/sample-loading.test.cjs` couvrent les noms affichés sans extension, le chargement des notices et des feuilles sans modification de l’autre éditeur, l’annulation après modification, une erreur HTTP, la visibilité des menus selon le mode, les chargements tardifs après changement de mode et la saisie pendant le chargement. Ils vérifient aussi que le fichier chargé reste sélectionné, que la sélection précédente est rétablie après annulation ou erreur, que les descriptions XSLT sont visibles avant et après le choix et qu’Échap ferme la liste en restituant le focus.
+Les dix-neuf tests de `tests/sample-loading.test.cjs` couvrent les noms affichés sans extension, le chargement des notices et des feuilles sans modification de l’autre éditeur, l’annulation après modification, une erreur HTTP, la visibilité des menus selon le mode, les chargements tardifs après changement de mode et la saisie pendant le chargement. Ils vérifient aussi que le fichier chargé reste sélectionné, que la sélection précédente est rétablie après annulation ou erreur, que les descriptions XSLT sont visibles avant et après le choix et qu’Échap ferme la liste en restituant le focus.
 
 Ils utilisent un DOM simulé et ne vérifient ni le rendu visuel ni le moteur XSLT du navigateur.
 

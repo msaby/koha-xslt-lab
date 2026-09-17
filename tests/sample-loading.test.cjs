@@ -48,6 +48,33 @@ function setup() {
   return { context, xsltExample: vm.runInContext('xsltExample', context), get: (id) => document.querySelector(`#${id}`) };
 }
 
+test('le mode libre démarre avec la première notice du catalogue et la feuille identité', async () => {
+  const { context, get } = setup();
+  const originalFetch = context.fetch;
+  context.fetch = async (url) => url === 'content/samples/index.json'
+    ? { ok: true, json: async () => ['cuisine-des-etoiles.xml', 'jardin-des-nuages.xml'] }
+    : originalFetch(url);
+  await context.enterMode('free');
+  assert.equal(get('xml-editor').value, fs.readFileSync(path.join(root, 'content/samples/cuisine-des-etoiles.xml'), 'utf8'));
+  assert.equal(get('xslt-editor').value, fs.readFileSync(path.join(root, 'content/xslt/samples/identite.xsl'), 'utf8'));
+  assert.equal(get('sample-select').value, 'cuisine-des-etoiles.xml');
+  assert.equal(get('xslt-sample-select').value, 'identite.xsl');
+  assert.equal(get('xslt-sample-toggle').textContent, 'identite');
+  assert.ok(get('xslt-sample-description').textContent.length > 20);
+  assert.equal(get('run-status').textContent, 'Transformé');
+});
+
+test('revenir au mode libre ne réinitialise pas les sources modifiées', async () => {
+  const { context, get } = setup();
+  await context.enterMode('free');
+  await context.enterMode('guided');
+  get('xml-editor').value = '<record>Travail en cours</record>';
+  get('xslt-editor').value = '<!-- Ma feuille -->';
+  await context.enterMode('free');
+  assert.equal(get('xml-editor').value, '<record>Travail en cours</record>');
+  assert.equal(get('xslt-editor').value, '<!-- Ma feuille -->');
+});
+
 test('le catalogue affiche exactement trois noms sans extension', async () => {
   const { context, get } = setup();
   await context.loadSampleCatalog();

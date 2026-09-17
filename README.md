@@ -19,6 +19,8 @@ Réduire la distance entre « je ne connais pas XSLT » et « je peux comprendre
 
 ## Notices d’exemple
 
+Lors de la première entrée en mode libre, la première notice de `content/samples/index.json` (actuellement `jardin-des-nuages.xml`) et la feuille `identite.xsl` sont chargées et sélectionnées automatiquement, puis transformées. Les retours suivants au mode libre conservent les sources en cours.
+
 En mode « Utilisation libre », le menu « Charger une notice d’exemple » remplace le XML de l’éditeur sans modifier la XSLT. Le copier-coller reste possible. Si le XML a été modifié, une confirmation précède son remplacement. Cliquez ensuite sur « Transformer ».
 
 Les trois notices fictives sont stockées dans `content/samples/` et répertoriées dans `content/samples/index.json`. Pour ajouter une notice, placez son fichier XML dans ce dossier et ajoutez son nom au tableau JSON. Le menu affiche automatiquement le nom du fichier sans l’extension `.xml`.
