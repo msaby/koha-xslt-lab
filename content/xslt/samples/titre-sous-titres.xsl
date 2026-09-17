@@ -3,7 +3,10 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:marc="http://www.loc.gov/MARC21/slim" exclude-result-prefixes="marc">
   <xsl:output method="html" encoding="UTF-8"/>
-  <!-- Parcourir chaque 200$e ; aucun séparateur si le sous-titre est absent. -->
+  <!-- Affiche en HTML le titre (200$a), suivi de tous les sous-titres (200$e)
+       dans leur ordre d’origine, séparés par « : ». Si aucun sous-titre
+       n’est présent, seul le titre apparaît, sans séparateur.
+       Consulter le résultat dans « Aperçu ». -->
   <xsl:template match="/">
     <xsl:for-each select="//marc:record">
       <p>

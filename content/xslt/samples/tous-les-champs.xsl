@@ -3,7 +3,10 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:marc="http://www.loc.gov/MARC21/slim" exclude-result-prefixes="marc">
   <xsl:output method="html" encoding="UTF-8"/>
-  <!-- Présentation HTML des zones, indicateurs et sous-zones dans l’ordre source. -->
+  <!-- Transforme la notice en HTML lisible : le label, les zones, les indicateurs
+       et les sous-zones sont présentés sous forme de listes, dans leur ordre
+       d’origine. La structure XML n’est pas conservée.
+       Consulter le résultat dans « Aperçu ». -->
   <xsl:template match="/">
     <xsl:for-each select="//marc:record">
       <article>
