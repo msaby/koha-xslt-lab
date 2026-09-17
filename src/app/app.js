@@ -32,13 +32,11 @@ const errorsOutput = document.querySelector("#errors-output");
 const errorSummary = document.querySelector("#error-summary");
 const runStatus = document.querySelector("#run-status");
 const validateExerciseButton = document.querySelector("#validate-exercise");
-const exerciseInstructions = document.querySelector("#exercise-instructions");
-const exerciseClarification = document.querySelector("#exercise-clarification");
+const exerciseInstruction = document.querySelector("#exercise-instruction");
 const exerciseTitle = document.querySelector("#exercise-title");
 const exerciseSelect = document.querySelector("#exercise-select");
 const exerciseStatus = document.querySelector("#exercise-status");
 const hintList = document.querySelector("#hint-list");
-const showSolutionButton = document.querySelector("#show-solution");
 const solutionOutput = document.querySelector("#solution-output");
 const modeChoice = document.querySelector("#mode-choice");
 const modeToolbar = document.querySelector("#mode-toolbar");
@@ -82,20 +80,18 @@ async function loadExercise() {
   currentExercise = await response.json();
   const xmlResponse = await fetch(currentExercise.files.xml);
   const xsltResponse = await fetch(currentExercise.files.entryXslt);
+  const solutionResponse = await fetch(currentExercise.solution);
+  const solution = await solutionResponse.text();
   xmlEditor.value = await xmlResponse.text();
   xsltEditor.value = await xsltResponse.text();
   exerciseTitle.textContent = currentExercise.title;
-  exerciseInstructions.textContent = currentExercise.instructions;
-  exerciseClarification.textContent = currentExercise.clarification;
+  exerciseInstruction.textContent = currentExercise.instruction;
   hintList.replaceChildren(...currentExercise.hints.map((hint) => {
     const item = document.createElement("li");
     item.textContent = hint;
     return item;
   }));
-  solutionOutput.hidden = true;
-  solutionOutput.textContent = "";
-  showSolutionButton.disabled = false;
-  exerciseStatus.textContent = "Exercice chargé. Transformez puis validez votre résultat.";
+  solutionOutput.textContent = solution;
   validateExerciseButton.disabled = false;
   await runTransformation();
 }
@@ -121,12 +117,6 @@ async function enterMode(mode) {
   if (mode === "free") {
     await runTransformation();
   }
-}
-
-async function showSolution() {
-  const response = await fetch(currentExercise.solution);
-  solutionOutput.textContent = await response.text();
-  solutionOutput.hidden = false;
 }
 
 function validateExercise() {
@@ -160,7 +150,6 @@ chooseGuidedModeButton.addEventListener("click", () => enterMode("guided").catch
 freeModeButton.addEventListener("click", () => enterMode("free").catch(setError));
 guidedModeButton.addEventListener("click", () => enterMode("guided").catch(setError));
 validateExerciseButton.addEventListener("click", validateExercise);
-showSolutionButton.addEventListener("click", () => showSolution().catch(setError));
 document.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
     event.preventDefault();

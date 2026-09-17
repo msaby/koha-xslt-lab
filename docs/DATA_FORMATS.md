@@ -8,8 +8,7 @@
   "order": 1,
   "title": "Afficher l'identifiant de la notice",
   "concepts": ["xpath", "xsl:value-of"],
-  "instructions": "Affichez l'identifiant de la notice en zone 001.",
-  "clarification": "Le code initial crée une balise HTML p contenant \"Votre identifiant apparaîtra ici.\". L'objectif de l'exercice est de remplacer cette phrase par le contenu de la zone 001.",
+  "instruction": "Le code initial crée une balise HTML p contenant \"Votre identifiant apparaîtra ici.\". L'objectif de l'exercice est de remplacer cette phrase par le contenu de la zone 001.",
   "files": {
     "xml": "content/samples/identifier.xml",
     "entryXslt": "content/xslt/ex01/main.xsl",

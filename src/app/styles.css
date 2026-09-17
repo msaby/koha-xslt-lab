@@ -39,8 +39,8 @@ h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .exercise-strip p { margin-bottom: 0; }
 .exercise-picker { display: inline-flex; align-items: center; gap: .5rem; margin-bottom: .7rem; color: var(--blue); font: 700 .78rem ui-sans-serif, system-ui, sans-serif; text-transform: uppercase; }
 .exercise-picker select { border: 1px solid var(--line); padding: .35rem .5rem; color: var(--ink); background: var(--panel); font: .85rem ui-sans-serif, system-ui, sans-serif; text-transform: none; }
-.exercise-clarification { color: var(--muted); font: .86rem/1.4 ui-sans-serif, system-ui, sans-serif; }
-.exercise-actions { display: flex; gap: .5rem; }
+.exercise-instruction { color: var(--muted); font: .86rem/1.4 ui-sans-serif, system-ui, sans-serif; }
+.exercise-actions { grid-column: 1 / -1; display: flex; justify-content: flex-start; gap: .5rem; }
 .secondary-button { border: 1px solid var(--blue); border-radius: 2px; padding: .7rem .9rem; color: var(--blue); background: transparent; cursor: pointer; font: 700 .78rem ui-sans-serif, system-ui, sans-serif; }
 .secondary-button:hover { color: #fff; background: var(--blue); }
 .secondary-button:disabled { border-color: var(--line); color: var(--muted); cursor: not-allowed; }
@@ -51,9 +51,6 @@ h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .exercise-help summary { cursor: pointer; color: var(--blue); font-weight: 700; }
 .exercise-help ol { margin: .75rem 0; padding-left: 1.3rem; }
 .exercise-help li { margin: .3rem 0; }
-.text-button { border: 0; padding: 0; color: var(--accent-dark); background: transparent; cursor: pointer; font: 700 .82rem ui-sans-serif, system-ui, sans-serif; }
-.text-button:disabled { color: var(--muted); cursor: not-allowed; }
-.solution-help { grid-column: 1 / -1; }
 .solution-help pre { min-height: 0; margin-top: .75rem; }
 .workspace { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .85fr); gap: 1px; max-width: 90rem; min-height: calc(100vh - 12rem); margin: 0 auto; background: var(--line); }
 .editor-panel, .result-panel { padding: 2rem 5vw; background: rgba(255, 253, 248, .88); }

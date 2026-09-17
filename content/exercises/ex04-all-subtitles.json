@@ -3,8 +3,7 @@
   "order": 4,
   "title": "Afficher tous les sous-titres",
   "concepts": ["XPath", "xsl:value-of", "xsl:for-each", "position"],
-  "instructions": "Affichez le titre et tous les sous-titres dans un seul élément HTML p.",
-  "clarification": "Récupérez 200$a et toutes les sous-zones 200$e, en insérant le séparateur \" : \" entre les valeurs.",
+  "instruction": "Récupérez 200$a et toutes les sous-zones 200$e, en insérant le séparateur \" : \" entre les valeurs.",
   "files": {
     "xml": "content/samples/all-subtitles.xml",
     "entryXslt": "content/xslt/ex04/main.xsl",

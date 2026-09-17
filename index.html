@@ -48,8 +48,7 @@
           </select>
         </label>
         <h2 id="exercise-title">Afficher l'identifiant de la notice</h2>
-        <p id="exercise-instructions">Chargez l’exercice pour travailler sur la zone 001.</p>
-        <p id="exercise-clarification" class="exercise-clarification"></p>
+        <p id="exercise-instruction" class="exercise-instruction"></p>
       </div>
       <div class="exercise-actions">
         <button id="validate-exercise" class="secondary-button" type="button" disabled>Valider le résultat</button>
@@ -59,10 +58,10 @@
         <summary>Afficher les indices</summary>
         <ol id="hint-list"></ol>
       </details>
-      <div class="solution-help">
-        <button id="show-solution" class="text-button" type="button" disabled>Afficher la solution</button>
-        <pre id="solution-output" hidden></pre>
-      </div>
+      <details class="exercise-help solution-help">
+        <summary>Afficher la solution</summary>
+        <pre id="solution-output"></pre>
+      </details>
     </section>
     <main id="workspace" class="workspace" hidden>
       <section class="editor-panel" aria-labelledby="editor-title">

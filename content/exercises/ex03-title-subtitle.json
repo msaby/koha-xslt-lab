@@ -3,8 +3,7 @@
   "order": 3,
   "title": "Afficher le titre et le sous-titre",
   "concepts": ["XPath", "xsl:value-of", "xsl:text"],
-  "instructions": "Affichez le titre et le sous-titre dans un seul élément HTML p.",
-  "clarification": "Récupérez 200$a et le premier 200$e, puis insérez le séparateur \" : \" entre les deux valeurs.",
+  "instruction": "Récupérez 200$a et le premier 200$e, puis insérez le séparateur \" : \" entre les deux valeurs.",
   "files": {
     "xml": "content/samples/title-subtitle.xml",
     "entryXslt": "content/xslt/ex03/main.xsl",
