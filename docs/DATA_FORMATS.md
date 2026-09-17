@@ -50,6 +50,8 @@ Les trois notices fictives utilisent un élément `record` avec le namespace `ht
 
 Les exemples sont des feuilles XSLT 1.0 autonomes. `identite.xsl` produit du XML avec le template identité `@*|node()` et `xsl:copy`, sans suppression des espaces ni tri. Les trois autres produisent du HTML à partir de notices UNIMARC/MARCXML, seules ou dans une collection.
 
+Les descriptions du sélecteur XSLT sont définies dans `content/xslt/samples/descriptions.json`, un objet associant chaque nom complet de fichier `.xsl` à une description courte. Chaque fichier du catalogue doit avoir une description. Les descriptions sont affichées comme texte dans la liste avant le choix, puis sous le sélecteur après chargement. Conserver leur cohérence avec les commentaires XML des feuilles.
+
 ## Validateurs MVP
 
 - `textContains`

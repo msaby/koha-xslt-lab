@@ -10,7 +10,7 @@ Matrice Chrome/Firefox/Edge : parsing MARCXML namespace ; XSLT simple ; template
 
 Depuis la racine du dépôt : `node tests/sample-loading.test.cjs`.
 
-Les quatorze tests de `tests/sample-loading.test.cjs` couvrent les noms affichés sans extension, le chargement des notices et des feuilles sans modification de l’autre éditeur, l’annulation après modification, une erreur HTTP, la visibilité des menus selon le mode, les chargements tardifs après changement de mode et la saisie pendant le chargement. Ils vérifient aussi que le fichier chargé reste sélectionné et que la sélection précédente est rétablie après annulation ou erreur.
+Les dix-sept tests de `tests/sample-loading.test.cjs` couvrent les noms affichés sans extension, le chargement des notices et des feuilles sans modification de l’autre éditeur, l’annulation après modification, une erreur HTTP, la visibilité des menus selon le mode, les chargements tardifs après changement de mode et la saisie pendant le chargement. Ils vérifient aussi que le fichier chargé reste sélectionné, que la sélection précédente est rétablie après annulation ou erreur, que les descriptions XSLT sont visibles avant et après le choix et qu’Échap ferme la liste en restituant le focus.
 
 Ils utilisent un DOM simulé et ne vérifient ni le rendu visuel ni le moteur XSLT du navigateur.
 
@@ -47,6 +47,8 @@ Depuis l'écran initial, choisir l'utilisation libre et vérifier que les exerci
 - Provoquer une erreur XML ou XSLT et lancer la transformation : vérifier la sélection de l’onglet « Erreurs », le focus sur son bouton et l’affichage du message.
 
 ## 6. Accessibilité
+
+Pour le sélecteur XSLT, vérifier les descriptions sur écran étroit et au clavier : ouverture avec Entrée/Espace, parcours par Tab/Maj+Tab, activation d’un choix, fermeture par Échap avec retour au bouton. Vérifier aussi la fermeture au clic extérieur et lorsque le focus quitte le menu. Les descriptions doivent rester visibles sans survol, y compris sur mobile.
 
 Navigation clavier, focus, noms accessibles, ordre de tabulation, messages d'erreur annoncés, zoom 200 %, contraste. Ajouter un audit automatisé mais conserver une vérification manuelle.
 

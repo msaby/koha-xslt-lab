@@ -81,10 +81,13 @@
             <p id="sample-status" role="status"></p>
           </div>
           <div id="xslt-sample-picker" class="sample-picker" hidden>
-            <label for="xslt-sample-select">Charger une feuille XSLT d’exemple</label>
-            <select id="xslt-sample-select" aria-describedby="xslt-sample-status" disabled>
+            <span id="xslt-sample-label" class="sample-picker-label">Charger une feuille XSLT d’exemple</span>
+            <button id="xslt-sample-toggle" class="sample-toggle" type="button" aria-expanded="false" aria-controls="xslt-sample-options" aria-labelledby="xslt-sample-label xslt-sample-toggle" aria-describedby="xslt-sample-description" disabled>Choisir une feuille XSLT…</button>
+            <ul id="xslt-sample-options" class="sample-options" aria-labelledby="xslt-sample-label" hidden></ul>
+            <select id="xslt-sample-select" hidden disabled>
               <option value="">Choisir une feuille XSLT…</option>
             </select>
+            <p id="xslt-sample-description"></p>
             <p id="xslt-sample-status" role="status"></p>
           </div>
         </div>

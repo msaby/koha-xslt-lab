@@ -70,6 +70,54 @@ let modeVersion = 0;
 let currentExercise = null;
 let latestHtml = "";
 let guidedModeInitialized = false;
+const xsltSampleToggle = document.querySelector("#xslt-sample-toggle");
+const xsltSampleOptions = document.querySelector("#xslt-sample-options");
+const xsltSampleDescription = document.querySelector("#xslt-sample-description");
+let xsltDescriptions = {};
+let xsltOptionButtons = [];
+
+function closeXsltMenu() {
+  xsltSampleOptions.hidden = true;
+  xsltSampleToggle.setAttribute("aria-expanded", "false");
+}
+
+function updateXsltSelection() {
+  const filename = xsltExample.loadedFilename;
+  xsltSampleToggle.textContent = filename ? filename.replace(/\.xsl$/i, "") : "Choisir une feuille XSLT…";
+  xsltSampleDescription.textContent = xsltDescriptions[filename] || "";
+  for (const button of xsltOptionButtons) {
+    button.setAttribute("aria-current", String(button.value === filename));
+  }
+}
+
+function renderXsltOptions(filenames) {
+  xsltOptionButtons = [];
+  const items = filenames.map((filename) => {
+    const item = document.createElement("li");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "sample-option";
+    button.value = filename;
+    const name = document.createElement("strong");
+    name.textContent = filename.replace(/\.xsl$/i, "");
+    const description = document.createElement("span");
+    description.textContent = xsltDescriptions[filename];
+    button.append(name, description);
+    button.addEventListener("click", () => {
+      if (xsltExample.select.disabled) return;
+      xsltExample.select.value = filename;
+      closeXsltMenu();
+      xsltSampleToggle.focus();
+      return loadSample(xsltExample);
+    });
+    item.append(button);
+    xsltOptionButtons.push(button);
+    return item;
+  });
+  xsltSampleOptions.replaceChildren(...items);
+  xsltSampleToggle.disabled = false;
+  updateXsltSelection();
+}
 
 xmlEditor.value = sampleXml;
 xsltEditor.value = sampleXslt;
@@ -114,6 +162,7 @@ async function loadExercise() {
   xsltExample.loadedSource = xsltEditor.value;
   xsltExample.loadedFilename = "";
   xsltExample.select.value = "";
+  updateXsltSelection();
   exerciseTitle.textContent = currentExercise.title;
   exerciseInstruction.textContent = currentExercise.instruction;
   hintList.replaceChildren(...currentExercise.hints.map((hint) => {
@@ -135,6 +184,7 @@ function updateModeButtons(mode) {
 
 async function enterMode(mode) {
   modeVersion += 1;
+  closeXsltMenu();
   const enteredModeVersion = modeVersion;
   xmlExample.picker.hidden = mode !== "free";
   xsltExample.picker.hidden = mode !== "free";
@@ -165,6 +215,12 @@ async function loadSampleCatalog(example = xmlExample) {
     const response = await fetch(`${example.directory}/index.json`);
     if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
     const filenames = await response.json();
+    if (example === xsltExample) {
+      const descriptionsResponse = await fetch(`${example.directory}/descriptions.json`);
+      if (!descriptionsResponse.ok) throw new Error(`Erreur HTTP ${descriptionsResponse.status}`);
+      xsltDescriptions = await descriptionsResponse.json();
+      renderXsltOptions(filenames);
+    }
     const options = filenames.map((filename) => {
       const option = document.createElement("option");
       option.value = filename;
@@ -189,6 +245,7 @@ async function loadSample(example = xmlExample) {
   }
   const requestModeVersion = modeVersion;
   sampleSelect.disabled = true;
+  if (example === xsltExample) xsltSampleToggle.setAttribute("aria-disabled", "true");
   sampleStatus.textContent = `Chargement de ${example.itemName}…`;
   try {
     const response = await fetch(`${example.directory}/${encodeURIComponent(filename)}`);
@@ -218,6 +275,10 @@ async function loadSample(example = xmlExample) {
     if (requestModeVersion !== modeVersion) sampleStatus.textContent = "";
     sampleSelect.value = example.loadedFilename;
     sampleSelect.disabled = false;
+    if (example === xsltExample) {
+      xsltSampleToggle.setAttribute("aria-disabled", "false");
+      updateXsltSelection();
+    }
   }
 }
 
@@ -246,6 +307,25 @@ async function runTransformation() {
 }
 
 transformButton.addEventListener("click", runTransformation);
+xsltSampleToggle.addEventListener("click", () => {
+  if (xsltExample.select.disabled) return;
+  const open = xsltSampleOptions.hidden;
+  xsltSampleOptions.hidden = !open;
+  xsltSampleToggle.setAttribute("aria-expanded", String(open));
+});
+xsltExample.picker.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !xsltSampleOptions.hidden) {
+    event.preventDefault();
+    closeXsltMenu();
+    xsltSampleToggle.focus();
+  }
+});
+document.addEventListener("click", (event) => {
+  if (!xsltExample.picker.contains(event.target)) closeXsltMenu();
+});
+xsltExample.picker.addEventListener("focusout", (event) => {
+  if (!xsltExample.picker.contains(event.relatedTarget)) closeXsltMenu();
+});
 for (const example of [xmlExample, xsltExample]) {
   example.select.addEventListener("change", () => loadSample(example));
 }

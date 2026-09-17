@@ -40,6 +40,10 @@ La transformation identité produit du XML, consultable dans l’onglet actuelle
 
 Les fichiers sont dans `content/xslt/samples/`. Pour ajouter une feuille XSLT 1.0 autonome, y déposer le fichier `.xsl` puis ajouter son nom au tableau `content/xslt/samples/index.json`.
 
+La liste XSLT affiche le nom et une courte description de chaque feuille avant le choix. Après chargement, le nom reste sélectionné et sa description reste visible sous le bouton. Les descriptions de l’interface sont stockées dans `content/xslt/samples/descriptions.json`, avec le nom complet du fichier comme clé ; les commentaires explicatifs restent dans les feuilles. Mettre les deux à jour lors de l’ajout ou de la modification d’un exemple.
+
+Au clavier, ouvrir avec Entrée ou Espace, parcourir les choix avec Tab et Maj+Tab, puis activer un choix avec Entrée ou Espace. Échap ferme la liste et ramène le focus au bouton ; quitter le menu au clavier ou cliquer ailleurs le ferme également.
+
 ## Lancement local et tests
 
 Depuis la racine du dépôt, avec Python installé :
