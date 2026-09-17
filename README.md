@@ -17,6 +17,12 @@ Réduire la distance entre « je ne connais pas XSLT » et « je peux comprendre
 - Le site n'émule pas Koha intégralement.
 - L'aperçu HTML doit être isolé (`iframe sandbox`).
 
+## Notices d’exemple
+
+En mode « Utilisation libre », le menu « Charger une notice d’exemple » remplace le XML de l’éditeur sans modifier la XSLT. Le copier-coller reste possible. Si le XML a été modifié, une confirmation précède son remplacement. Cliquez ensuite sur « Transformer ».
+
+Les trois notices fictives sont stockées dans `content/samples/` et répertoriées dans `content/samples/index.json`. Pour ajouter une notice, placez son fichier XML dans ce dossier et ajoutez son nom au tableau JSON. Le menu affiche automatiquement le nom du fichier sans l’extension `.xml`.
+
 ## Documents du projet
 
 - `PRD.md` — exigences produit et critères d'acceptation.

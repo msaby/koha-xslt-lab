@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Notice UNIMARC fictive pour les essais du laboratoire. -->
+<record xmlns="http://www.loc.gov/MARC21/slim">
+  <controlfield tag="001">DEMO002</controlfield>
+  <datafield tag="200" ind1="1" ind2=" ">
+    <subfield code="a">Atlas des îles imaginaires</subfield>
+    <subfield code="e">cartes et récits</subfield>
+    <subfield code="e">à l’usage des voyageurs immobiles</subfield>
+    <subfield code="f">Noé Rivage et Alma Boussole</subfield>
+  </datafield>
+  <datafield tag="210" ind1=" " ind2=" ">
+    <subfield code="a">Port-Lointain</subfield>
+    <subfield code="c">La Boussole bleue</subfield>
+    <subfield code="d">2023</subfield>
+  </datafield>
+  <datafield tag="215" ind1=" " ind2=" ">
+    <subfield code="a">96 p.</subfield>
+    <subfield code="c">cartes en couleur</subfield>
+  </datafield>
+  <datafield tag="700" ind1=" " ind2="1">
+    <subfield code="a">Rivage</subfield>
+    <subfield code="b">Noé</subfield>
+  </datafield>
+  <datafield tag="701" ind1=" " ind2="1">
+    <subfield code="a">Boussole</subfield>
+    <subfield code="b">Alma</subfield>
+  </datafield>
+</record>

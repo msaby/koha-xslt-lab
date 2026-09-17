@@ -61,11 +61,16 @@ h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .primary-button:disabled { opacity: .65; cursor: wait; }
 .primary-button span { display: block; margin-top: .2rem; font-size: .68rem; font-weight: 400; opacity: .8; }
 .editors { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.sample-picker { display: flex; flex-direction: column; align-items: flex-start; gap: .5rem; margin-bottom: 1rem; font: .85rem/1.4 ui-sans-serif, system-ui, sans-serif; }
+.sample-picker label { color: var(--blue); font-weight: 700; }
+.sample-picker select { max-width: 100%; padding: .5rem; border: 1px solid var(--line); color: var(--ink); background: var(--panel); font: inherit; }
+.sample-picker p { margin: 0; color: var(--muted); }
+.sample-picker p:empty { display: none; }
 .editor-card { display: flex; flex-direction: column; gap: .5rem; min-width: 0; }
 .editor-label { color: var(--blue); font: 700 .75rem ui-sans-serif, system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; }
 textarea, pre { border: 1px solid var(--line); border-radius: 2px; background: #fbfaf6; color: var(--ink); }
 textarea { width: 100%; min-height: 31rem; padding: 1rem; resize: vertical; font: .8rem/1.55 Consolas, "Courier New", monospace; tab-size: 2; }
-textarea:focus, button:focus-visible { outline: 3px solid rgba(35, 106, 120, .3); outline-offset: 2px; }
+textarea:focus, button:focus-visible, select:focus-visible { outline: 3px solid rgba(35, 106, 120, .3); outline-offset: 2px; }
 .error-summary { margin: 1rem 0 0; padding: .8rem 1rem; border-left: 4px solid #a52a1a; color: #7e2419; background: #fff0eb; font: .9rem/1.4 ui-sans-serif, system-ui, sans-serif; }
 .run-status { color: var(--muted); font: 700 .75rem ui-sans-serif, system-ui, sans-serif; text-transform: uppercase; }
 .run-status.is-success { color: #287a3e; }

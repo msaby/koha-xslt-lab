@@ -72,6 +72,13 @@
           </div>
           <button id="transform-button" class="primary-button" type="button">Transformer <span>Ctrl+Entrée</span></button>
         </div>
+        <div id="sample-picker" class="sample-picker" hidden>
+          <label for="sample-select">Charger une notice d’exemple</label>
+          <select id="sample-select" aria-describedby="sample-status" disabled>
+            <option value="">Choisir une notice…</option>
+          </select>
+          <p id="sample-status" role="status"></p>
+        </div>
         <div class="editors">
           <label class="editor-card">
             <span class="editor-label">MARCXML UNIMARC</span>

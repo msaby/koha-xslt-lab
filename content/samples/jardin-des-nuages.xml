@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Notice UNIMARC fictive pour les essais du laboratoire. -->
+<record xmlns="http://www.loc.gov/MARC21/slim">
+  <controlfield tag="001">DEMO001</controlfield>
+  <datafield tag="200" ind1="1" ind2=" ">
+    <subfield code="a">Le jardin des nuages</subfield>
+    <subfield code="e">roman</subfield>
+    <subfield code="f">Lila Brume</subfield>
+  </datafield>
+  <datafield tag="210" ind1=" " ind2=" ">
+    <subfield code="a">Clairvallon</subfield>
+    <subfield code="c">Éditions du Cerf-volant</subfield>
+    <subfield code="d">2024</subfield>
+  </datafield>
+  <datafield tag="215" ind1=" " ind2=" ">
+    <subfield code="a">184 p.</subfield>
+  </datafield>
+  <datafield tag="700" ind1=" " ind2="1">
+    <subfield code="a">Brume</subfield>
+    <subfield code="b">Lila</subfield>
+  </datafield>
+</record>

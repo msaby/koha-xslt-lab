@@ -46,6 +46,12 @@ const chooseFreeModeButton = document.querySelector("#choose-free-mode");
 const chooseGuidedModeButton = document.querySelector("#choose-guided-mode");
 const freeModeButton = document.querySelector("#free-mode-button");
 const guidedModeButton = document.querySelector("#guided-mode-button");
+const samplePicker = document.querySelector("#sample-picker");
+const sampleSelect = document.querySelector("#sample-select");
+const sampleStatus = document.querySelector("#sample-status");
+let loadedXml = sampleXml;
+let sampleCatalogLoaded = false;
+let modeVersion = 0;
 let currentExercise = null;
 let latestHtml = "";
 let guidedModeInitialized = false;
@@ -86,6 +92,7 @@ async function loadExercise() {
   const solutionResponse = await fetch(currentExercise.solution);
   const solution = await solutionResponse.text();
   xmlEditor.value = await xmlResponse.text();
+  loadedXml = xmlEditor.value;
   xsltEditor.value = await xsltResponse.text();
   exerciseTitle.textContent = currentExercise.title;
   exerciseInstruction.textContent = currentExercise.instruction;
@@ -107,6 +114,8 @@ function updateModeButtons(mode) {
 }
 
 async function enterMode(mode) {
+  modeVersion += 1;
+  samplePicker.hidden = mode !== "free";
   modeChoice.hidden = true;
   modeToolbar.hidden = false;
   workspace.hidden = false;
@@ -118,7 +127,66 @@ async function enterMode(mode) {
     return;
   }
   if (mode === "free") {
+    if (!sampleCatalogLoaded) await loadSampleCatalog();
     await runTransformation();
+  }
+}
+
+async function loadSampleCatalog() {
+  sampleSelect.disabled = true;
+  sampleStatus.textContent = "Chargement de la liste des notices…";
+  try {
+    const response = await fetch("content/samples/index.json");
+    if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
+    const filenames = await response.json();
+    const options = filenames.map((filename) => {
+      const option = document.createElement("option");
+      option.value = filename;
+      option.textContent = filename.replace(/\.xml$/i, "");
+      return option;
+    });
+    sampleSelect.replaceChildren(sampleSelect.options[0], ...options);
+    sampleCatalogLoaded = true;
+    sampleSelect.disabled = false;
+    sampleStatus.textContent = "";
+  } catch (error) {
+    sampleStatus.textContent = `Impossible de charger la liste des notices : ${error.message}. Vous pouvez toujours coller votre XML.`;
+  }
+}
+
+async function loadSample() {
+  const filename = sampleSelect.value;
+  if (!filename) return;
+  const requestModeVersion = modeVersion;
+  sampleSelect.disabled = true;
+  sampleStatus.textContent = "Chargement de la notice…";
+  try {
+    const response = await fetch(`content/samples/${encodeURIComponent(filename)}`);
+    if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
+    const xml = await response.text();
+    if (requestModeVersion !== modeVersion) return;
+    if (xmlEditor.value !== loadedXml && !window.confirm("Remplacer le XML que vous avez modifié par cette notice d’exemple ?")) {
+      sampleStatus.textContent = "Chargement annulé. Votre XML est conservé.";
+      return;
+    }
+    xmlEditor.value = xml;
+    loadedXml = xmlEditor.value;
+    latestHtml = "";
+    preview.srcdoc = "";
+    htmlOutput.textContent = "Cliquez sur Transformer pour afficher le résultat.";
+    errorsOutput.textContent = "Aucune erreur.";
+    errorSummary.hidden = true;
+    runStatus.textContent = "À transformer";
+    runStatus.className = "run-status";
+    sampleStatus.textContent = "Notice chargée. Cliquez sur Transformer pour afficher le résultat.";
+  } catch (error) {
+    if (requestModeVersion === modeVersion) {
+      sampleStatus.textContent = `Impossible de charger la notice : ${error.message}. Votre XML est conservé.`;
+    }
+  } finally {
+    if (requestModeVersion !== modeVersion) sampleStatus.textContent = "";
+    sampleSelect.value = "";
+    sampleSelect.disabled = false;
   }
 }
 
@@ -147,6 +215,7 @@ async function runTransformation() {
 }
 
 transformButton.addEventListener("click", runTransformation);
+sampleSelect.addEventListener("change", loadSample);
 exerciseSelect.addEventListener("change", () => loadExercise().catch(setError));
 chooseFreeModeButton.addEventListener("click", () => enterMode("free").catch(setError));
 chooseGuidedModeButton.addEventListener("click", () => enterMode("guided").catch(setError));

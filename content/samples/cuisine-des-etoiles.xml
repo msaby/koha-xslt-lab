@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Notice UNIMARC fictive pour les essais du laboratoire. -->
+<record xmlns="http://www.loc.gov/MARC21/slim">
+  <controlfield tag="001">DEMO003</controlfield>
+  <datafield tag="200" ind1="1" ind2=" ">
+    <subfield code="a">La cuisine des étoiles</subfield>
+    <subfield code="f">Milo Comète</subfield>
+  </datafield>
+  <datafield tag="210" ind1=" " ind2=" ">
+    <subfield code="a">Luneville-sur-Ciel</subfield>
+    <subfield code="c">Éditions Sucre &amp; Saturne</subfield>
+    <subfield code="d">2025</subfield>
+  </datafield>
+  <datafield tag="215" ind1=" " ind2=" ">
+    <subfield code="a">128 p.</subfield>
+    <subfield code="c">illustrations en couleur</subfield>
+  </datafield>
+  <datafield tag="300" ind1=" " ind2=" ">
+    <subfield code="a">Recettes imaginaires : ne pas utiliser comme livre de cuisine.</subfield>
+  </datafield>
+  <datafield tag="700" ind1=" " ind2="1">
+    <subfield code="a">Comète</subfield>
+    <subfield code="b">Milo</subfield>
+  </datafield>
+</record>
