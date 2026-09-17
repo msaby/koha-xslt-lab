@@ -63,6 +63,9 @@ function setError(error) {
   errorsOutput.textContent = message;
   runStatus.textContent = "Échec";
   runStatus.className = "run-status is-error";
+  const errorsTab = document.querySelector('[data-tab="errors-panel"]');
+  errorsTab.click();
+  errorsTab.focus();
 }
 
 function setSuccess(html) {
