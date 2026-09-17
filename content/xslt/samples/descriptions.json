@@ -1,5 +1,5 @@
 {
-  "identite.xsl": "Recopie la notice en XML en conservant les éléments, attributs, valeurs, commentaires et l’ordre des champs. Consulter le résultat dans « HTML généré ».",
+  "identite.xsl": "Recopie la notice en XML en conservant les éléments, attributs, valeurs, commentaires et l’ordre des champs. Consulter le résultat dans « XML ou HTML généré ».",
   "titre-auteur.xsl": "Affiche une fiche HTML avec le titre (200$a) et la mention de responsabilité (200$f, généralement l’auteur).",
   "titre-sous-titres.xsl": "Affiche le titre et tous les sous-titres dans leur ordre d’origine, séparés par « : ». Sans sous-titre, seul le titre apparaît.",
   "tous-les-champs.xsl": "Présente le label, les zones, les indicateurs et les sous-zones en listes HTML, dans leur ordre d’origine. La structure XML n’est pas conservée."

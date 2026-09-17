@@ -42,7 +42,7 @@ Depuis l'écran initial, choisir l'utilisation libre et vérifier que les exerci
 - Simuler un fichier inaccessible : vérifier le message près du menu, la conservation du XML et la possibilité de sélectionner à nouveau une notice.
 - Vérifier que le menu est masqué dans le parcours guidé.
 - Répéter les scénarios de chargement, confirmation, annulation et erreur avec le menu XSLT ; vérifier que le XML reste inchangé et que ce menu est également masqué en mode guidé.
-- Charger `identite`, transformer et consulter « HTML généré » : vérifier la conservation des champs, sous-zones, valeurs, attributs et de leur ordre dans le XML. Vérifier les trois autres feuilles dans l’aperçu, notamment les notices sans sous-titre et avec plusieurs sous-titres.
+- Charger `identite`, transformer et consulter « XML ou HTML généré » : vérifier la conservation des champs, sous-zones, valeurs, attributs et de leur ordre dans le XML. Vérifier les trois autres feuilles dans l’aperçu, notamment les notices sans sous-titre et avec plusieurs sous-titres.
 - Dans chaque exercice, vérifier la consigne unique, le bouton de validation en dessous à gauche, puis l’ouverture et la fermeture des indices et de la solution.
 - Provoquer une erreur XML ou XSLT et lancer la transformation : vérifier la sélection de l’onglet « Erreurs », le focus sur son bouton et l’affichage du message.
 

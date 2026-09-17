@@ -36,7 +36,7 @@ En mode libre, le menu « Charger une feuille XSLT d’exemple » fonctionne com
 - `titre-sous-titres` : affiche le titre et tous les sous-titres séparés par « : ».
 - `tous-les-champs` : présente les zones, indicateurs et sous-zones en HTML, dans l’ordre de la notice.
 
-La transformation identité produit du XML, consultable dans l’onglet actuellement nommé « HTML généré ». Elle conserve la structure et les données, mais ne garantit pas un fichier identique octet par octet : la sérialisation peut changer les préfixes de namespace, les guillemets ou la forme des balises vides.
+La transformation identité produit du XML, consultable dans l’onglet actuellement nommé « XML ou HTML généré ». Elle conserve la structure et les données, mais ne garantit pas un fichier identique octet par octet : la sérialisation peut changer les préfixes de namespace, les guillemets ou la forme des balises vides.
 
 Les fichiers sont dans `content/xslt/samples/`. Pour ajouter une feuille XSLT 1.0 autonome, y déposer le fichier `.xsl` puis ajouter son nom au tableau `content/xslt/samples/index.json`.
 

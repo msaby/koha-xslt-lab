@@ -53,7 +53,7 @@ const xmlExample = {
   editor: xmlEditor, loadedSource: sampleXml, loadedFilename: "", catalogLoaded: false,
   directory: "content/samples", extension: /\.xml$/i,
   listName: "des notices", itemName: "la notice", sourceName: "le XML",
-  preserved: "Votre XML est conservé.", loaded: "Notice chargée.",
+  preserved: "Votre XML est conservé.",
   confirmation: "Remplacer le XML que vous avez modifié par cette notice d’exemple ?",
 };
 const xsltExample = {
@@ -63,7 +63,7 @@ const xsltExample = {
   editor: xsltEditor, loadedSource: sampleXslt, loadedFilename: "", catalogLoaded: false,
   directory: "content/xslt/samples", extension: /\.xsl$/i,
   listName: "des feuilles XSLT", itemName: "la feuille XSLT", sourceName: "la XSLT",
-  preserved: "Votre XSLT est conservée.", loaded: "Feuille XSLT chargée.",
+  preserved: "Votre XSLT est conservée.",
   confirmation: "Remplacer la XSLT que vous avez modifiée par cette feuille d’exemple ?",
 };
 let modeVersion = 0;
@@ -266,7 +266,7 @@ async function loadSample(example = xmlExample) {
     errorSummary.hidden = true;
     runStatus.textContent = "À transformer";
     runStatus.className = "run-status";
-    sampleStatus.textContent = `${example.loaded} Cliquez sur Transformer pour afficher le résultat.`;
+    sampleStatus.textContent = "";
   } catch (error) {
     if (requestModeVersion === modeVersion) {
       sampleStatus.textContent = `Impossible de charger ${example.itemName} : ${error.message}. ${example.preserved}`;

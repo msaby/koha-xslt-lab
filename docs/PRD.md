@@ -17,7 +17,7 @@ Public principal : bibliothécaires et administrateurs fonctionnels Koha connais
 Au lancement, l'utilisateur choisit l'un des deux modes. Aucun exercice n'est affiché avant ce choix.
 
 ### Laboratoire libre
-Deux éditeurs principaux : MARCXML et XSLT. Transformation à la demande, aperçu HTML, HTML généré et erreurs. Import/export de `.xml` et `.xsl`.
+Deux éditeurs principaux : MARCXML et XSLT. Transformation à la demande, aperçu HTML, XML ou HTML généré et erreurs. Import/export de `.xml` et `.xsl`.
 
 Le menu « Charger une notice d’exemple », réservé au mode libre, propose les fichiers du catalogue `content/samples/index.json` sous leur nom sans extension. La sélection remplace uniquement le XML, avec confirmation si celui-ci a été modifié ; le copier-coller reste possible. Une annulation ou une erreur de chargement conserve le XML actuel. La transformation reste déclenchée par l’utilisateur.
 
@@ -38,7 +38,7 @@ Vue pédagogique du pipeline : `notice UNIMARC -> traitements Koha -> MARCXML tr
 1. Éditeur MARCXML avec numéros de ligne, coloration et validation syntaxique.
 2. Éditeur XSLT avec mêmes fonctions.
 3. Transformation XSLT 1.0 locale, bouton et raccourci `Ctrl+Entrée`.
-4. Aperçu HTML isolé ; onglet HTML généré ; onglet erreurs.
+4. Aperçu HTML isolé ; onglet XML ou HTML généré ; onglet erreurs.
 5. Corpus de notices UNIMARC.
 6. Au moins 10 exercices progressifs.
 7. Validation fondée sur le résultat, pas sur une solution XSLT unique.
