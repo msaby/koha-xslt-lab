@@ -78,6 +78,8 @@ Chaque exercice affiche une consigne unique, puis le bouton « Valider le résul
 
 ## Documents du projet
 
+- [Préparation du mode XSLT Koha](docs/XSLT_KOHA.md) — références officielles UNIMARC 26.05.03 et questions de conception du futur troisième mode.
+
 - [PRD](docs/PRD.md) — exigences produit et critères d'acceptation.
 - [Architecture](docs/ARCHITECTURE.md) — architecture technique et décisions.
 - [Pédagogie](docs/PEDAGOGY.md) — progression pédagogique et exercices.

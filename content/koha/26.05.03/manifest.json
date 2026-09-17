@@ -1,0 +1,59 @@
+{
+  "version": "26.05.03",
+  "retrievedOn": "2026-09-17",
+  "source": "https://download.koha-community.org/koha-26.05.03.tar.gz",
+  "archiveSha256": "e6a4fed2975cf5f9c3e202549b63bf12f778dd159b679dbaefd13f0ce0aa3418",
+  "language": "en",
+  "format": "UNIMARC",
+  "files": [
+    {
+      "path": "koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "sha256": "4f991c6d85d86f2ac6b8a1ec354bb07a8c16a1adfd389106c2fe0db630243e90",
+      "dependencies": [
+        "UNIMARCslimUtils.xsl"
+      ]
+    },
+    {
+      "path": "koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "sha256": "7c9c6908ce167255efa552b4b93126e6f33793fa890ea075769c584246f9f8b7",
+      "dependencies": [
+        "UNIMARCslimUtils.xsl"
+      ]
+    },
+    {
+      "path": "koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "sha256": "7f00316e5a7ffbf4eec233c2281ed2aa6eed1650ced31bdf7b4af86e1713fc90",
+      "dependencies": [
+        "UNIMARCslimUtils.xsl"
+      ]
+    },
+    {
+      "path": "koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "sha256": "e555b14d6ea2aa65e0fa91561b2c5657064a21507fa6ac181c6b3c2cf91ec7fa",
+      "dependencies": [
+        "UNIMARCslimUtils.xsl"
+      ]
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b",
+      "dependencies": []
+    },
+    {
+      "path": "koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl",
+      "sha256": "6470c21ebd977f60294f980ab02446dbf3d24a4a2d3c69fdcec64c1008b64c5c",
+      "dependencies": []
+    },
+    {
+      "path": "koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl",
+      "sha256": "382140ceec77a01125cf0cdd5ea3be5e2ac53fe77dcf51f4bc2a391e0e75a2e7",
+      "dependencies": []
+    }
+  ],
+  "entrypoints": [
+    "koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+    "koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+    "koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+    "koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl"
+  ]
+}
