@@ -1,28 +1,6 @@
 import { transformSources } from "../transformer/transformer.js";
 import { validateResult } from "../exercises/validator.js";
 
-const sampleXml = `<?xml version="1.0" encoding="UTF-8"?>
-<record xmlns="http://www.loc.gov/MARC21/slim">
-  <datafield tag="200" ind1=" " ind2=" ">
-    <subfield code="a">Fables</subfield>
-    <subfield code="f">Jean de La Fontaine</subfield>
-  </datafield>
-</record>`;
-
-const sampleXslt = `<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:marc="http://www.loc.gov/MARC21/slim"
-  exclude-result-prefixes="marc">
-  <xsl:output method="html" encoding="UTF-8"/>
-  <xsl:template match="/">
-    <article>
-      <h2><xsl:value-of select="marc:record/marc:datafield[@tag='200']/marc:subfield[@code='a']"/></h2>
-      <p><xsl:value-of select="marc:record/marc:datafield[@tag='200']/marc:subfield[@code='f']"/></p>
-    </article>
-  </xsl:template>
-</xsl:stylesheet>`;
-
 const xmlEditor = document.querySelector("#xml-editor");
 const xsltEditor = document.querySelector("#xslt-editor");
 const transformButton = document.querySelector("#transform-button");
@@ -50,7 +28,7 @@ const xmlExample = {
   picker: document.querySelector("#sample-picker"),
   select: document.querySelector("#sample-select"),
   status: document.querySelector("#sample-status"),
-  editor: xmlEditor, loadedSource: sampleXml, loadedFilename: "", catalogLoaded: false,
+  editor: xmlEditor, loadedSource: "", loadedFilename: "", catalogLoaded: false,
   directory: "content/samples", extension: /\.xml$/i,
   listName: "des notices", itemName: "la notice", sourceName: "le XML",
   preserved: "Votre XML est conservé.",
@@ -60,7 +38,7 @@ const xsltExample = {
   picker: document.querySelector("#xslt-sample-picker"),
   select: document.querySelector("#xslt-sample-select"),
   status: document.querySelector("#xslt-sample-status"),
-  editor: xsltEditor, loadedSource: sampleXslt, loadedFilename: "", catalogLoaded: false,
+  editor: xsltEditor, loadedSource: "", loadedFilename: "", catalogLoaded: false,
   directory: "content/xslt/samples", extension: /\.xsl$/i,
   listName: "des feuilles XSLT", itemName: "la feuille XSLT", sourceName: "la XSLT",
   preserved: "Votre XSLT est conservée.",
@@ -70,6 +48,7 @@ let modeVersion = 0;
 let currentExercise = null;
 let latestHtml = "";
 let guidedModeInitialized = false;
+let freeModeInitialized = false;
 const xsltSampleToggle = document.querySelector("#xslt-sample-toggle");
 const xsltSampleOptions = document.querySelector("#xslt-sample-options");
 const xsltSampleDescription = document.querySelector("#xslt-sample-description");
@@ -119,8 +98,6 @@ function renderXsltOptions(filenames) {
   updateXsltSelection();
 }
 
-xmlEditor.value = sampleXml;
-xsltEditor.value = sampleXslt;
 
 function setError(error) {
   const message = error instanceof Error ? error.message : String(error);
@@ -203,6 +180,20 @@ async function enterMode(mode) {
       example.catalogLoaded ? undefined : loadSampleCatalog(example)
     ));
     if (enteredModeVersion !== modeVersion) return;
+    if (!freeModeInitialized) {
+      if (!xmlExample.catalogLoaded || !xsltExample.catalogLoaded) return;
+      const firstNotice = xmlExample.select.options[1]?.value;
+      if (!firstNotice) {
+        xmlExample.status.textContent = "Aucune notice d’exemple disponible.";
+        return;
+      }
+      xmlExample.select.value = firstNotice;
+      xsltExample.select.value = "identite.xsl";
+      await Promise.all([loadSample(xmlExample), loadSample(xsltExample)]);
+      if (enteredModeVersion !== modeVersion) return;
+      freeModeInitialized = true;
+    }
+    if (!xmlEditor.value || !xsltEditor.value) return;
     await runTransformation();
   }
 }
