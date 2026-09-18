@@ -78,6 +78,20 @@ h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .sample-option:hover, .sample-option:focus-visible, .sample-option[aria-current="true"] { background: #e5eee9; }
 .editor-card { display: flex; flex-direction: column; gap: .5rem; min-width: 0; }
 .editor-label { color: var(--blue); font: 700 .75rem ui-sans-serif, system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; }
+.code-editor { min-width: 0; }
+.code-editor .cm-editor { height: 31rem; min-height: 15rem; resize: vertical; overflow: hidden; border: 1px solid var(--line); border-radius: 2px; background: #fbfaf6; color: var(--ink); }
+.code-editor .cm-scroller { overflow: auto; font: .8rem/1.55 Consolas, "Courier New", monospace; }
+.code-editor .cm-content { padding: .75rem 0; }
+.code-editor .cm-line { padding: 0 .75rem; }
+.code-editor .cm-gutters { border-right: 1px solid var(--line); background: #f0eee7; color: #64717c; }
+.code-editor .cm-activeLineGutter { background: #e5eee9; color: var(--ink); }
+.code-editor .cm-editor.cm-focused { outline: 3px solid rgba(35, 106, 120, .3); outline-offset: 2px; }
+.syntax-tag { color: #205c8c; }
+.syntax-attribute { color: #7b3c91; }
+.syntax-value { color: #875020; }
+.syntax-comment { color: #526c50; font-style: italic; }
+.syntax-meta, .syntax-entity { color: #934027; }
+.syntax-punctuation { color: #475763; }
 textarea, pre { border: 1px solid var(--line); border-radius: 2px; background: #fbfaf6; color: var(--ink); }
 textarea { width: 100%; min-height: 31rem; padding: 1rem; resize: vertical; font: .8rem/1.55 Consolas, "Courier New", monospace; tab-size: 2; }
 textarea:focus, button:focus-visible, select:focus-visible { outline: 3px solid rgba(35, 106, 120, .3); outline-offset: 2px; }
@@ -96,3 +110,4 @@ pre { min-height: 31rem; margin: 0; padding: 1rem; overflow: auto; white-space: 
 @media (max-width: 38rem) { .section-heading { align-items: start; flex-direction: column; } .editors { grid-template-columns: 1fr; } textarea, .tab-panel, iframe, pre { min-height: 20rem; } }
 @media (max-width: 38rem) { .mode-choice-actions { grid-template-columns: 1fr; } }
 @media (max-width: 38rem) { .sample-pickers { grid-template-columns: 1fr; } }
+@media (max-width: 38rem) { .code-editor .cm-editor { height: 20rem; } }

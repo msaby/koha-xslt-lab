@@ -1,8 +1,9 @@
 import { transformSources } from "../transformer/transformer.js";
 import { validateResult } from "../exercises/validator.js";
+import { createXmlEditor } from "../editor/xml-editor.bundle.js";
 
-const xmlEditor = document.querySelector("#xml-editor");
-const xsltEditor = document.querySelector("#xslt-editor");
+const xmlEditor = createXmlEditor("#xml-editor", "Éditeur MARCXML", () => runTransformation());
+const xsltEditor = createXmlEditor("#xslt-editor", "Éditeur XSLT", () => runTransformation());
 const transformButton = document.querySelector("#transform-button");
 const preview = document.querySelector("#preview");
 const htmlOutput = document.querySelector("#html-output");
@@ -327,6 +328,7 @@ freeModeButton.addEventListener("click", () => enterMode("free").catch(setError)
 guidedModeButton.addEventListener("click", () => enterMode("guided").catch(setError));
 validateExerciseButton.addEventListener("click", validateExercise);
 document.addEventListener("keydown", (event) => {
+  if (event.defaultPrevented) return;
   if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
     event.preventDefault();
     runTransformation();
