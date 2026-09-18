@@ -1,0 +1,37 @@
+{
+  "upstreamCommit": "75d5220d1f3473f1fb79b036b839c344c465b703",
+  "libxml2": "c34742f3017f6d39f3e4ccae4f70172238160ef8",
+  "libxslt": "923903c59d668af42e3144bc623c9190a0f65988",
+  "files": [
+    {
+      "path": "experimental/original.js",
+      "bytes": 1495058,
+      "sha256": "8462a8a372f92a5c8845999b981d0e9f1a5ce2a0b70f2dd1ff3628600405e854"
+    },
+    {
+      "path": "experimental/patched.js",
+      "bytes": 1497102,
+      "sha256": "4c5e186c41b9633cf2645f063898211a816c9f9c93608ba3f38357b7b35d622b"
+    },
+    {
+      "path": "experimental/compiler.txt",
+      "bytes": 290,
+      "sha256": "b12da233ba9e5a3c837e805f17d70f9acaa822f038e5cc5a3cf234a28dd31fa5"
+    },
+    {
+      "path": "build-experiment.sh",
+      "bytes": 2730,
+      "sha256": "2eb514468f365bf54e3013545830b9a1bde43de8f6e234371142bbbcddb2f6fc"
+    },
+    {
+      "path": "patch-loader.py",
+      "bytes": 836,
+      "sha256": "9cb028cf20172409ec418fa96f78bcf8ccec0265610a0ee8f9925e4ec489ec3a"
+    },
+    {
+      "path": "vendor/transform.c",
+      "bytes": 23409,
+      "sha256": "061abac9e2fb764ee4a3639140dba13e38380830bf071d746d7e43a1dbf7b892"
+    }
+  ]
+}

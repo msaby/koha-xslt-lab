@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; style-src 'self'; img-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>Essai WebAssembly corrigé — Koha XSLT Lab</title>
+  <link rel="stylesheet" href="spike.css">
+  <script src="bootstrap.js"></script>
+  <script src="experimental/patched.js"></script>
+</head>
+<body>
+  <h1>Essai XSLT WebAssembly corrigé</h1>
+  <p>Copie expérimentale corrigeant la transmission des paramètres aux feuilles importées. Les résultats sont comparés à libxslt ; les feuilles Koha restent intactes.</p>
+  <p><a href="index.html">Comparer avec le moteur initial</a></p>
+  <p id="engine-status" role="status">Initialisation…</p>
+  <p id="summary" role="status">Tests en cours…</p>
+  <table>
+    <thead><tr><th>Cas</th><th>Résultat</th><th>Durée</th><th>Détail</th></tr></thead>
+    <tbody id="results"></tbody>
+  </table>
+  <details><summary>Rapport technique</summary><pre id="report"></pre></details>
+  <p><a href="../../index.html">Revenir au laboratoire</a></p>
+  <script type="module" src="spike.js"></script>
+</body>
+</html>

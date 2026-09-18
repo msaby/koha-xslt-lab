@@ -1,0 +1,238 @@
+{
+  "reference": {
+    "libxml": [
+      2,
+      10,
+      4
+    ],
+    "libxslt": [
+      1,
+      1,
+      37
+    ]
+  },
+  "cases": [
+    {
+      "xml": "content/samples/identifier.xml",
+      "xsl": "content/solutions/ex01/main.xsl",
+      "method": "html",
+      "expected": "<p>FRBNF000000001</p>\n"
+    },
+    {
+      "xml": "content/samples/simple.xml",
+      "xsl": "content/solutions/ex02/main.xsl",
+      "method": "html",
+      "expected": "<p>Le nom de la rose</p>\n"
+    },
+    {
+      "xml": "content/samples/title-subtitle.xml",
+      "xsl": "content/solutions/ex03/main.xsl",
+      "method": "html",
+      "expected": "<p>Le nom de la rose : roman</p>\n"
+    },
+    {
+      "xml": "content/samples/all-subtitles.xml",
+      "xsl": "content/solutions/ex04/main.xsl",
+      "method": "html",
+      "expected": "<p>Le nom de la rose : roman : édition illustrée : une enquête</p>\n"
+    },
+    {
+      "xml": "content/samples/jardin-des-nuages.xml",
+      "xsl": "content/xslt/samples/identite.xsl",
+      "method": "xml",
+      "expected": "<?xml version=\"1.0\"?>\n<!-- Notice UNIMARC fictive pour les essais du laboratoire. --><record xmlns=\"http://www.loc.gov/MARC21/slim\">\n  <controlfield tag=\"001\">DEMO001</controlfield>\n  <datafield tag=\"200\" ind1=\"1\" ind2=\" \">\n    <subfield code=\"a\">Le jardin des nuages</subfield>\n    <subfield code=\"e\">roman</subfield>\n    <subfield code=\"f\">Lila Brume</subfield>\n  </datafield>\n  <datafield tag=\"210\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">Clairvallon</subfield>\n    <subfield code=\"c\">Éditions du Cerf-volant</subfield>\n    <subfield code=\"d\">2024</subfield>\n  </datafield>\n  <datafield tag=\"215\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">184 p.</subfield>\n  </datafield>\n  <datafield tag=\"700\" ind1=\" \" ind2=\"1\">\n    <subfield code=\"a\">Brume</subfield>\n    <subfield code=\"b\">Lila</subfield>\n  </datafield>\n</record>"
+    },
+    {
+      "xml": "content/samples/jardin-des-nuages.xml",
+      "xsl": "content/xslt/samples/titre-auteur.xsl",
+      "method": "html",
+      "expected": "<article><h2>Le jardin des nuages</h2>\n<p>Lila Brume</p></article>\n"
+    },
+    {
+      "xml": "content/samples/jardin-des-nuages.xml",
+      "xsl": "content/xslt/samples/titre-sous-titres.xsl",
+      "method": "html",
+      "expected": "<p>Le jardin des nuages : roman</p>\n"
+    },
+    {
+      "xml": "content/samples/jardin-des-nuages.xml",
+      "xsl": "content/xslt/samples/tous-les-champs.xsl",
+      "method": "html",
+      "expected": "<article><h2>Champs de la notice</h2>\n<dl>\n<dt>001</dt>\n<dd>DEMO001</dd>\n<dt>200 [1 ]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Le jardin des nuages</li>\n<li>\n<strong>$e</strong> roman</li>\n<li>\n<strong>$f</strong> Lila Brume</li>\n</ul></dd>\n<dt>210 [  ]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Clairvallon</li>\n<li>\n<strong>$c</strong> Éditions du Cerf-volant</li>\n<li>\n<strong>$d</strong> 2024</li>\n</ul></dd>\n<dt>215 [  ]</dt>\n<dd><ul><li>\n<strong>$a</strong> 184 p.</li></ul></dd>\n<dt>700 [ 1]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Brume</li>\n<li>\n<strong>$b</strong> Lila</li>\n</ul></dd>\n</dl></article>\n"
+    },
+    {
+      "xml": "content/samples/atlas-des-iles-imaginaires.xml",
+      "xsl": "content/xslt/samples/identite.xsl",
+      "method": "xml",
+      "expected": "<?xml version=\"1.0\"?>\n<!-- Notice UNIMARC fictive pour les essais du laboratoire. --><record xmlns=\"http://www.loc.gov/MARC21/slim\">\n  <controlfield tag=\"001\">DEMO002</controlfield>\n  <datafield tag=\"200\" ind1=\"1\" ind2=\" \">\n    <subfield code=\"a\">Atlas des îles imaginaires</subfield>\n    <subfield code=\"e\">cartes et récits</subfield>\n    <subfield code=\"e\">à l’usage des voyageurs immobiles</subfield>\n    <subfield code=\"f\">Noé Rivage et Alma Boussole</subfield>\n  </datafield>\n  <datafield tag=\"210\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">Port-Lointain</subfield>\n    <subfield code=\"c\">La Boussole bleue</subfield>\n    <subfield code=\"d\">2023</subfield>\n  </datafield>\n  <datafield tag=\"215\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">96 p.</subfield>\n    <subfield code=\"c\">cartes en couleur</subfield>\n  </datafield>\n  <datafield tag=\"700\" ind1=\" \" ind2=\"1\">\n    <subfield code=\"a\">Rivage</subfield>\n    <subfield code=\"b\">Noé</subfield>\n  </datafield>\n  <datafield tag=\"701\" ind1=\" \" ind2=\"1\">\n    <subfield code=\"a\">Boussole</subfield>\n    <subfield code=\"b\">Alma</subfield>\n  </datafield>\n</record>"
+    },
+    {
+      "xml": "content/samples/atlas-des-iles-imaginaires.xml",
+      "xsl": "content/xslt/samples/titre-auteur.xsl",
+      "method": "html",
+      "expected": "<article><h2>Atlas des îles imaginaires</h2>\n<p>Noé Rivage et Alma Boussole</p></article>\n"
+    },
+    {
+      "xml": "content/samples/atlas-des-iles-imaginaires.xml",
+      "xsl": "content/xslt/samples/titre-sous-titres.xsl",
+      "method": "html",
+      "expected": "<p>Atlas des îles imaginaires : cartes et récits : à l’usage des voyageurs immobiles</p>\n"
+    },
+    {
+      "xml": "content/samples/atlas-des-iles-imaginaires.xml",
+      "xsl": "content/xslt/samples/tous-les-champs.xsl",
+      "method": "html",
+      "expected": "<article><h2>Champs de la notice</h2>\n<dl>\n<dt>001</dt>\n<dd>DEMO002</dd>\n<dt>200 [1 ]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Atlas des îles imaginaires</li>\n<li>\n<strong>$e</strong> cartes et récits</li>\n<li>\n<strong>$e</strong> à l’usage des voyageurs immobiles</li>\n<li>\n<strong>$f</strong> Noé Rivage et Alma Boussole</li>\n</ul></dd>\n<dt>210 [  ]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Port-Lointain</li>\n<li>\n<strong>$c</strong> La Boussole bleue</li>\n<li>\n<strong>$d</strong> 2023</li>\n</ul></dd>\n<dt>215 [  ]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> 96 p.</li>\n<li>\n<strong>$c</strong> cartes en couleur</li>\n</ul></dd>\n<dt>700 [ 1]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Rivage</li>\n<li>\n<strong>$b</strong> Noé</li>\n</ul></dd>\n<dt>701 [ 1]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Boussole</li>\n<li>\n<strong>$b</strong> Alma</li>\n</ul></dd>\n</dl></article>\n"
+    },
+    {
+      "xml": "content/samples/cuisine-des-etoiles.xml",
+      "xsl": "content/xslt/samples/identite.xsl",
+      "method": "xml",
+      "expected": "<?xml version=\"1.0\"?>\n<!-- Notice UNIMARC fictive pour les essais du laboratoire. --><record xmlns=\"http://www.loc.gov/MARC21/slim\">\n  <controlfield tag=\"001\">DEMO003</controlfield>\n  <datafield tag=\"200\" ind1=\"1\" ind2=\" \">\n    <subfield code=\"a\">La cuisine des étoiles</subfield>\n    <subfield code=\"f\">Milo Comète</subfield>\n  </datafield>\n  <datafield tag=\"210\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">Luneville-sur-Ciel</subfield>\n    <subfield code=\"c\">Éditions Sucre &amp; Saturne</subfield>\n    <subfield code=\"d\">2025</subfield>\n  </datafield>\n  <datafield tag=\"215\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">128 p.</subfield>\n    <subfield code=\"c\">illustrations en couleur</subfield>\n  </datafield>\n  <datafield tag=\"300\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">Recettes imaginaires : ne pas utiliser comme livre de cuisine.</subfield>\n  </datafield>\n  <datafield tag=\"700\" ind1=\" \" ind2=\"1\">\n    <subfield code=\"a\">Comète</subfield>\n    <subfield code=\"b\">Milo</subfield>\n  </datafield>\n</record>"
+    },
+    {
+      "xml": "content/samples/cuisine-des-etoiles.xml",
+      "xsl": "content/xslt/samples/titre-auteur.xsl",
+      "method": "html",
+      "expected": "<article><h2>La cuisine des étoiles</h2>\n<p>Milo Comète</p></article>\n"
+    },
+    {
+      "xml": "content/samples/cuisine-des-etoiles.xml",
+      "xsl": "content/xslt/samples/titre-sous-titres.xsl",
+      "method": "html",
+      "expected": "<p>La cuisine des étoiles</p>\n"
+    },
+    {
+      "xml": "content/samples/cuisine-des-etoiles.xml",
+      "xsl": "content/xslt/samples/tous-les-champs.xsl",
+      "method": "html",
+      "expected": "<article><h2>Champs de la notice</h2>\n<dl>\n<dt>001</dt>\n<dd>DEMO003</dd>\n<dt>200 [1 ]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> La cuisine des étoiles</li>\n<li>\n<strong>$f</strong> Milo Comète</li>\n</ul></dd>\n<dt>210 [  ]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Luneville-sur-Ciel</li>\n<li>\n<strong>$c</strong> Éditions Sucre &amp; Saturne</li>\n<li>\n<strong>$d</strong> 2025</li>\n</ul></dd>\n<dt>215 [  ]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> 128 p.</li>\n<li>\n<strong>$c</strong> illustrations en couleur</li>\n</ul></dd>\n<dt>300 [  ]</dt>\n<dd><ul><li>\n<strong>$a</strong> Recettes imaginaires : ne pas utiliser comme livre de cuisine.</li></ul></dd>\n<dt>700 [ 1]</dt>\n<dd><ul>\n<li>\n<strong>$a</strong> Comète</li>\n<li>\n<strong>$b</strong> Milo</li>\n</ul></dd>\n</dl></article>\n"
+    },
+    {
+      "xml": "spike/fixtures/record.xml",
+      "xsl": "spike/fixtures/simple.xsl",
+      "method": "html",
+      "expected": "<p>Jean de La Fontaine</p>\n"
+    },
+    {
+      "xml": "spike/fixtures/record.xml",
+      "xsl": "spike/fixtures/include/main.xsl",
+      "method": "xml",
+      "expected": "<?xml version=\"1.0\"?>\n<p>Jean de La Fontaine</p>\n"
+    },
+    {
+      "xml": "spike/fixtures/record.xml",
+      "xsl": "spike/fixtures/import/main.xsl",
+      "method": "xml",
+      "expected": "<?xml version=\"1.0\"?>\n<p xmlns:marc=\"http://www.loc.gov/MARC21/slim\">Jean de La Fontaine</p>\n"
+    },
+    {
+      "xml": "spike/wasm/fixtures/identity.xml",
+      "xsl": "spike/wasm/fixtures/import/main.xsl",
+      "method": "xml",
+      "expected": "<result><override><base>dépendance imbriquée</base></override></result>\n"
+    },
+    {
+      "xml": "spike/wasm/fixtures/identity.xml",
+      "xsl": "spike/wasm/fixtures/exslt.xsl",
+      "method": "xml",
+      "expected": "<result><encoded>%C3%89t%C3%A9%20%26%20caf%C3%A9</encoded><tokens>3</tokens><node-set>présent</node-set></result>\n"
+    },
+    {
+      "xml": "spike/wasm/fixtures/identity.xml",
+      "xsl": "spike/wasm/fixtures/text.xsl",
+      "method": "text",
+      "expected": "Été & café <texte>"
+    },
+    {
+      "xml": "spike/wasm/fixtures/identity.xml",
+      "xsl": "spike/wasm/fixtures/inert-output.xsl",
+      "method": "html",
+      "expected": "<div onclick=\"window.__xsltScriptExecuted=true\">\n<script>window.__xsltScriptExecuted=true;</script>Sortie conservée comme texte</div>\n"
+    },
+    {
+      "xml": "spike/wasm/fixtures/identity.xml",
+      "xsl": "content/xslt/samples/identite.xsl",
+      "method": "xml",
+      "expected": "<?xml version=\"1.0\"?>\n<?essai conserver?><record xmlns=\"http://www.loc.gov/MARC21/slim\" test=\"identité\">\n  <!-- Conserver cet ordre inhabituel, les espaces et les champs répétés. -->\n  <datafield tag=\"200\" ind1=\"1\" ind2=\" \"><subfield code=\"e\"> premier </subfield><subfield code=\"a\">Été &amp; café</subfield><subfield code=\"e\">second</subfield></datafield>\n  <controlfield tag=\"001\">DEMO</controlfield>\n  <datafield tag=\"200\" ind1=\" \" ind2=\" \"><subfield code=\"a\"/></datafield>\n</record>"
+    },
+    {
+      "xml": "spike/wasm/fixtures/author-parameter/notice.xml",
+      "xsl": "spike/wasm/fixtures/author-parameter/main.xsl",
+      "method": "xml",
+      "expected": "<diagnostic><direct fields=\"2\" selected=\"1\">Brume</direct><case id=\"local-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case></diagnostic>"
+    },
+    {
+      "xml": "content/samples/jardin-des-nuages.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "method": "html",
+      "expected": "<h1>Le jardin des nuages : roman / Lila Brume</h1><span class=\"results_summary author main_author\"><span class=\"label\">Main Author: </span><span class=\"value\"><a href=\"/cgi-bin/koha/catalogue/search.pl?q=au:Brume%20Lila\">Brume, Lila</a></span></span><span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Clairvallon : <a href=\"/cgi-bin/koha/catalogue/search.pl?q=pb:%C3%89ditions%20du%20Cerf-volant\" title=\"Search for publisher\">Éditions du Cerf-volant</a>, 2024</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>184 p.</span>\n"
+    },
+    {
+      "xml": "content/samples/atlas-des-iles-imaginaires.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "method": "html",
+      "expected": "<h1>Atlas des îles imaginaires : cartes et récitsà l’usage des voyageurs immobiles / Noé Rivage et Alma Boussole</h1><span class=\"results_summary author main_author\"><span class=\"label\">Main Author: </span><span class=\"value\"><a href=\"/cgi-bin/koha/catalogue/search.pl?q=au:Rivage%20No%C3%A9\">Rivage, Noé</a></span></span><span class=\"results_summary author coauthor\"><span class=\"label\">Coauthor: </span><span class=\"value\"><a href=\"/cgi-bin/koha/catalogue/search.pl?q=au:Boussole%20Alma\">Boussole, Alma</a></span></span><span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Port-Lointain : <a href=\"/cgi-bin/koha/catalogue/search.pl?q=pb:La%20Boussole%20bleue\" title=\"Search for publisher\">La Boussole bleue</a>, 2023</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>96 p. :\n          cartes en couleur</span>\n"
+    },
+    {
+      "xml": "content/samples/cuisine-des-etoiles.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "method": "html",
+      "expected": "<h1>La cuisine des étoiles / Milo Comète</h1><span class=\"results_summary author main_author\"><span class=\"label\">Main Author: </span><span class=\"value\"><a href=\"/cgi-bin/koha/catalogue/search.pl?q=au:Com%C3%A8te%20Milo\">Comète, Milo</a></span></span><span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Luneville-sur-Ciel : <a href=\"/cgi-bin/koha/catalogue/search.pl?q=pb:%C3%89ditions%20Sucre%20%26%20Saturne\" title=\"Search for publisher\">Éditions Sucre &amp; Saturne</a>, 2025</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>128 p. :\n          illustrations en couleur</span>\n"
+    },
+    {
+      "xml": "content/samples/jardin-des-nuages.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "method": "html",
+      "expected": "<a href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber=DEMO001\" class=\"title\">Le jardin des nuages</a> : roman / Lila Brume <span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Clairvallon : <a href=\"/cgi-bin/koha/catalogue/search.pl?q=pb:%C3%89ditions%20du%20Cerf-volant\" title=\"Search for publisher\">Éditions du Cerf-volant</a>, 2024</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>184 p.</span>\n"
+    },
+    {
+      "xml": "content/samples/atlas-des-iles-imaginaires.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "method": "html",
+      "expected": "<a href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber=DEMO002\" class=\"title\">Atlas des îles imaginaires</a> : cartes et récits / Noé Rivage et Alma Boussole <span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Port-Lointain : <a href=\"/cgi-bin/koha/catalogue/search.pl?q=pb:La%20Boussole%20bleue\" title=\"Search for publisher\">La Boussole bleue</a>, 2023</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>96 p. :\n          cartes en couleur</span>\n"
+    },
+    {
+      "xml": "content/samples/cuisine-des-etoiles.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "method": "html",
+      "expected": "<a href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber=DEMO003\" class=\"title\">La cuisine des étoiles</a> / Milo Comète <span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Luneville-sur-Ciel : <a href=\"/cgi-bin/koha/catalogue/search.pl?q=pb:%C3%89ditions%20Sucre%20%26%20Saturne\" title=\"Search for publisher\">Éditions Sucre &amp; Saturne</a>, 2025</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>128 p. :\n          illustrations en couleur</span>\n"
+    },
+    {
+      "xml": "content/samples/jardin-des-nuages.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "method": "html",
+      "expected": "<h2 class=\"title\">Le jardin des nuages : roman / Lila Brume</h2><span class=\"results_summary author main_author\"><span class=\"label\">Main Author: </span><span class=\"value\"><a href=\"/cgi-bin/koha/opac-search.pl?q=au:Brume%20Lila\">Brume, Lila</a></span></span><span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Clairvallon : <a href=\"/cgi-bin/koha/opac-search.pl?q=pb:%C3%89ditions%20du%20Cerf-volant\" title=\"Search for publisher\">Éditions du Cerf-volant</a>, 2024</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>184 p.</span>\n"
+    },
+    {
+      "xml": "content/samples/atlas-des-iles-imaginaires.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "method": "html",
+      "expected": "<h2 class=\"title\">Atlas des îles imaginaires : cartes et récits : à l’usage des voyageurs immobiles / Noé Rivage et Alma Boussole</h2><span class=\"results_summary author main_author\"><span class=\"label\">Main Author: </span><span class=\"value\"><a href=\"/cgi-bin/koha/opac-search.pl?q=au:Rivage%20No%C3%A9\">Rivage, Noé</a></span></span><span class=\"results_summary author coauthor\"><span class=\"label\">Coauthor: </span><span class=\"value\"><a href=\"/cgi-bin/koha/opac-search.pl?q=au:Boussole%20Alma\">Boussole, Alma</a></span></span><span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Port-Lointain : <a href=\"/cgi-bin/koha/opac-search.pl?q=pb:La%20Boussole%20bleue\" title=\"Search for publisher\">La Boussole bleue</a>, 2023</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>96 p. :\n          cartes en couleur</span>\n"
+    },
+    {
+      "xml": "content/samples/cuisine-des-etoiles.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "method": "html",
+      "expected": "<h2 class=\"title\">La cuisine des étoiles / Milo Comète</h2><span class=\"results_summary author main_author\"><span class=\"label\">Main Author: </span><span class=\"value\"><a href=\"/cgi-bin/koha/opac-search.pl?q=au:Com%C3%A8te%20Milo\">Comète, Milo</a></span></span><span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Luneville-sur-Ciel : <a href=\"/cgi-bin/koha/opac-search.pl?q=pb:%C3%89ditions%20Sucre%20%26%20Saturne\" title=\"Search for publisher\">Éditions Sucre &amp; Saturne</a>, 2025</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>128 p. :\n          illustrations en couleur</span>\n"
+    },
+    {
+      "xml": "content/samples/jardin-des-nuages.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "method": "html",
+      "expected": "<a href=\"/cgi-bin/koha/opac-detail.pl?biblionumber=DEMO001\" class=\"title\">Le jardin des nuages</a> : roman / Lila Brume<span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Clairvallon : <a href=\"/cgi-bin/koha/opac-search.pl?q=pb:%C3%89ditions%20du%20Cerf-volant\" title=\"Search for publisher\">Éditions du Cerf-volant</a>, 2024</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>184 p.</span><span class=\"results_summary availability\"><span class=\"label\">Availability: </span>\n        No items available\n      <span class=\"available\">: </span></span>\n"
+    },
+    {
+      "xml": "content/samples/atlas-des-iles-imaginaires.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "method": "html",
+      "expected": "<a href=\"/cgi-bin/koha/opac-detail.pl?biblionumber=DEMO002\" class=\"title\">Atlas des îles imaginaires</a> : cartes et récits : à l’usage des voyageurs immobiles / Noé Rivage et Alma Boussole<span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Port-Lointain : <a href=\"/cgi-bin/koha/opac-search.pl?q=pb:La%20Boussole%20bleue\" title=\"Search for publisher\">La Boussole bleue</a>, 2023</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>96 p. :\n          cartes en couleur</span><span class=\"results_summary availability\"><span class=\"label\">Availability: </span>\n        No items available\n      <span class=\"available\">: </span></span>\n"
+    },
+    {
+      "xml": "content/samples/cuisine-des-etoiles.xml",
+      "xsl": "content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "method": "html",
+      "expected": "<a href=\"/cgi-bin/koha/opac-detail.pl?biblionumber=DEMO003\" class=\"title\">La cuisine des étoiles</a> / Milo Comète<span class=\"results_summary publication\"><span class=\"label\">Publication: </span><span class=\"value\">Luneville-sur-Ciel : <a href=\"/cgi-bin/koha/opac-search.pl?q=pb:%C3%89ditions%20Sucre%20%26%20Saturne\" title=\"Search for publisher\">Éditions Sucre &amp; Saturne</a>, 2025</span></span><span class=\"results_summary description\"><span class=\"label\">Description: </span>128 p. :\n          illustrations en couleur</span><span class=\"results_summary availability\"><span class=\"label\">Availability: </span>\n        No items available\n      <span class=\"available\">: </span></span>\n"
+    }
+  ]
+}

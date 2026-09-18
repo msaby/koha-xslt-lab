@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Notice minimale : un auteur principal et un coauteur témoin. -->
+<record xmlns="http://www.loc.gov/MARC21/slim">
+  <controlfield tag="001">TEST-AUTEUR</controlfield>
+  <datafield tag="700" ind1=" " ind2="1">
+    <subfield code="a">Brume</subfield>
+    <subfield code="b">Lila</subfield>
+  </datafield>
+  <datafield tag="701" ind1=" " ind2="1">
+    <subfield code="a">Rivage</subfield>
+    <subfield code="b">Noé</subfield>
+  </datafield>
+</record>

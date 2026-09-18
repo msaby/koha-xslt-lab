@@ -1,0 +1,244 @@
+{
+  "cases": [
+    {
+      "name": "identifier.xml → content/solutions/ex01/main.xsl",
+      "passed": true,
+      "ms": 27
+    },
+    {
+      "name": "simple.xml → content/solutions/ex02/main.xsl",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "title-subtitle.xml → content/solutions/ex03/main.xsl",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "all-subtitles.xml → content/solutions/ex04/main.xsl",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/xslt/samples/identite.xsl",
+      "passed": true,
+      "ms": 17
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/xslt/samples/titre-auteur.xsl",
+      "passed": true,
+      "ms": 8
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/xslt/samples/titre-sous-titres.xsl",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/xslt/samples/tous-les-champs.xsl",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/xslt/samples/identite.xsl",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/xslt/samples/titre-auteur.xsl",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/xslt/samples/titre-sous-titres.xsl",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/xslt/samples/tous-les-champs.xsl",
+      "passed": true,
+      "ms": 8
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/xslt/samples/identite.xsl",
+      "passed": true,
+      "ms": 8
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/xslt/samples/titre-auteur.xsl",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/xslt/samples/titre-sous-titres.xsl",
+      "passed": true,
+      "ms": 10
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/xslt/samples/tous-les-champs.xsl",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "record.xml → spike/fixtures/simple.xsl",
+      "passed": true,
+      "ms": 6
+    },
+    {
+      "name": "record.xml → spike/fixtures/include/main.xsl",
+      "passed": true,
+      "ms": 14
+    },
+    {
+      "name": "record.xml → spike/fixtures/import/main.xsl",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "identity.xml → spike/wasm/fixtures/import/main.xsl",
+      "passed": true,
+      "ms": 23
+    },
+    {
+      "name": "identity.xml → spike/wasm/fixtures/exslt.xsl",
+      "passed": true,
+      "ms": 8
+    },
+    {
+      "name": "identity.xml → spike/wasm/fixtures/text.xsl",
+      "passed": true,
+      "ms": 6
+    },
+    {
+      "name": "identity.xml → spike/wasm/fixtures/inert-output.xsl",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "identity.xml → content/xslt/samples/identite.xsl",
+      "passed": true,
+      "ms": 10
+    },
+    {
+      "name": "notice.xml → spike/wasm/fixtures/author-parameter/main.xsl",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "passed": true,
+      "ms": 21
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "passed": true,
+      "ms": 23
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "passed": true,
+      "ms": 23
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "passed": true,
+      "ms": 25
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "passed": true,
+      "ms": 18
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "passed": true,
+      "ms": 21
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "passed": true,
+      "ms": 22
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "passed": true,
+      "ms": 20
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "passed": true,
+      "ms": 20
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "passed": true,
+      "ms": 17
+    },
+    {
+      "name": "XML mal formé",
+      "passed": true,
+      "ms": 1
+    },
+    {
+      "name": "XSLT mal formée",
+      "passed": true,
+      "ms": 0
+    },
+    {
+      "name": "XSLT invalide",
+      "passed": true,
+      "ms": 1
+    },
+    {
+      "name": "Reprise après erreur et appels simultanés",
+      "passed": true,
+      "ms": 1
+    },
+    {
+      "name": "Le JavaScript du résultat reste inerte",
+      "passed": true,
+      "ms": 0
+    }
+  ],
+  "errors": [],
+  "initializationMs": 22,
+  "reference": {
+    "libxml": [
+      2,
+      10,
+      4
+    ],
+    "libxslt": [
+      1,
+      1,
+      37
+    ]
+  },
+  "authorParameter": {
+    "actual": "<diagnostic><direct fields=\"2\" selected=\"1\">Brume</direct><case id=\"local-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case></diagnostic>",
+    "expected": "<diagnostic><direct fields=\"2\" selected=\"1\">Brume</direct><case id=\"local-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case></diagnostic>"
+  },
+  "probe": {
+    "nativeAvailable": false,
+    "nativeError": null,
+    "blockedRequests": [],
+    "wasmCompilations": 1
+  },
+  "passed": 42,
+  "failed": 0,
+  "browser": "153.0.8010.12",
+  "pageErrors": [],
+  "externalRequests": [],
+  "variant": "patched"
+}

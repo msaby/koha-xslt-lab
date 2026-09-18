@@ -1,0 +1,1135 @@
+// Copyright (c) 2025, Mason Freed
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+
+// This is a polyfill for the XSLTProcessor API.
+// See: https://developer.mozilla.org/en-US/docs/Web/API/XSLTProcessor
+
+// The actual XSLT processing is performed by the xslt-processor package:
+//   https://github.com/DesignLiquido/xslt-processor/tree/main
+// Please see its copyright terms in src/xslt-processor/LICENSE.
+
+(function () {
+  // Feature detection
+  if (window.xsltPolyfillInstalled) {
+    return;
+  }
+  window.xsltPolyfillInstalled = true;
+  let polyfillReadyPromiseResolve;
+  let polyfillReadyPromiseReject;
+  const polyfillReadyPromise = new Promise((resolve, reject) => {
+    polyfillReadyPromiseResolve = resolve;
+    polyfillReadyPromiseReject = reject;
+  });
+  window.xsltUsePolyfillAlways = 'xsltUsePolyfillAlways' in window ? window.xsltUsePolyfillAlways : false;
+  window.xsltDontAutoloadXmlDocs = 'xsltDontAutoloadXmlDocs' in window ? window.xsltDontAutoloadXmlDocs : false;
+  let xsltPolyfillHideRequestId = 0;
+  let currentSpinnerText = null;
+
+  if ('xsltPolyfillSpinner' in window) {
+    currentSpinnerText = window.xsltPolyfillSpinner;
+    delete window.xsltPolyfillSpinner;
+  }
+
+  function setPolyfillSpinner(text) {
+    currentSpinnerText = text;
+    if (!document.body) {
+      if (text) {
+        xsltPolyfillHideRequestId = requestAnimationFrame(() => setPolyfillSpinner(text));
+      } else {
+        cancelAnimationFrame(xsltPolyfillHideRequestId);
+      }
+      return;
+    }
+
+    cancelAnimationFrame(xsltPolyfillHideRequestId);
+
+    let overlay = document.getElementById('xslt-polyfill-spinner');
+    if (text) {
+      if (!overlay) {
+        const xmlns = 'http://www.w3.org/1999/xhtml';
+        overlay = document.createElementNS(xmlns, 'div');
+        overlay.id = 'xslt-polyfill-spinner';
+
+        const span = document.createElementNS(xmlns, 'span');
+        span.textContent = text;
+        overlay.appendChild(span);
+
+        const style = document.createElementNS(xmlns, 'style');
+        style.textContent = `
+          #xslt-polyfill-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 16px;
+            border-radius: 15px;
+            z-index: 1;
+            font-family: sans-serif;
+            visibility: visible;
+          }
+          #xslt-polyfill-spinner::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: #3b82f6;
+            z-index: -1;
+            animation: ripple 1.5s infinite ease-out;
+          }
+          @keyframes ripple {
+            to {
+              transform: scale(1.15, 1.4);
+              opacity: 0;
+            }
+          }`;
+        overlay.appendChild(style);
+        document.body.appendChild(overlay);
+      } else {
+        const span = overlay.querySelector('span');
+        if (span) span.textContent = text;
+      }
+      overlay.style.display = 'block';
+      document.body.style.visibility = 'hidden';
+    } else {
+      if (overlay) {
+        overlay.remove();
+      }
+      if (document.body) {
+        document.body.style.removeProperty('visibility');
+      }
+    }
+  }
+
+  Object.defineProperty(window, 'xsltPolyfillSpinner', {
+    get() {
+      return currentSpinnerText;
+    },
+    set(val) {
+      setPolyfillSpinner(val);
+    },
+    configurable: true,
+  });
+
+  if (currentSpinnerText) {
+    setPolyfillSpinner(currentSpinnerText);
+  }
+
+  let nativeSupported = 'XSLTProcessor' in window && window.XSLTProcessor.toString().includes('native code');
+  if (nativeSupported) {
+    try {
+      new XSLTProcessor();
+    } catch {
+      nativeSupported = false;
+    }
+  }
+  const polyfillWillLoad = !nativeSupported || window.xsltUsePolyfillAlways;
+  if (polyfillWillLoad) {
+    // The polyfill
+    const promiseName = 'xsltPolyfillReady';
+
+    // Initialize the Wasm module as early as possible.
+    let WasmModule = null;
+    let wasm_transform = null;
+    let wasm_transform_async = null;
+    let wasm_free = null;
+
+    createXSLTTransformModule()
+      .then((Module) => {
+        WasmModule = Module;
+        const args = ['transform', 'number', ['number', 'number', 'number', 'number', 'number', 'number', 'number']];
+        wasm_transform = Module.cwrap(...args, { async: false });
+        wasm_transform_async = Module.cwrap(...args, { async: true });
+        wasm_free = Module._free;
+
+        // Tell people we're ready.
+        polyfillReadyPromiseResolve();
+      })
+      .catch((err) => {
+        console.error('Error loading XSLT Wasm module:', err);
+        polyfillReadyPromiseReject(err);
+      });
+
+    async function loadDoc(fn, cache) {
+      const res = await fetch(fn, { cache: cache });
+      if (!res.ok) {
+        return null;
+      }
+      const xmltext = await res.text();
+      const doc = new DOMParser().parseFromString(xmltext, 'text/xml');
+      if (doc.querySelector('parsererror') || doc.documentElement?.localName === 'parsererror') {
+        return null;
+      }
+      return doc;
+    }
+
+    function isDuplicateParam(nodeToImport, existingParamNames, existingVariableNames) {
+      if (nodeToImport.localName !== 'param' || nodeToImport.namespaceURI !== 'http://www.w3.org/1999/XSL/Transform') {
+        return false;
+      }
+      const name = nodeToImport.getAttribute('name');
+      return existingParamNames.has(name) || (existingVariableNames && existingVariableNames.has(name));
+    }
+
+    function isDuplicateVariable(nodeToImport, existingParamNames, existingVariableNames) {
+      if (nodeToImport.localName !== 'variable' || nodeToImport.namespaceURI !== 'http://www.w3.org/1999/XSL/Transform') {
+        return false;
+      }
+      const name = nodeToImport.getAttribute('name');
+      return existingVariableNames.has(name) || (existingParamNames && existingParamNames.has(name));
+    }
+
+    function getTopLevelParamNames(xsltsheet, xslns) {
+      const params = xsltsheet.documentElement.getElementsByTagNameNS(xslns, 'param');
+      const names = new Set();
+      for (const param of params) {
+        if (param.parentElement === xsltsheet.documentElement) {
+          names.add(param.getAttribute('name'));
+        }
+      }
+      return names;
+    }
+
+    function getTopLevelVariableNames(xsltsheet, xslns) {
+      const vars = xsltsheet.documentElement.getElementsByTagNameNS(xslns, 'variable');
+      const names = new Set();
+      for (const v of vars) {
+        if (v.parentElement === xsltsheet.documentElement) {
+          names.add(v.getAttribute('name'));
+        }
+      }
+      return names;
+    }
+
+    // Recursively fetches and inlines <xsl:import> statements within an XSLT document.
+    // This function is destructive and will modify the provided `xsltsheet` document.
+    // The `xsltsheet` parameter is the XSLT document to process, and `relurl` is the
+    // base URL for resolving relative import paths.
+    // Returns the modified XSLT document with all imports inlined.
+    async function compileImports(xsltsheet, relurl) {
+      const xslns = 'http://www.w3.org/1999/XSL/Transform';
+      const imports = Array.from(xsltsheet.getElementsByTagNameNS(xslns, 'import'));
+      if (!imports.length) {
+        return xsltsheet;
+      }
+      if (!relurl) {
+        relurl = window.location.href;
+      }
+
+      const existingParamNames = getTopLevelParamNames(xsltsheet, xslns);
+      const existingVariableNames = getTopLevelVariableNames(xsltsheet, xslns);
+
+      // Fetch all imports at this level in parallel.
+      const importDocs = await Promise.all(
+        imports.map(async (importElement) => {
+          const href = new URL(importElement.getAttribute('href'), relurl).href;
+          const importedDoc = await loadDoc(href, 'default');
+          return { importElement, importedDoc, href };
+        }),
+      );
+
+      for (const { importElement, importedDoc, href } of importDocs) {
+        if (
+          !importedDoc ||
+          !importedDoc.documentElement ||
+          importedDoc.querySelector('parsererror') ||
+          importedDoc.documentElement.localName === 'parsererror'
+        ) {
+          importElement.remove();
+          continue;
+        }
+
+        const importedDocRoot = importedDoc.documentElement;
+        const xsltDocRoot = xsltsheet.documentElement;
+        const attrs = importedDocRoot.getAttributeNames();
+        for (const attr of attrs) {
+          if (!xsltDocRoot.getAttribute(attr)) {
+            xsltDocRoot.setAttribute(attr, importedDocRoot.getAttribute(attr));
+          }
+        }
+
+        // Recursively compile imports within the imported document.
+        await compileImports(importedDoc, href);
+
+        // Move all children from the imported document to the main document.
+        // Special case: skip duplicate parameters and variables if they were already merged.
+        let child = importedDocRoot.firstChild;
+        while (child) {
+          const next = child.nextSibling;
+          if (
+            isDuplicateParam(child, existingParamNames, existingVariableNames) ||
+            isDuplicateVariable(child, existingParamNames, existingVariableNames)
+          ) {
+            child.remove();
+          } else {
+            if (child.namespaceURI === xslns) {
+              if (child.localName === 'param') {
+                existingParamNames.add(child.getAttribute('name'));
+              } else if (child.localName === 'variable') {
+                existingVariableNames.add(child.getAttribute('name'));
+              }
+            }
+            importElement.before(child);
+          }
+          child = next;
+        }
+        importElement.remove();
+      }
+      return xsltsheet;
+    }
+
+    const textEncoder = new TextEncoder();
+    const textDecoder = new TextDecoder();
+
+    function transformXmlWithXslt(xmlContent, xsltContent, parameters, xsltUrl, allowAsync, buildPlainText) {
+      if (!wasm_transform || !WasmModule) {
+        throw new Error(
+          `Polyfill XSLT Wasm module not yet loaded. Please wait for the ${promiseName} promise to resolve.`,
+        );
+      }
+
+      let xmlPtr = 0;
+      let xsltPtr = 0;
+      let paramsPtr = 0;
+      let xsltUrlPtr = 0;
+      let mimeTypePtr = 0;
+      const paramStringPtrs = [];
+
+      // Helper to write byte arrays to Wasm memory manually.
+      const writeBytesToHeap = (bytes) => {
+        const ptr = WasmModule._malloc(bytes.length + 1);
+        if (!ptr) throw new Error(`Wasm malloc failed for bytes of length ${bytes.length}`);
+        const heapu8 = new Uint8Array(WasmModule.wasmMemory.buffer);
+        heapu8.set(bytes, ptr);
+        heapu8[ptr + bytes.length] = 0; // Null terminator
+        return ptr;
+      };
+
+      // Helper to write JS strings to Wasm memory manually.
+      const writeStringToHeap = (str) => {
+        if (str === null || str === undefined || typeof str !== 'string') {
+          throw new Error(`Cannot write non-string value to Wasm heap: ${str}`);
+        }
+        const encodedStr = textEncoder.encode(str);
+        const ptr = WasmModule._malloc(encodedStr.length + 1);
+        if (!ptr) throw new Error(`Wasm malloc failed for string: ${str.substring(0, 50)}...`);
+        const heapu8 = new Uint8Array(WasmModule.wasmMemory.buffer);
+        heapu8.set(encodedStr, ptr);
+        heapu8[ptr + encodedStr.length] = 0; // Null terminator
+        return ptr;
+      };
+
+      // Helper to read a null-terminated UTF-8 string from Wasm memory.
+      const readStringFromHeap = (ptr) => {
+        const heapu8 = new Uint8Array(WasmModule.wasmMemory.buffer);
+        let end = ptr;
+        while (heapu8[end] !== 0) {
+          end++;
+        }
+        return textDecoder.decode(heapu8.subarray(ptr, end));
+      };
+
+      const cleanup = () => {
+        // Clean up all allocated memory to prevent memory leaks in the Wasm heap.
+        if (xmlPtr) wasm_free(xmlPtr);
+        if (xsltPtr) wasm_free(xsltPtr);
+        if (xsltUrlPtr) wasm_free(xsltUrlPtr);
+        if (mimeTypePtr) wasm_free(mimeTypePtr);
+        paramStringPtrs.forEach((ptr) => wasm_free(ptr));
+        if (paramsPtr) wasm_free(paramsPtr);
+      };
+
+      try {
+        // 1. Prepare parameters from the Map into a flat array.
+        // Values are passed as raw strings; xsltQuoteUserParams on the C side
+        // handles quoting so that any character is treated as a literal string.
+        const paramsArray = [];
+        if (parameters) {
+          for (const [key, value] of parameters.entries()) {
+            paramsArray.push(key);
+            paramsArray.push(String(value));
+          }
+        }
+
+        // 2. Allocate memory for parameter strings and the pointer array in the Wasm heap.
+        if (paramsArray.length > 0) {
+          // Allocate memory for the array of pointers (char**), plus a NULL terminator.
+          const ptrSize = 4; // Pointers are 32-bit in wasm32
+          paramsPtr = WasmModule._malloc((paramsArray.length + 1) * ptrSize);
+          if (!paramsPtr) throw new Error('Wasm malloc failed for params pointer array.');
+
+          // Allocate memory for each string, write it to the heap, and store its pointer.
+          paramsArray.forEach((str, i) => {
+            const strPtr = writeStringToHeap(str);
+            paramStringPtrs.push(strPtr); // Track for later cleanup.
+            // Write the pointer to the string into the paramsPtr array.
+            new DataView(WasmModule.wasmMemory.buffer).setUint32(paramsPtr + i * ptrSize, strPtr, true);
+          });
+
+          // Null-terminate the array of pointers.
+          new DataView(WasmModule.wasmMemory.buffer).setUint32(paramsPtr + paramsArray.length * ptrSize, 0, true);
+        }
+
+        // 3. Allocate memory for XML and XSLT content.
+        const xmlBytes = xmlContent instanceof Uint8Array ? xmlContent : textEncoder.encode(xmlContent);
+        const xsltBytes = xsltContent instanceof Uint8Array ? xsltContent : textEncoder.encode(xsltContent);
+        xmlPtr = writeBytesToHeap(xmlBytes);
+        xsltPtr = writeBytesToHeap(xsltBytes);
+        xsltUrlPtr = writeStringToHeap(xsltUrl);
+
+        // Allocate memory for the output mime type (minimum 32 bytes).
+        mimeTypePtr = WasmModule._malloc(32);
+        if (!mimeTypePtr) throw new Error('Wasm malloc failed for mimeType pointer.');
+        new Uint8Array(WasmModule.wasmMemory.buffer, mimeTypePtr, 32).fill(0);
+
+        // 4. Call the C function with pointers to the data in Wasm memory.
+        const wasm_fn = allowAsync ? wasm_transform_async : wasm_transform;
+        const resultPtr_or_Promise = wasm_fn(
+          xmlPtr,
+          xmlBytes.byteLength,
+          xsltPtr,
+          xsltBytes.byteLength,
+          paramsPtr,
+          xsltUrlPtr,
+          mimeTypePtr,
+        );
+
+        if (!allowAsync && WasmModule.Asyncify && WasmModule.Asyncify.state === 1 /* Suspending */) {
+          throw new Error(
+            "This XSLT transformation contains includes or document() calls. These aren't supported for synchronous XSLTProcessor methods.",
+          );
+        }
+
+        if (!resultPtr_or_Promise) {
+          throw new Error(`XSLT Transformation failed. See console for details.`);
+        }
+
+        const finishProcessing = (resultPtr) => {
+          // 5. Convert the result pointers (char*) back to JS strings.
+          let resultString = readStringFromHeap(resultPtr);
+          let mimeTypeString = readStringFromHeap(mimeTypePtr);
+
+          // 6. Free the result pointer itself, which was allocated by the C code.
+          wasm_free(resultPtr);
+
+          // Workaround for libxslt appending an extra line feed to the result.
+          // See https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc;l=221;drc=d2f52c0dcbbdb54a08ce6ab50f470942240e15b2
+          if (resultString.endsWith('\n')) {
+            resultString = resultString.slice(0, -1);
+          }
+
+          // 7. Handle the plain text case, if needed.
+          if (buildPlainText && mimeTypeString === 'text/plain') {
+            resultString = resultString.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            resultString = `<html xmlns="http://www.w3.org/1999/xhtml">\n<head><title></title></head>\n<body>\n<pre>${resultString}</pre>\n</body>\n</html>`;
+            mimeTypeString = 'application/xml';
+          }
+
+          return {
+            content: resultString,
+            mimeType: mimeTypeString,
+          };
+        };
+
+        if (resultPtr_or_Promise instanceof Promise) {
+          // Return a Promise that resolves to the finished object
+          return resultPtr_or_Promise.then((resultPtr) => {
+            const res = finishProcessing(resultPtr);
+            cleanup();
+            return res;
+          });
+        }
+        // Not a promise - just return the finished object.
+        const res = finishProcessing(resultPtr_or_Promise);
+        cleanup();
+        return res;
+      } catch (e) {
+        cleanup();
+        throw e;
+      }
+    }
+
+    function isEmptySourceDocument(source) {
+      return source && source.nodeType === Node.DOCUMENT_NODE && !source.documentElement;
+    }
+
+    // Event handlers ('on*' attributes) parsed into DOMParser inert documents
+    // do not create event listeners. Remove and re-add them to activate them.
+    function resetEventHandlers(root) {
+      if (!root) return;
+      const elements = root.querySelectorAll ? Array.from(root.querySelectorAll('*')) : [];
+      if (root.nodeType === Node.ELEMENT_NODE) {
+        elements.push(root);
+      }
+      for (let i = 0; i < elements.length; i++) {
+        const el = elements[i];
+        const attrs = el.getAttributeNames();
+        for (let j = 0; j < attrs.length; j++) {
+          const attr = attrs[j];
+          if (attr.toLowerCase().startsWith('on')) {
+            const val = el.getAttribute(attr);
+            el.removeAttribute(attr);
+            el.setAttribute(attr, val);
+          }
+        }
+      }
+    }
+
+    function lowercaseHtmlAttributes(root) {
+      if (!root) return;
+      const elements = root.querySelectorAll('*');
+      for (let i = 0; i < elements.length; i++) {
+        const el = elements[i];
+        if (el.namespaceURI === 'http://www.w3.org/1999/xhtml') {
+          const attrs = el.getAttributeNames();
+          for (let j = 0; j < attrs.length; j++) {
+            const attr = attrs[j];
+            const lowerAttr = attr.toLowerCase();
+            if (attr !== lowerAttr) {
+              const val = el.getAttribute(attr);
+              el.removeAttribute(attr);
+              el.setAttribute(lowerAttr, val);
+            }
+          }
+        }
+      }
+    }
+
+    class XSLTProcessor {
+      #stylesheetText = null;
+      #parameters = new Map();
+      #stylesheetBaseUrl = null;
+
+      constructor() {}
+      isPolyfill() {
+        return true;
+      }
+
+      importStylesheet(stylesheet) {
+        this.#stylesheetText = new XMLSerializer().serializeToString(stylesheet);
+        this.#stylesheetBaseUrl = stylesheet.baseURI || window.location.href;
+      }
+
+      // Returns a new document (XML or HTML).
+      transformToDocument(source) {
+        if (!this.#stylesheetText) {
+          throw new Error('XSLTProcessor: Stylesheet not imported.');
+        }
+        if (isEmptySourceDocument(source)) {
+          return null;
+        }
+        const sourceXml = new XMLSerializer().serializeToString(source);
+        const { content, mimeType } = transformXmlWithXslt(
+          sourceXml,
+          this.#stylesheetText,
+          this.#parameters,
+          this.#stylesheetBaseUrl,
+          /*allowAsync*/ false,
+          /*buildPlainText*/ true,
+        );
+        return new DOMParser().parseFromString(content, mimeType);
+      }
+
+      // Returns a fragment. In the case of HTML, head/body are flattened.
+      // For text output, no <pre> is generated.
+      transformToFragment(source, document) {
+        if (!this.#stylesheetText) {
+          throw new Error('XSLTProcessor: Stylesheet not imported.');
+        }
+        if (isEmptySourceDocument(source)) {
+          return null;
+        }
+        const sourceXml = new XMLSerializer().serializeToString(source);
+        const { content, mimeType } = transformXmlWithXslt(
+          sourceXml,
+          this.#stylesheetText,
+          this.#parameters,
+          this.#stylesheetBaseUrl,
+          /*allowAsync*/ false,
+          /*buildPlainText*/ false,
+        );
+        const fragment = document.createDocumentFragment();
+        switch (mimeType) {
+          case 'text/plain':
+            fragment.append(content);
+            return fragment;
+          case 'application/xml': {
+            // It's legal for XML content to contain multiple sibling root
+            // elements in transformToFragment, so wrap the content in one.
+            const fakeRoot = `rootelementforparsing`;
+            const ns = document instanceof HTMLDocument ? ` xmlns="http://www.w3.org/1999/xhtml"` : '';
+            const doc = new DOMParser().parseFromString(`<${fakeRoot}${ns}>${content}</${fakeRoot}>`, mimeType);
+            const rootNode = doc.querySelector(fakeRoot);
+            if (document instanceof HTMLDocument) {
+              lowercaseHtmlAttributes(rootNode);
+            }
+            fragment.append(...rootNode.childNodes);
+            resetEventHandlers(fragment);
+            return fragment;
+          }
+          case 'text/html': {
+            // The transformToFragment method flattens head/body into a flat list.
+            // Note this comment: https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/editing/serializers/serialization.cc;l=776;drc=7666bc1983c2a5b98e5dc6fa6c28f8f53c07d06f
+            const doc = new DOMParser().parseFromString(content, mimeType);
+            const html = doc.firstElementChild instanceof HTMLHtmlElement ? doc.firstElementChild : undefined;
+            const head = html?.firstElementChild;
+            const body = head?.nextElementSibling;
+            if (head) {
+              fragment.append(...head.childNodes);
+              head.remove();
+            }
+            if (body) {
+              fragment.append(...body.childNodes);
+              body.remove();
+            }
+            html?.remove();
+            fragment.append(...doc.childNodes);
+            resetEventHandlers(fragment);
+            return fragment;
+          }
+          default:
+            throw new Error(`Unknown mime type ${mimeType}`);
+        }
+      }
+
+      setParameter(namespaceURI, localName, value) {
+        // libxslt top-level parameters are not namespaced.
+        this.#parameters.set(localName, value);
+      }
+
+      getParameter(namespaceURI, localName) {
+        return this.#parameters.has(localName) ? this.#parameters.get(localName) : null;
+      }
+
+      removeParameter(namespaceURI, localName) {
+        this.#parameters.delete(localName);
+      }
+
+      clearParameters() {
+        this.#parameters.clear();
+      }
+
+      reset() {
+        this.#stylesheetText = null;
+        this.#stylesheetBaseUrl = null;
+        this.clearParameters();
+      }
+    }
+
+    function xsltPolyfillReady() {
+      return polyfillReadyPromise;
+    }
+
+    window.XSLTProcessor = XSLTProcessor;
+    window.xsltPolyfillReady = xsltPolyfillReady;
+
+    function absoluteUrl(url) {
+      return new URL(url, window.location.href).href;
+    }
+
+    async function loadXmlWithXsltFromBytes(xmlBytes, xmlUrl) {
+      xmlUrl = absoluteUrl(xmlUrl);
+      // Look inside XML file for a processing instruction with an XSLT file.
+      // We decode only a small chunk at the beginning for safety and performance.
+      const decoder = new TextDecoder();
+      const xmlTextChunk = decoder.decode(xmlBytes.subarray(0, 2048));
+
+      let xsltPath = null;
+      const piMatches = xmlTextChunk.matchAll(/<\?xml-stylesheet\s+([^>]*?)\?>/g);
+      for (const piMatch of piMatches) {
+        const piData = piMatch[1];
+        const hrefMatch = piData.match(/href\s*=\s*(["'])(.*?)\1/)?.[2];
+        const typeMatch = piData.match(/type\s*=\s*(["'])(.*?)\1/)?.[2]?.toLowerCase();
+        if (hrefMatch && (typeMatch === 'text/xsl' || typeMatch === 'application/xslt+xml')) {
+          // Decode HTML entities from the path.
+          xsltPath = hrefMatch
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&apos;/g, "'")
+            .replace(/&amp;/g, '&');
+          break;
+        }
+      }
+
+      if (!xsltPath) {
+        // Do not display an error, just leave the original content.
+        console.warn(`XSLT Polyfill: No XSLT processing instruction found in ${xmlUrl}`);
+        setPolyfillSpinner(null);
+        return;
+      }
+
+      // Fetch the XSLT file, resolving its path relative to the XML file's URL.
+      const xsltUrl = new URL(xsltPath, xmlUrl);
+      const xsltDoc = await loadDoc(xsltUrl.href, 'default');
+      if (!xsltDoc) {
+        return showError(`Failed to fetch XSLT file: ${xsltUrl.href}`);
+      }
+
+      // Compile imports. This inlines them into the stylesheet document.
+      const compiledXsltDoc = await compileImports(xsltDoc, xsltUrl.href);
+      const compiledXsltText = new XMLSerializer().serializeToString(compiledXsltDoc);
+
+      // Process XML/XSLT and replace the document.
+      try {
+        const { content, mimeType } = await transformXmlWithXslt(
+          xmlBytes,
+          compiledXsltText,
+          null,
+          xsltUrl.href,
+          /*allowAsync*/ true,
+          /*buildPlainText*/ true,
+        );
+        // Replace the document with the result
+        replaceDoc(content, mimeType);
+      } catch (e) {
+        return showError(`Error processing XML/XSLT: ${e}`);
+      }
+    }
+
+    // Replace the current document with the provided HTML.
+    function replaceDoc(newHTML, mimeType) {
+      setPolyfillSpinner(null);
+      if (typeof newHTML !== 'string') {
+        return showError('newHTML should be a string');
+      }
+      if (document instanceof XMLDocument) {
+        const htmlRoot = document.createElementNS('http://www.w3.org/1999/xhtml', 'html');
+        document.documentElement.replaceWith(htmlRoot);
+        unsafeReplaceDocumentWithHtml(htmlRoot, newHTML, mimeType);
+      } else if (document instanceof HTMLDocument) {
+        unsafeReplaceDocumentWithHtml(document.documentElement, newHTML, mimeType);
+      } else {
+        return showError('Unknown document type');
+      }
+    }
+
+    function unsafeReplaceDocumentWithHtml(targetElement, htmlString, mimeType) {
+      if (mimeType === 'text/plain') {
+        const escaped = htmlString.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        htmlString = `<pre>${escaped}</pre>`;
+        mimeType = 'text/html';
+      }
+      // First parse the document and move content to a fragment.
+      let root, parsedDoc;
+      if (mimeType === 'application/xml' && document instanceof HTMLDocument) {
+        const fakeRoot = `rootelementforparsing`;
+        parsedDoc = new DOMParser().parseFromString(
+          `<${fakeRoot} xmlns="http://www.w3.org/1999/xhtml">${htmlString}</${fakeRoot}>`,
+          mimeType,
+        );
+        root = parsedDoc.querySelector(fakeRoot);
+        lowercaseHtmlAttributes(root);
+      } else {
+        parsedDoc = new DOMParser().parseFromString(htmlString, mimeType || 'text/html');
+        root = parsedDoc.documentElement;
+      }
+      const fragment = document.createDocumentFragment();
+      if (root) {
+        fragment.append(...root.childNodes);
+      }
+      // Scripts need to be re-created, so they will execute:
+      const scripts = Array.from(fragment.querySelectorAll('script'));
+      const textArea = document.createElementNS('http://www.w3.org/1999/xhtml', 'textarea');
+      const scriptMarkers = scripts.map((oldScript) => {
+        const marker = document.createComment(' script placeholder ');
+        oldScript.parentNode.replaceChild(marker, oldScript);
+        return { oldScript, marker };
+      });
+      if (targetElement instanceof HTMLHtmlElement) {
+        // Clear existing attributes to remove any artifacts left by the browser's native XML viewer.
+        // For example, Chrome's XML viewer adds specific IDs or classes to the <html> element.
+        while (targetElement.attributes.length > 0) {
+          targetElement.removeAttribute(targetElement.attributes[0].name);
+        }
+        for (const attr of parsedDoc.documentElement.attributes) {
+          targetElement.setAttribute(attr.name, attr.value);
+        }
+      }
+      targetElement.replaceChildren(fragment);
+      resetEventHandlers(targetElement);
+      if (targetElement instanceof HTMLHtmlElement) {
+        // The browser's native XML viewer injects a hidden User Agent stylesheet that applies
+        // rules like `white-space: nowrap` and monospace fonts. Since we are reusing the same
+        // Document, these rules persist and break the layout of the newly rendered HTML.
+        // We inject a reset stylesheet at the very top of the <head> to override these UA styles,
+        // allowing the author's own CSS to take precedence naturally.
+        const resetStyles = document.createElementNS('http://www.w3.org/1999/xhtml', 'style');
+        let supportsWhere = false;
+        try {
+          supportsWhere = CSS.supports('selector(:where(table:not([width])))');
+        } catch {}
+        if (supportsWhere) {
+          resetStyles.textContent = `
+            :where(html, body) {
+              white-space: normal;
+              font-family: initial;
+              font-size: initial;
+            }
+            :where(body) {
+              margin: 8px;
+            }
+            :where(table) {
+              min-width: auto;
+              white-space: normal;
+              font-size: initial;
+              font-family: initial;
+              tab-size: initial;
+            }
+            :where(table:not([width])) {
+              width: auto;
+            }
+            :where(table:not([cellspacing])) {
+              border-spacing: 2px;
+            }
+            :where(table:not([align])) {
+              margin: initial;
+            }
+            :where(td) {
+              vertical-align: initial;
+            }
+            :where(tbody, thead, tfoot, tr, th) {
+              white-space: normal;
+            }
+            :where(li) {
+              list-style-position: inside;
+            }
+            :where(ul, ol, menu) :where(li) {
+              list-style-position: unset;
+            }`;
+        } else {
+          resetStyles.textContent = `
+            html, body {
+              white-space: normal;
+              font-family: initial;
+              font-size: initial;
+            }
+            body {
+              margin: 8px;
+            }
+            table {
+              width: auto;
+              min-width: auto;
+              border-spacing: 2px;
+              white-space: normal;
+              margin: initial;
+              font-size: initial;
+              font-family: initial;
+              tab-size: initial;
+            }
+            td {
+              vertical-align: initial;
+            }
+            tbody, thead, tfoot, tr, th {
+              white-space: normal;
+            }
+            li {
+              list-style-position: inside;
+            }
+            ul li, ol li, menu li {
+              list-style-position: unset;
+            }`;
+        }
+        const head = targetElement.querySelector('head');
+        if (head) {
+          head.prepend(resetStyles);
+        } else {
+          targetElement.prepend(resetStyles);
+        }
+      }
+      (async () => {
+        for (const { oldScript, marker } of scriptMarkers) {
+          let resolvePromise;
+          const promise = new Promise((r) => {
+            resolvePromise = r;
+          });
+          const newScript = document.createElementNS('http://www.w3.org/1999/xhtml', 'script');
+          Array.from(oldScript.attributes).forEach((attr) => {
+            newScript.setAttribute(attr.name, attr.value);
+          });
+          const isAsyncOrDefer = newScript.hasAttribute('async') || newScript.hasAttribute('defer');
+          const isBlocking = newScript.hasAttribute('src') && !isAsyncOrDefer;
+          if (isBlocking) {
+            newScript.addEventListener('load', resolvePromise, { once: true });
+            newScript.addEventListener('error', resolvePromise, { once: true });
+          }
+          // Because the original XSLT doc is serialized with
+          // `XMLSerializer().serializeToString(compiledXsltDoc)` above, the
+          // contents of the script will have been treated as XML children of the
+          // <script> node, meaning special characters *might* have been escaped.
+          // E.g. `foo => bar` might have been turned into `foo =&gt; bar`. But
+          // also, the source script might have been written with special
+          // characters already escaped, e.g. `new RegExp("[\\?&amp;]");`. We use
+          // the textarea trick to handle both. But we have to use
+          // setHTMLUnsafe() and not innerHTML, because the latter will invoke
+          // the XML parser, which doesn't like unescaped things like `&`.
+          textArea.setHTMLUnsafe(oldScript.textContent);
+          newScript.textContent = textArea.value;
+          marker.parentNode.replaceChild(newScript, marker);
+          if (isBlocking) {
+            await promise;
+          }
+        }
+        document.dispatchEvent(new Event('DOMContentLoaded', { bubbles: true, cancelable: true }));
+        window.dispatchEvent(new Event('load', { bubbles: false, cancelable: false }));
+      })();
+    }
+
+    // If we're polyfilling, we need to patch `Document.prototype.createElement()`,
+    // because that will create XML elements in the (still) XML document.
+    //
+    // NOTE: this patch (and the ones below) must apply *only* to the document
+    // being polyfilled, not to other XML documents (e.g. from
+    // `document.implementation.createDocument()`), which must
+    // keep case-sensitive, null-namespace XML behavior.
+    const _polyfilledDocument = document instanceof XMLDocument ? document : null;
+    const _originalCreateElement = Document.prototype.createElement;
+    const _originalCreateElementNS = Document.prototype.createElementNS;
+
+    function patchedCreateElement(tagName, options) {
+      if (this === _polyfilledDocument) {
+        const el = _originalCreateElementNS.call(this, 'http://www.w3.org/1999/xhtml', String(tagName).toLowerCase(), options);
+        if (options && options.is) {
+          el.setAttribute('is', options.is);
+        }
+        return el;
+      }
+      return _originalCreateElement.apply(this, arguments);
+    }
+
+    Document.prototype.createElement = patchedCreateElement;
+    document.createElement = patchedCreateElement;
+
+    if (document instanceof XMLDocument) {
+      const originalTagName = Object.getOwnPropertyDescriptor(Element.prototype, 'tagName').get;
+      Object.defineProperty(Element.prototype, 'tagName', {
+        get() {
+          const val = originalTagName.call(this);
+          if (this.namespaceURI === 'http://www.w3.org/1999/xhtml' && val) {
+            return val.toUpperCase();
+          }
+          return val;
+        },
+      });
+      const originalNodeName = Object.getOwnPropertyDescriptor(Node.prototype, 'nodeName').get;
+      Object.defineProperty(Node.prototype, 'nodeName', {
+        get() {
+          const val = originalNodeName.call(this);
+          if (this.nodeType === 1 && this.namespaceURI === 'http://www.w3.org/1999/xhtml' && val) {
+            return val.toUpperCase();
+          }
+          return val;
+        },
+      });
+      // Monkeypatch innerHTML, outerHTML, and insertAdjacentHTML for HTML elements in XML documents
+      let _htmlDoc = null;
+      function getHtmlContext(localName, namespaceURI) {
+        if (!_htmlDoc) _htmlDoc = document.implementation.createHTMLDocument('');
+        const ns = namespaceURI || 'http://www.w3.org/1999/xhtml';
+        try {
+          return _htmlDoc.createElementNS(ns, localName || 'div');
+        } catch {
+          return _htmlDoc.createElement('div');
+        }
+      }
+
+      function cloneIntoHtmlDoc(node) {
+        const clone = _htmlDoc.importNode(node, true);
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          if (node.localName === 'template' && node.content) {
+            if (clone.content && clone.content.childNodes.length === 0 && node.content.childNodes.length > 0) {
+              for (const c of node.content.childNodes) {
+                clone.content.appendChild(cloneIntoHtmlDoc(c));
+              }
+            }
+          }
+          const origTemplates = node.querySelectorAll ? node.querySelectorAll('template') : [];
+          if (origTemplates.length > 0) {
+            const cloneTemplates = clone.querySelectorAll('template');
+            for (let i = 0; i < origTemplates.length; i++) {
+              if (
+                origTemplates[i].content &&
+                cloneTemplates[i] &&
+                cloneTemplates[i].content &&
+                cloneTemplates[i].content.childNodes.length === 0 &&
+                origTemplates[i].content.childNodes.length > 0
+              ) {
+                for (const c of origTemplates[i].content.childNodes) {
+                  cloneTemplates[i].content.appendChild(cloneIntoHtmlDoc(c));
+                }
+              }
+            }
+          }
+        }
+        return clone;
+      }
+
+      const originalInnerHTML = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+      if (originalInnerHTML) {
+        Object.defineProperty(Element.prototype, 'innerHTML', {
+          get() {
+            if (this.ownerDocument instanceof XMLDocument) {
+              if (!_htmlDoc) _htmlDoc = document.implementation.createHTMLDocument('');
+              const isTemplate =
+                this.localName === 'template' && this.namespaceURI === 'http://www.w3.org/1999/xhtml';
+              const container = isTemplate
+                ? getHtmlContext('div')
+                : getHtmlContext(this.localName, this.namespaceURI);
+              const target = isTemplate && this.content ? this.content : this;
+              for (const child of target.childNodes) {
+                container.appendChild(cloneIntoHtmlDoc(child));
+              }
+              return container.innerHTML;
+            }
+            return originalInnerHTML.get.call(this);
+          },
+          set(value) {
+            if (this.ownerDocument === _polyfilledDocument) {
+              const ctxElement = getHtmlContext(this.localName, this.namespaceURI);
+              ctxElement.innerHTML = value;
+              const nodes = [...(ctxElement.content instanceof DocumentFragment ? ctxElement.content.childNodes : ctxElement.childNodes)];
+              if (this.localName === 'template' && this.namespaceURI === 'http://www.w3.org/1999/xhtml' && this.content instanceof DocumentFragment) {
+                this.content.replaceChildren(...nodes);
+                this.replaceChildren();
+              } else {
+                this.replaceChildren(...nodes);
+              }
+            } else {
+              originalInnerHTML.set.call(this, value);
+            }
+          },
+        });
+      }
+
+      const originalOuterHTML = Object.getOwnPropertyDescriptor(Element.prototype, 'outerHTML');
+      if (originalOuterHTML) {
+        Object.defineProperty(Element.prototype, 'outerHTML', {
+          get() {
+            return originalOuterHTML.get.call(this);
+          },
+          set(value) {
+            if (this.ownerDocument === _polyfilledDocument) {
+              const parent = this.parentNode;
+              if (!parent || parent.nodeType === Node.DOCUMENT_NODE) {
+                throw new DOMException(
+                  "Failed to set the 'outerHTML' property on 'Element': This element has no parent node.",
+                  'NoModificationAllowedError',
+                );
+              }
+              const ctxLocalName = parent.nodeType === Node.ELEMENT_NODE ? parent.localName : 'div';
+              const ctxNamespaceURI = parent.nodeType === Node.ELEMENT_NODE ? parent.namespaceURI : 'http://www.w3.org/1999/xhtml';
+              const ctxElement = getHtmlContext(ctxLocalName, ctxNamespaceURI);
+              ctxElement.innerHTML = value;
+              const nodes = [...(ctxElement.content instanceof DocumentFragment ? ctxElement.content.childNodes : ctxElement.childNodes)];
+              this.replaceWith(...nodes);
+            } else {
+              originalOuterHTML.set.call(this, value);
+            }
+          },
+        });
+      }
+
+      const originalInsertAdjacentHTML = Element.prototype.insertAdjacentHTML;
+      if (originalInsertAdjacentHTML) {
+        Element.prototype.insertAdjacentHTML = function (position, text) {
+          if (this.ownerDocument === _polyfilledDocument) {
+            position = position.toLowerCase();
+            let ctxLocalName = 'div';
+            let ctxNamespaceURI = 'http://www.w3.org/1999/xhtml';
+            if (position === 'beforebegin' || position === 'afterend') {
+              const parent = this.parentNode;
+              if (!parent || parent.nodeType === Node.DOCUMENT_NODE) {
+                throw new DOMException(
+                  "Failed to execute 'insertAdjacentHTML' on 'Element': The element has no parent.",
+                  'NoModificationAllowedError',
+                );
+              }
+              if (parent.nodeType === Node.ELEMENT_NODE) {
+                ctxLocalName = parent.localName;
+                ctxNamespaceURI = parent.namespaceURI;
+              }
+            } else if (position === 'afterbegin' || position === 'beforeend') {
+              ctxLocalName = this.localName;
+              ctxNamespaceURI = this.namespaceURI;
+            }
+            const ctxElement = getHtmlContext(ctxLocalName, ctxNamespaceURI);
+            ctxElement.innerHTML = text;
+            const nodes = [...(ctxElement.content instanceof DocumentFragment ? ctxElement.content.childNodes : ctxElement.childNodes)];
+            if (position === 'beforebegin') {
+              this.before(...nodes);
+            } else if (position === 'afterbegin') {
+              this.prepend(...nodes);
+            } else if (position === 'beforeend') {
+              this.append(...nodes);
+            } else if (position === 'afterend') {
+              this.after(...nodes);
+            }
+          } else {
+            originalInsertAdjacentHTML.call(this, position, text);
+          }
+        };
+      }
+    }
+    function parseAndReplaceCurrentXMLDoc(doc) {
+      const xml = new XMLSerializer().serializeToString(doc);
+      const xmlBytes = new TextEncoder().encode(xml);
+      xsltPolyfillReady()
+        .then(() => loadXmlWithXsltFromBytes(xmlBytes, doc.defaultView.location.href))
+        .catch((err) => {
+          showError(`Error displaying XML file: ${err.message || err.toString()}`);
+        });
+    }
+
+    async function loadXmlWithXsltFromUrl(url) {
+      url = absoluteUrl(url);
+      const xmlResponse = await fetch(url);
+      if (!xmlResponse.ok) {
+        return showError(`Failed to fetch XML file: ${xmlResponse.statusText}`);
+      }
+      const xmlBytes = new Uint8Array(await xmlResponse.arrayBuffer());
+      return loadXmlWithXsltFromBytes(xmlBytes, url);
+    }
+
+    function loadXmlUrlWithXsltWhenReady(url) {
+      return xsltPolyfillReady().then(() => loadXmlWithXsltFromUrl(url));
+    }
+
+    window.parseAndReplaceCurrentXMLDoc = parseAndReplaceCurrentXMLDoc;
+    window.loadXmlWithXsltFromBytes = loadXmlWithXsltFromBytes;
+    window.loadXmlWithXsltFromUrl = loadXmlWithXsltFromUrl;
+    window.loadXmlUrlWithXsltWhenReady = loadXmlUrlWithXsltWhenReady;
+    window.showError = showError;
+  } // if (polyfillWillLoad)
+
+  // Replace the current document with the provided error message.
+  function showError(errorMessage) {
+    setPolyfillSpinner(null);
+    if (document.documentElement) {
+      document.documentElement.textContent = errorMessage;
+    }
+    throw new Error(errorMessage);
+  }
+
+  const type = document.contentType;
+  const isXml = type === "text/xml" || type === "application/xml" || type.endsWith("+xml");
+  
+  if (polyfillWillLoad && isXml && !xsltDontAutoloadXmlDocs) {
+    if (document.readyState === 'loading') {
+      document.addEventListener(
+        'DOMContentLoaded',
+        () => {
+          parseAndReplaceCurrentXMLDoc(document);
+        },
+        { once: true },
+      );
+    } else {
+      parseAndReplaceCurrentXMLDoc(document);
+    }
+  }
+
+  if (!window.xsltPolyfillQuiet) {
+    console.log(`XSLT polyfill ${!polyfillWillLoad ? 'NOT ' : ''}installed (native supported: ${nativeSupported}).`);
+  }
+})();

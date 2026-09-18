@@ -4,20 +4,41 @@
 
 Application statique : HTML/CSS/JavaScript + ressources JSON/XML/XSL. Un outil de build est autorisé au développement, mais la sortie GitHub Pages ne doit nécessiter aucun serveur applicatif.
 
-## 2. Risque n°1 : moteur XSLT multifichier
+## 2. Moteur retenu pour 2027 et état de l'intégration
 
-Avant toute UI complète, réaliser un **spike**. Tester sur Chrome, Firefox et Edge : MARCXML avec namespace `http://www.loc.gov/MARC21/slim`, `value-of`, templates, `apply-templates`, template nommé, `xsl:include`, `xsl:import`, chemins relatifs et ressources servies par un serveur HTTP local puis GitHub Pages.
+L'[ADR-002 — moteur WebAssembly](ADR-002-xslt-wasm.md) retient **libxslt/libxml2
+embarqués dans le navigateur**, avec un correctif local du chargeur de dépendances.
+Ce choix permet de conserver XSLT 1.0, les véritables imports Koha et l'hébergement
+statique sans transmettre les notices à un serveur. Le retrait annoncé du moteur
+natif rend l'ancienne orientation de l'[ADR-001](ADR-001-xslt-engine.md) insuffisante.
 
-### Décision A — natif
-Si `XSLTProcessor` résout les dépendances de façon fiable dans les navigateurs cibles, l'utiliser directement.
+**État actuel :** les modes libre et guidé utilisent encore `XSLTProcessor` natif.
+Le moteur corrigé est isolé dans `spike/wasm/` ; il n'est pas intégré au produit
+et n'est pas encore validé pour la production. Il réussit 42/42 contrôles sur
+Chromium avec XSLT natif désactivé, contre 35/42 avant correction.
 
-### Décision B — résolution applicative
-Si ce n'est pas fiable, conserver une représentation de projet multifichier et résoudre les `include/import` dans l'application avant compilation/transformation. Respecter les différences sémantiques entre include et import ; ne pas faire un simple copier-coller naïf si cela change la précédence d'import.
+Le correctif rétablit le dictionnaire partagé entre feuilles, nécessaire aux
+paramètres des templates importés dans les cas testés. Les feuilles Koha restent
+intactes. L'adaptateur utilise une entrée asynchrone du module Wasm et sérialise
+les transformations ; il ne charge pas les fonctions de remplacement automatique
+de pages du polyfill. Les imports restent interprétés par libxslt, sans concaténation.
 
-### Décision C — moteur embarqué
-Seulement si A/B sont insuffisantes, évaluer un moteur JS/WASM compatible avec les contraintes statiques. Documenter poids, licence, compatibilité XSLT 1.0 et comportement par rapport à libxslt/Koha.
+### Limites structurantes
 
-Le résultat du spike doit être écrit dans `docs/ADR-001-xslt-engine.md`.
+- Les résultats valident un corpus limité dans Chromium, pas tous les navigateurs,
+  tous les usages XSLT ou une émulation complète de Koha.
+- Le calcul peut bloquer le thread principal : un Worker interruptible et des
+  limites de ressources restent à implémenter avant exposition de sources arbitraires.
+- Le chargeur définitif doit contrôler les dépendances et `document()` ; le
+  filtre réseau expérimental ne constitue pas une garantie de confidentialité générale.
+- Le banc conserve le résultat HTML comme texte. La sûreté de l'aperçu réel
+  reste à vérifier pendant l'intégration avec l'iframe sandboxé.
+- La variante locale impose compilation reproductible, suivi de sécurité et
+  tests à chaque mise à jour. Le correctif n'a pas encore été accepté en amont.
+
+Les conditions détaillées de production, le coût du moteur et les raisons du
+choix sont consignés dans l'ADR-002. La disponibilité native ne doit pas masquer
+un échec du moteur embarqué lors de la validation de la migration.
 
 ## 3. Modules proposés
 

@@ -1,0 +1,8 @@
+body { max-width: 80rem; margin: 0 auto; padding: 1.5rem; font: 1rem/1.5 system-ui, sans-serif; color: #18212b; background: #fffdf8; }
+h1 { font-size: 1.7rem; }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { padding: .5rem; text-align: left; border-bottom: 1px solid #d9d5cc; vertical-align: top; overflow-wrap: anywhere; }
+.pass { color: #21652b; }
+.fail { color: #a52a1a; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #f5f2eb; padding: 1rem; }
+@media (max-width: 40rem) { body { padding: .75rem; } table { font-size: .75rem; } }

@@ -1,0 +1,251 @@
+{
+  "cases": [
+    {
+      "name": "identifier.xml → content/solutions/ex01/main.xsl",
+      "passed": true,
+      "ms": 28
+    },
+    {
+      "name": "simple.xml → content/solutions/ex02/main.xsl",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "title-subtitle.xml → content/solutions/ex03/main.xsl",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "all-subtitles.xml → content/solutions/ex04/main.xsl",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/xslt/samples/identite.xsl",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/xslt/samples/titre-auteur.xsl",
+      "passed": true,
+      "ms": 8
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/xslt/samples/titre-sous-titres.xsl",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/xslt/samples/tous-les-champs.xsl",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/xslt/samples/identite.xsl",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/xslt/samples/titre-auteur.xsl",
+      "passed": true,
+      "ms": 11
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/xslt/samples/titre-sous-titres.xsl",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/xslt/samples/tous-les-champs.xsl",
+      "passed": true,
+      "ms": 10
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/xslt/samples/identite.xsl",
+      "passed": true,
+      "ms": 12
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/xslt/samples/titre-auteur.xsl",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/xslt/samples/titre-sous-titres.xsl",
+      "passed": true,
+      "ms": 9
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/xslt/samples/tous-les-champs.xsl",
+      "passed": true,
+      "ms": 10
+    },
+    {
+      "name": "record.xml → spike/fixtures/simple.xsl",
+      "passed": true,
+      "ms": 6
+    },
+    {
+      "name": "record.xml → spike/fixtures/include/main.xsl",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "record.xml → spike/fixtures/import/main.xsl",
+      "passed": true,
+      "ms": 15
+    },
+    {
+      "name": "identity.xml → spike/wasm/fixtures/import/main.xsl",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "identity.xml → spike/wasm/fixtures/exslt.xsl",
+      "passed": true,
+      "ms": 10
+    },
+    {
+      "name": "identity.xml → spike/wasm/fixtures/text.xsl",
+      "passed": true,
+      "ms": 6
+    },
+    {
+      "name": "identity.xml → spike/wasm/fixtures/inert-output.xsl",
+      "passed": true,
+      "ms": 7
+    },
+    {
+      "name": "identity.xml → content/xslt/samples/identite.xsl",
+      "passed": true,
+      "ms": 6
+    },
+    {
+      "name": "notice.xml → spike/wasm/fixtures/author-parameter/main.xsl",
+      "passed": false,
+      "error": "Différence à 1048: obtenu record\"],[null,\"fields\",\"2\"],[null,\"namespace\",\"http://www.loc.gov/MARC21/slim\"],[null,\"parameter\",\"\"],[null,\"selected\",\"0\"]],[]]]],[null,\"case\",[[null,\"id\",\"imported-string\"]],[[null,\"probe\",[[null,\"context\",\"record\"],[null,\"fields\",\"2\"],[null,\"namespace\",\"http://www.loc.gov/MARC21/slim\"],[null,\"parameter\",\"\"],[null,\"selected\",\"0\"]],[]]]],[null,\"c ; attendu record\"],[null,\"fields\",\"2\"],[null,\"namespace\",\"http://www.loc.gov/MARC21/slim\"],[null,\"parameter\",\"700\"],[null,\"selected\",\"1\"]],[[null,\"author\",[],[[\"text\",\"Brume\"]]]]]]],[null,\"case\",[[null,\"id\",\"imported-string\"]],[[null,\"probe\",[[null,\"context\",\"record\"],[null,\"fields\",\"2\"],[null,\"namespace\",\"http://www.loc.gov/MARC21/slim\"],[null,\"parameter\",\"",
+      "ms": 15
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "passed": false,
+      "error": "Différence à 299: obtenu ges : roman / Lila Brume\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary publication\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Publication:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"text\",\"Clairvallon :\"],[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\"/c ; attendu ges : roman / Lila Brume\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary author main_author\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Main Author:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\"/cgi-bin/koha/catalo",
+      "ms": 20
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "passed": false,
+      "error": "Différence à 366: obtenu  Rivage et Alma Boussole\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary publication\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Publication:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"text\",\"Port-Lointain :\"],[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\" ; attendu  Rivage et Alma Boussole\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary author main_author\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Main Author:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\"/cgi-bin/koha/catalo",
+      "ms": 25
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl",
+      "passed": false,
+      "error": "Différence à 294: obtenu es étoiles / Milo Comète\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary publication\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Publication:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"text\",\"Luneville-sur-Ciel :\"],[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"hr ; attendu es étoiles / Milo Comète\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary author main_author\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Main Author:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\"/cgi-bin/koha/catalo",
+      "ms": 23
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "passed": true,
+      "ms": 20
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "passed": true,
+      "ms": 17
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/koha/26.05.03/koha-tmpl/intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetResults.xsl",
+      "passed": true,
+      "ms": 14
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "passed": false,
+      "error": "Différence à 321: obtenu ges : roman / Lila Brume\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary publication\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Publication:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"text\",\"Clairvallon :\"],[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\"/c ; attendu ges : roman / Lila Brume\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary author main_author\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Main Author:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\"/cgi-bin/koha/opac-s",
+      "ms": 27
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "passed": false,
+      "error": "Différence à 391: obtenu  Rivage et Alma Boussole\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary publication\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Publication:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"text\",\"Port-Lointain :\"],[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\" ; attendu  Rivage et Alma Boussole\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary author main_author\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Main Author:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\"/cgi-bin/koha/opac-s",
+      "ms": 20
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl",
+      "passed": false,
+      "error": "Différence à 316: obtenu es étoiles / Milo Comète\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary publication\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Publication:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"text\",\"Luneville-sur-Ciel :\"],[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"hr ; attendu es étoiles / Milo Comète\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"results_summary author main_author\"]],[[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"label\"]],[[\"text\",\"Main Author:\"]]],[\"http://www.w3.org/1999/xhtml\",\"span\",[[null,\"class\",\"value\"]],[[\"http://www.w3.org/1999/xhtml\",\"a\",[[null,\"href\",\"/cgi-bin/koha/opac-s",
+      "ms": 21
+    },
+    {
+      "name": "jardin-des-nuages.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "atlas-des-iles-imaginaires.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "passed": true,
+      "ms": 17
+    },
+    {
+      "name": "cuisine-des-etoiles.xml → content/koha/26.05.03/koha-tmpl/opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl",
+      "passed": true,
+      "ms": 16
+    },
+    {
+      "name": "XML mal formé",
+      "passed": true,
+      "ms": 1
+    },
+    {
+      "name": "XSLT mal formée",
+      "passed": true,
+      "ms": 0
+    },
+    {
+      "name": "XSLT invalide",
+      "passed": true,
+      "ms": 1
+    },
+    {
+      "name": "Reprise après erreur et appels simultanés",
+      "passed": true,
+      "ms": 1
+    },
+    {
+      "name": "Le JavaScript du résultat reste inerte",
+      "passed": true,
+      "ms": 0
+    }
+  ],
+  "errors": [],
+  "initializationMs": 22,
+  "reference": {
+    "libxml": [
+      2,
+      10,
+      4
+    ],
+    "libxslt": [
+      1,
+      1,
+      37
+    ]
+  },
+  "authorParameter": {
+    "actual": "<diagnostic><direct fields=\"2\" selected=\"1\">Brume</direct><case id=\"local-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"\" fields=\"2\" selected=\"0\"/></case><case id=\"imported-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"\" fields=\"2\" selected=\"0\"/></case><case id=\"imported-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"\" fields=\"2\" selected=\"0\"/></case></diagnostic>",
+    "expected": "<diagnostic><direct fields=\"2\" selected=\"1\">Brume</direct><case id=\"local-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"local-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-fragment\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-string\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case><case id=\"imported-number\"><probe context=\"record\" namespace=\"http://www.loc.gov/MARC21/slim\" parameter=\"700\" fields=\"2\" selected=\"1\"><author>Brume</author></probe></case></diagnostic>"
+  },
+  "probe": {
+    "nativeAvailable": false,
+    "nativeError": null,
+    "blockedRequests": [],
+    "wasmCompilations": 1
+  },
+  "passed": 35,
+  "failed": 7,
+  "browser": "153.0.8010.12",
+  "pageErrors": [],
+  "externalRequests": [],
+  "variant": "original"
+}

@@ -4,6 +4,14 @@ Application pédagogique statique pour apprendre XSLT 1.0 dans le contexte **Koh
 
 ## Objectif
 
+Un [essai isolé de moteur XSLT WebAssembly](spike/wasm/README.md) prépare la sortie
+du moteur natif des navigateurs : la copie corrigée réussit les 42 contrôles,
+y compris les quatre vues Koha et les paramètres de templates importés.
+Il n'est pas encore intégré aux modes du laboratoire.
+
+L'[ADR-002](docs/ADR-002-xslt-wasm.md) explique le choix du moteur, le correctif
+local à maintenir et les vérifications encore nécessaires avant production.
+
 Réduire la distance entre « je ne connais pas XSLT » et « je peux comprendre et modifier prudemment une feuille XSLT d'affichage de Koha ».
 
 ## Contraintes structurantes

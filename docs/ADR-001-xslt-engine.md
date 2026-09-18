@@ -2,7 +2,16 @@
 
 ## Statut
 
-Accepté provisoirement après le spike Phase 0. La matrice complète des navigateurs reste à exécuter.
+**Décision historique, remplacée pour l'objectif 2027 par l'[ADR-002](ADR-002-xslt-wasm.md).**
+Le code principal utilise encore cette approche en attendant la migration.
+Les sections suivantes conservent le raisonnement et les observations du spike initial.
+
+Actualisation du 18 septembre 2026 : ce choix ne convient pas à l'objectif 2027
+en raison du retrait annoncé de XSLT natif. Un [essai WebAssembly](../spike/wasm/README.md)
+démontre l'exécution sans API native. La copie corrigée du chargeur de dépendances
+réussit les 42 contrôles dans Chromium, contre 35/42 pour la copie non corrigée.
+Le moteur principal n'est pas encore migré ; la validation des autres navigateurs
+et des limites de ressources reste nécessaire.
 
 ## Contexte
 

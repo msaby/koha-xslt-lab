@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?essai conserver?>
+<record xmlns="http://www.loc.gov/MARC21/slim" test="identité">
+  <!-- Conserver cet ordre inhabituel, les espaces et les champs répétés. -->
+  <datafield tag="200" ind1="1" ind2=" "><subfield code="e"> premier </subfield><subfield code="a">Été &amp; café</subfield><subfield code="e">second</subfield></datafield>
+  <controlfield tag="001">DEMO</controlfield>
+  <datafield tag="200" ind1=" " ind2=" "><subfield code="a"/></datafield>
+</record>
