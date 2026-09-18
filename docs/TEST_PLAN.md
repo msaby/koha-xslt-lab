@@ -90,6 +90,10 @@ Depuis l'écran initial, choisir l'utilisation libre et vérifier que les exerci
 - Répéter les scénarios de chargement, confirmation, annulation et erreur avec le menu XSLT ; vérifier que le XML reste inchangé et que ce menu est également masqué en mode guidé.
 - Charger `identite`, transformer et consulter « XML ou HTML généré » : vérifier la conservation des champs, sous-zones, valeurs, attributs et de leur ordre dans le XML. Vérifier les trois autres feuilles dans l’aperçu, notamment les notices sans sous-titre et avec plusieurs sous-titres.
 - Dans chaque exercice, vérifier la consigne unique, le bouton de validation en dessous à gauche, puis l’ouverture et la fermeture des indices et de la solution.
+- Depuis la solution ouverte, copier dans l’éditeur XSLT : vérifier la correction
+  de l’exercice courant, le XML inchangé, le focus dans l’éditeur et l’obligation
+  de transformer à nouveau avant validation. Garder la solution ouverte en mobile
+  pour vérifier l’absence de débordement horizontal.
 - Provoquer une erreur XML ou XSLT et lancer la transformation : vérifier la sélection de l’onglet « Erreurs », le focus sur son bouton et l’affichage du message.
 
 ## 6. Accessibilité

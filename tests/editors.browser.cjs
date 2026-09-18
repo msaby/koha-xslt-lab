@@ -58,7 +58,15 @@ async function main() {
     await page.locator('#guided-mode-button').click();
     await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
     const solution = fs.readFileSync(path.join(__dirname, '../content/solutions/ex01/main.xsl'), 'utf8');
-    await xslt.fill(solution);
+    const initialXml = await xml.innerText();
+    await page.locator('.solution-help summary').click();
+    await page.locator('#use-solution').click();
+    assert.equal((await xslt.innerText()).replace(/\r\n/g, '\n'), solution.replace(/\r\n/g, '\n'));
+    assert.equal(await xml.innerText(), initialXml);
+    assert.equal(await xslt.evaluate((el) => el === document.activeElement), true);
+    assert.equal(await page.locator('#run-status').textContent(), 'À transformer');
+    await page.locator('#validate-exercise').click();
+    assert.equal(await page.locator('#exercise-status').textContent(), "Transformez d'abord les sources.");
     await xslt.press('Control+Enter');
     await page.locator('#validate-exercise').click();
     assert.equal(await page.locator('#exercise-status').textContent(), 'Exercice réussi.');
@@ -66,6 +74,9 @@ async function main() {
     await page.waitForFunction(() => document.querySelector('#exercise-title').textContent.includes('sous-titres'));
     await page.locator('#xml-editor .syntax-tag').first().waitFor();
     await page.locator('#xslt-editor .syntax-attribute').first().waitFor();
+    await page.locator('#use-solution').click();
+    const fourthSolution = fs.readFileSync(path.join(__dirname, '../content/solutions/ex04/main.xsl'), 'utf8');
+    assert.equal((await xslt.innerText()).replace(/\r\n/g, '\n'), fourthSolution.replace(/\r\n/g, '\n'));
     await xml.click();
     await xml.press('Tab');
     assert.equal(await xslt.evaluate((el) => el === document.activeElement), true);

@@ -17,6 +17,7 @@ const exerciseSelect = document.querySelector("#exercise-select");
 const exerciseStatus = document.querySelector("#exercise-status");
 const hintList = document.querySelector("#hint-list");
 const solutionOutput = document.querySelector("#solution-output");
+const useSolutionButton = document.querySelector("#use-solution");
 const modeChoice = document.querySelector("#mode-choice");
 const modeToolbar = document.querySelector("#mode-toolbar");
 const exerciseStrip = document.querySelector("#exercise-strip");
@@ -126,11 +127,13 @@ function setSuccess(html) {
 }
 
 async function loadExercise() {
+  useSolutionButton.disabled = true;
   const response = await fetch(`content/exercises/${exerciseSelect.value}.json`);
   currentExercise = await response.json();
   const xmlResponse = await fetch(currentExercise.files.xml);
   const xsltResponse = await fetch(currentExercise.files.entryXslt);
   const solutionResponse = await fetch(currentExercise.solution);
+  if (!solutionResponse.ok) throw new Error(`Impossible de charger la solution : HTTP ${solutionResponse.status}`);
   const solution = await solutionResponse.text();
   xmlEditor.value = await xmlResponse.text();
   xmlExample.loadedSource = xmlEditor.value;
@@ -149,6 +152,7 @@ async function loadExercise() {
     return item;
   }));
   solutionOutput.textContent = solution;
+  useSolutionButton.disabled = false;
   validateExerciseButton.disabled = false;
   await runTransformation();
 }
@@ -299,6 +303,20 @@ async function runTransformation() {
 }
 
 transformButton.addEventListener("click", runTransformation);
+useSolutionButton.addEventListener("click", () => {
+  if (useSolutionButton.disabled) return;
+  xsltEditor.value = solutionOutput.textContent;
+  latestHtml = "";
+  preview.srcdoc = "";
+  htmlOutput.textContent = "Cliquez sur Transformer pour afficher le résultat.";
+  errorsOutput.textContent = "Aucune erreur.";
+  errorSummary.hidden = true;
+  runStatus.textContent = "À transformer";
+  runStatus.className = "run-status";
+  exerciseStatus.textContent = "Solution copiée dans l’éditeur XSLT.";
+  exerciseStatus.className = "exercise-status";
+  xsltEditor.focus();
+});
 xsltSampleToggle.addEventListener("click", () => {
   if (xsltExample.select.disabled) return;
   const open = xsltSampleOptions.hidden;

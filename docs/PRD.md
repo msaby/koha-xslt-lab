@@ -28,6 +28,11 @@ Parcours progressif avec consigne, fichiers de départ, validation du résultat,
 
 La consigne unique est suivie du bouton de validation aligné à gauche. Les indices et la solution sont consultables dans deux blocs dépliables au comportement identique. En cas d’erreur de transformation, l’onglet « Erreurs » s’ouvre et reçoit le focus.
 
+Le bloc solution propose « Copier la solution dans l’éditeur XSLT ». Le bouton
+remplace la XSLT par la correction affichée et place le focus dans l’éditeur,
+sans modifier la notice XML. Il faut ensuite lancer la transformation ; le résultat
+précédent est effacé pour éviter de valider une sortie devenue obsolète.
+
 Les deux modes restent accessibles à tout moment depuis l'en-tête. Le changement de mode conserve les sources XML/XSLT actuellement éditées.
 
 ### Comprendre Koha

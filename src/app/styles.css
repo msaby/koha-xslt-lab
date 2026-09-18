@@ -51,7 +51,8 @@ h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .exercise-help summary { cursor: pointer; color: var(--blue); font-weight: 700; }
 .exercise-help ol { margin: .75rem 0; padding-left: 1.3rem; }
 .exercise-help li { margin: .3rem 0; }
-.solution-help pre { min-height: 0; margin-top: .75rem; }
+.solution-help { min-width: 0; }
+.solution-help pre { min-height: 0; margin: .75rem 0; overflow-wrap: anywhere; }
 .workspace { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .85fr); gap: 1px; max-width: 90rem; min-height: calc(100vh - 12rem); margin: 0 auto; background: var(--line); }
 .editor-panel, .result-panel { padding: 2rem 5vw; background: rgba(255, 253, 248, .88); }
 .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 1.25rem; }
