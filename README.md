@@ -48,6 +48,8 @@ Au clavier, ouvrir avec Entrée ou Espace, parcourir les choix avec Tab et Maj+T
 
 ## Lancement local et tests
 
+Les éditeurs MARCXML et XSLT des modes libre et guidé utilisent CodeMirror 6 : coloration des balises, attributs, valeurs et commentaires, numéros de ligne, indentation automatique et annulation/rétablissement. Le copier-coller et Ctrl+Entrée (Cmd+Entrée sur macOS) restent disponibles. Tab passe au champ suivant.
+
 Depuis la racine du dépôt, avec Python installé :
 
 ```sh
@@ -56,6 +58,15 @@ python -m http.server 8000 --bind 127.0.0.1
 
 Ouvrir <http://127.0.0.1:8000/>. Aucun build ni installation de dépendances n’est nécessaire : Python sert les fichiers et le navigateur exécute le JavaScript et les transformations XSLT.
 
+CodeMirror est fourni dans `src/editor/xml-editor.bundle.js`, avec ses licences dans `src/editor/LICENSES.txt` ; aucun CDN n’est utilisé. Pour modifier la configuration de l’éditeur, éditer `src/editor/xml-editor.js`, puis régénérer le fichier intégré avec Node.js et npm :
+
+```sh
+npm ci
+npm run build:editor
+```
+
+Les versions des outils et bibliothèques sont fixées dans `package-lock.json`. Le fichier généré et les licences doivent être conservés dans le dépôt pour permettre le lancement statique direct.
+
 Avec Node.js installé, exécuter les tests du chargement des notices et des feuilles XSLT :
 
 ```sh
@@ -63,6 +74,8 @@ node tests/sample-loading.test.cjs
 ```
 
 Ces tests utilisent un DOM simulé ; les vérifications dans un navigateur sont décrites dans le [plan de tests](docs/TEST_PLAN.md).
+
+Le test des éditeurs dans Chromium se lance avec `npm run test:browser`, serveur local démarré et dépendances npm installées. Il nécessite un navigateur Chromium Playwright installé, ou la variable `BROWSER_EXECUTABLE` indiquant le chemin d’un exécutable Chromium. `LAB_URL` permet de changer l’URL locale testée (par défaut `http://127.0.0.1:8000/`).
 
 Les transformations des exemples peuvent être vérifiées avec Python et `lxml` installé dans l’environnement de test :
 

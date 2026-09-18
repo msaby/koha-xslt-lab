@@ -14,6 +14,14 @@ Les dix-neuf tests de `tests/sample-loading.test.cjs` couvrent les noms affiché
 
 Ils utilisent un DOM simulé et ne vérifient ni le rendu visuel ni le moteur XSLT du navigateur.
 
+### Tests navigateur des éditeurs
+
+`npm run test:browser` exécute `tests/editors.browser.cjs` avec Playwright Core. Démarrer le serveur HTTP local au préalable. Définir `BROWSER_EXECUTABLE` si le Chromium installé n’est pas celui attendu par Playwright, et éventuellement `LAB_URL` pour tester une autre adresse.
+
+Le scénario vérifie les couleurs distinctes et numéros de ligne des deux entrées, un véritable collage via le presse-papiers, l’annulation, Ctrl+Entrée, les erreurs de transformation, le chargement et la validation d’un exercice, Tab entre éditeurs et l’absence de débordement à 390 pixels. Il vérifie également l’absence d’erreurs JavaScript et de requêtes externes. Une capture mobile est déposée dans `test-results/`, exclu de Git.
+
+Vérifié sur le Chromium local le 18 septembre 2026. Les autres navigateurs et technologies d’assistance restent à vérifier.
+
 ### Couverture complémentaire prévue
 
 - parsing XML valide/invalide ;

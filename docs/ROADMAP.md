@@ -12,8 +12,8 @@
 ## Phase 1 — Laboratoire MVP
 
 - [ ] Initialiser projet et CI.
-- [ ] Intégrer CodeMirror.
-- [ ] Éditeurs XML/XSLT.
+- [x] Intégrer CodeMirror.
+- [x] Éditeurs XML/XSLT avec coloration, numéros de ligne et indentation.
 - [ ] Transformer + erreurs.
 - [ ] Aperçu sandboxé + HTML source.
 - [ ] Import/export simple.

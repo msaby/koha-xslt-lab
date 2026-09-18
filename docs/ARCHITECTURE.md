@@ -44,7 +44,11 @@ Responsabilités : `transformer` parse/compile/exécute ; `preview` isole le HTM
 
 ## 4. Éditeur
 
-Préférence initiale : CodeMirror 6, plus léger que Monaco. L'éditeur doit permettre XML/XSLT, numéros de ligne, indentation et recherche. Les erreurs de parsing doivent être affichées hors de l'éditeur en texte accessible, même si elles sont aussi soulignées.
+Les deux entrées XML/XSLT utilisent CodeMirror 6 et son [support XML](https://github.com/codemirror/lang-xml), en mode libre et guidé. La configuration `src/editor/xml-editor.js` fournit coloration syntaxique, numéros de ligne, indentation et historique. Son interface `value` permet au chargeur d’exemples et aux exercices de lire et remplacer les sources. Le chargement d’un fichier réinitialise l’historique de cet éditeur ; les saisies et collages restent annulables.
+
+`npm run build:editor` produit le module autonome `src/editor/xml-editor.bundle.js` avec esbuild et rassemble les licences des dépendances dans `src/editor/LICENSES.txt`. Ces fichiers sont versionnés : aucun build n’est nécessaire pour servir le dépôt, et aucune dépendance n’est téléchargée à l’exécution. Les versions sont verrouillées dans `package-lock.json`.
+
+Tab conserve son rôle de navigation entre champs. Ctrl+Entrée/Cmd+Entrée lance la transformation depuis l’éditeur. Les erreurs de parsing restent affichées dans les messages accessibles de l’application. La recherche intégrée et le soulignement des erreurs ne sont pas encore implémentés.
 
 ## 5. Parsing
 
