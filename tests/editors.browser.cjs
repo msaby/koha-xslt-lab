@@ -1,0 +1,88 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const { chromium } = require('playwright-core');
+
+async function main() {
+  const browser = await chromium.launch({
+    headless: true,
+    ...(process.env.BROWSER_EXECUTABLE ? { executablePath: process.env.BROWSER_EXECUTABLE } : {}),
+  });
+  try {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1050 }, permissions: ['clipboard-read', 'clipboard-write'] });
+    const page = await context.newPage();
+    const errors = [];
+    const externalRequests = [];
+    const base = process.env.LAB_URL || 'http://127.0.0.1:8000/';
+    page.on('pageerror', (error) => errors.push(error.message));
+    page.on('request', (request) => {
+      if (new URL(request.url()).origin !== new URL(base).origin) externalRequests.push(request.url());
+    });
+    await page.goto(base);
+    await page.locator('#choose-free-mode').click();
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
+    const xml = page.getByRole('textbox', { name: 'Éditeur MARCXML', exact: true });
+    const xslt = page.getByRole('textbox', { name: 'Éditeur XSLT', exact: true });
+    for (const id of ['xml-editor', 'xslt-editor']) {
+      await page.locator(`#${id} .syntax-tag`).first().waitFor();
+      const colors = await page.locator(`#${id}`).evaluate((host) =>
+        ['syntax-tag', 'syntax-attribute', 'syntax-value', 'syntax-comment'].map((name) =>
+          getComputedStyle(host.querySelector(`.${name}`)).color));
+      assert.equal(new Set(colors).size, 4, `${id}: distinct syntax colors`);
+      assert.ok(await page.locator(`#${id} .cm-lineNumbers .cm-gutterElement`).count() > 2);
+    }
+    console.log('OK: both free-mode editors have highlighting and line numbers.');
+
+    const copiedXml = '<?xml version="1.0"?><record xmlns="http://www.loc.gov/MARC21/slim"><!-- test --><controlfield tag="001">COLLÉ &amp; édité</controlfield></record>';
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.evaluate((text) => navigator.clipboard.writeText(text), copiedXml);
+    await xml.click();
+    await xml.press('Control+a');
+    await xml.press('Control+v');
+    await page.waitForFunction(() => document.querySelector('#xml-editor .cm-content').textContent.includes('COLLÉ'));
+    await xml.press('Control+Enter');
+    await page.waitForFunction(() => document.querySelector('#html-output').textContent.includes('COLLÉ'));
+    assert.match(await page.locator('#html-output').textContent(), /COLLÉ &amp; édité/);
+    await xml.press('Control+z');
+    await xml.press('Control+Enter');
+    await page.waitForFunction(() => document.querySelector('#html-output').textContent.includes('Le jardin des nuages'));
+    console.log('OK: clipboard paste, undo and Ctrl+Enter use the actual edited XML.');
+
+    await xslt.fill('<xsl:stylesheet');
+    await xslt.press('Control+Enter');
+    await page.waitForFunction(() => document.querySelector('[data-tab="errors-panel"]').getAttribute('aria-selected') === 'true');
+    assert.equal(await page.locator('[data-tab="errors-panel"]').evaluate((el) => el === document.activeElement), true);
+    assert.ok((await page.locator('#errors-output').textContent()).length > 20);
+    console.log('OK: malformed XSLT still opens and focuses Errors.');
+
+    await page.locator('#guided-mode-button').click();
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
+    const solution = fs.readFileSync(path.join(__dirname, '../content/solutions/ex01/main.xsl'), 'utf8');
+    await xslt.fill(solution);
+    await xslt.press('Control+Enter');
+    await page.locator('#validate-exercise').click();
+    assert.equal(await page.locator('#exercise-status').textContent(), 'Exercice réussi.');
+    await page.locator('#exercise-select').selectOption('ex04-all-subtitles');
+    await page.waitForFunction(() => document.querySelector('#exercise-title').textContent.includes('sous-titres'));
+    await page.locator('#xml-editor .syntax-tag').first().waitFor();
+    await page.locator('#xslt-editor .syntax-attribute').first().waitFor();
+    await xml.click();
+    await xml.press('Tab');
+    assert.equal(await xslt.evaluate((el) => el === document.activeElement), true);
+    console.log('OK: guided-mode loading, solution editing, validation and keyboard navigation.');
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await xml.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(150);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    fs.mkdirSync(path.join(__dirname, '../test-results'), { recursive: true });
+    await page.screenshot({ path: path.join(__dirname, '../test-results/editors-mobile.png'), fullPage: true });
+    assert.deepEqual(errors, []);
+    assert.deepEqual(externalRequests, []);
+    console.log('OK: narrow viewport, no JavaScript errors, no external requests.');
+  } finally {
+    await browser.close();
+  }
+}
+
+main().catch((error) => { console.error(error); process.exitCode = 1; });
