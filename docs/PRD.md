@@ -24,6 +24,11 @@ Le menu « Charger une notice d’exemple », réservé au mode libre, propose l
 Le mode libre propose aussi « Charger une feuille XSLT d’exemple », avec les mêmes règles de sélection et de protection des saisies. Seule la XSLT est remplacée. Le catalogue comprend une transformation identité conservant les données et l’ordre des nœuds XML, ainsi que des présentations HTML simples.
 
 ### Exercices
+
+Le sélecteur est généré depuis le catalogue et les fiches JSON : tri par `order`
+numérique croissant, titres issus de `title` et numérotation continue. Le premier
+exercice selon ce tri est chargé par défaut. Ajouter ou déplacer un exercice
+ne nécessite aucune modification HTML.
 Parcours progressif avec consigne, fichiers de départ, validation du résultat, trois niveaux d'indices, solution consultable et progression enregistrée localement. L'exercice 1 est sélectionné et chargé par défaut lorsque le parcours guidé est choisi. Un sélecteur permet ensuite de charger les exercices disponibles.
 
 La consigne unique est suivie du bouton de validation aligné à gauche. Les indices et la solution sont consultables dans deux blocs dépliables au comportement identique. En cas d’erreur de transformation, l’onglet « Erreurs » s’ouvre et reçoit le focus.

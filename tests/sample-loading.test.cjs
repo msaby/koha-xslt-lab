@@ -49,6 +49,63 @@ function setup() {
   return { context, xsltExample: vm.runInContext('xsltExample', context), get: (id) => document.querySelector(`#${id}`) };
 }
 
+test('les fiches JSON déterminent le tri, les titres et le premier exercice chargé', async () => {
+  const { context, get } = setup();
+  const originalFetch = context.fetch;
+  context.fetch = async (url) => {
+    const response = await originalFetch(url);
+    if (url === 'content/exercises/index.json') return { ok: true, json: async () => ({ exercises: ['ex01-identifier', 'ex-count-datafields'] }) };
+    if (url === 'content/exercises/ex01-identifier.json') {
+      const exercise = await response.json();
+      return { ok: true, json: async () => ({ ...exercise, order: 30 }) };
+    }
+    if (url === 'content/exercises/ex-count-datafields.json') {
+      const exercise = await response.json();
+      return { ok: true, json: async () => ({ ...exercise, order: 10, title: 'Mon comptage' }) };
+    }
+    return response;
+  };
+  await context.enterMode('guided');
+  assert.deepEqual(Array.from(get('exercise-select').options, option => option.textContent), ['1 · Mon comptage', "2 · Afficher l'identifiant de la notice"]);
+  assert.equal(get('exercise-select').value, 'ex-count-datafields');
+  assert.equal(get('exercise-title').textContent, 'Mon comptage');
+  assert.equal(get('xml-editor').value, fs.readFileSync(path.join(root, 'content/samples/count-datafields.xml'), 'utf8'));
+});
+
+test('un catalogue en erreur peut être rechargé sans écraser les sources', async () => {
+  const { context, get } = setup();
+  const originalFetch = context.fetch;
+  get('xml-editor').value = 'Travail conservé';
+  context.fetch = async () => ({ ok: false, status: 404 });
+  await assert.rejects(context.enterMode('guided'), /404/);
+  assert.equal(get('exercise-select').disabled, true);
+  assert.equal(get('xml-editor').value, 'Travail conservé');
+  assert.match(get('exercise-status').textContent, /Impossible/);
+  context.fetch = originalFetch;
+  await context.enterMode('guided');
+  assert.equal(get('exercise-select').disabled, false);
+  assert.equal(get('exercise-select').options.length, 5);
+});
+
+test('un ordre invalide est signalé et les égalités suivent le catalogue', async () => {
+  const { context, get } = setup();
+  const originalFetch = context.fetch;
+  let invalid = true;
+  context.fetch = async (url) => {
+    if (url === 'content/exercises/index.json') return { ok: true, json: async () => ({ exercises: ['ex-count-datafields', 'ex01-identifier'] }) };
+    const response = await originalFetch(url);
+    if (url.startsWith('content/exercises/')) {
+      const exercise = await response.json();
+      return { ok: true, json: async () => ({ ...exercise, order: invalid ? '10' : 10 }) };
+    }
+    return response;
+  };
+  await assert.rejects(context.enterMode('guided'), /order/);
+  invalid = false;
+  await context.enterMode('guided');
+  assert.deepEqual(Array.from(get('exercise-select').options, option => option.value), ['ex-count-datafields', 'ex01-identifier']);
+});
+
 test('le mode libre démarre avec la première notice du catalogue et la feuille identité', async () => {
   const { context, get } = setup();
   const originalFetch = context.fetch;

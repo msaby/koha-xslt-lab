@@ -63,6 +63,14 @@ tests/
 
 Responsabilités : `transformer` parse/compile/exécute ; `preview` isole le HTML ; `exercises` charge le contenu ; `validation` évalue le résultat ; `storage` persiste localement ; `llm-helper` fabrique uniquement du texte copiable.
 
+Le catalogue du parcours guidé est chargé à la demande depuis
+`content/exercises/index.json`. Les fiches sont chargées en parallèle, vérifiées
+sur `id`, `order` et `title`, puis triées par `order` croissant (égalité départagée
+par l'ordre du catalogue). Le menu HTML ne contient aucune liste codée en dur.
+Les fiches restent en mémoire pour la session ; un échec permet une nouvelle
+tentative. Les fichiers XML/XSLT sont chargés à la sélection et les réponses
+obsolètes ne remplacent pas les sources d'un exercice plus récent ou du mode libre.
+
 ## 4. Éditeur
 
 Les deux entrées XML/XSLT utilisent CodeMirror 6 et son [support XML](https://github.com/codemirror/lang-xml), en mode libre et guidé. La configuration `src/editor/xml-editor.js` fournit coloration syntaxique, numéros de ligne, indentation et historique. Son interface `value` permet au chargeur d’exemples et aux exercices de lire et remplacer les sources. Le chargement d’un fichier réinitialise l’historique de cet éditeur ; les saisies et collages restent annulables.

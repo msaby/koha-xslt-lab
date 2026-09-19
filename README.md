@@ -95,6 +95,15 @@ python -m unittest discover -s tests -v
 
 ## Parcours guidé
 
+Le menu est généré à partir de `content/exercises/index.json` et des fiches JSON.
+Le champ numérique `order` détermine la position ; `title` fournit le titre,
+et la numérotation 1, 2, 3… est automatique.
+
+Pour ajouter un exercice, créer sa fiche et ses fichiers XML/XSLT, puis ajouter
+son identifiant au catalogue. **Aucune modification du HTML n'est nécessaire.**
+Pour le déplacer, changer uniquement `order` (10, 20, 30… sont possibles), puis
+recharger la page. Voir le [guide d'ajout des exercices](docs/DATA_FORMATS.md#ajouter-un-exercice-à-la-main).
+
 Chaque exercice affiche une consigne unique, puis le bouton « Valider le résultat », aligné à gauche. « Afficher les indices » et « Afficher la solution » sont deux blocs dépliables, utilisables également au clavier. En cas d’erreur de transformation, l’onglet « Erreurs » est sélectionné, reçoit le focus et affiche le message.
 
 ## Documents du projet

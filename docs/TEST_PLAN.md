@@ -52,6 +52,11 @@ Les dix-neuf tests de `tests/sample-loading.test.cjs` couvrent les noms affiché
 
 Ils utilisent un DOM simulé et ne vérifient ni le rendu visuel ni le moteur XSLT du navigateur.
 
+Les tests unitaires du catalogue vérifient aussi le tri par `order` indépendamment
+de l'ordre de la liste, les titres JSON et la numérotation continue avec des ordres
+espacés, le premier exercice chargé, le rejet d'un ordre non numérique, le
+départage des égalités et la reprise après erreur HTTP sans perte des sources.
+
 ### Tests navigateur des éditeurs
 
 `npm run test:browser` exécute `tests/editors.browser.cjs` avec Playwright Core. Démarrer le serveur HTTP local au préalable. Définir `BROWSER_EXECUTABLE` si le Chromium installé n’est pas celui attendu par Playwright, et éventuellement `LAB_URL` pour tester une autre adresse.

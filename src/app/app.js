@@ -50,6 +50,9 @@ let modeVersion = 0;
 let currentExercise = null;
 let latestHtml = "";
 let guidedModeInitialized = false;
+let exerciseCatalogPromise = null;
+let exerciseCatalog = new Map();
+let exerciseLoadVersion = 0;
 let freeModeInitialized = false;
 const xsltSampleToggle = document.querySelector("#xslt-sample-toggle");
 const xsltSampleOptions = document.querySelector("#xslt-sample-options");
@@ -126,20 +129,69 @@ function setSuccess(html) {
   runStatus.className = "run-status is-success";
 }
 
+async function loadExerciseCatalog() {
+  if (exerciseCatalogPromise) return exerciseCatalogPromise;
+  exerciseSelect.disabled = true;
+  exerciseStatus.textContent = "Chargement des exercices…";
+  exerciseCatalogPromise = (async () => {
+    const response = await fetch("content/exercises/index.json");
+    if (!response.ok) throw new Error(`Catalogue des exercices : HTTP ${response.status}`);
+    const { exercises: ids } = await response.json();
+    if (!Array.isArray(ids) || !ids.length) throw new Error("Aucun exercice dans le catalogue.");
+    if (new Set(ids).size !== ids.length) throw new Error("Identifiant d’exercice répété dans le catalogue.");
+    const exercises = await Promise.all(ids.map(async (id) => {
+      if (typeof id !== "string" || !/^[a-zA-Z0-9_-]+$/.test(id)) throw new Error("Identifiant d’exercice invalide.");
+      const response = await fetch(`content/exercises/${id}.json`);
+      if (!response.ok) throw new Error(`Exercice ${id} : HTTP ${response.status}`);
+      const exercise = await response.json();
+      if (exercise.id !== id || !Number.isFinite(exercise.order) || typeof exercise.title !== "string" || !exercise.title.trim()) {
+        throw new Error(`Exercice ${id} : vérifier id, order (nombre) et title.`);
+      }
+      return exercise;
+    }));
+    // Stable sorting keeps catalogue order when two exercises share an order.
+    exercises.sort((a, b) => a.order - b.order);
+    exerciseCatalog = new Map(exercises.map(exercise => [exercise.id, exercise]));
+    exerciseSelect.replaceChildren(...exercises.map((exercise, index) => {
+      const option = document.createElement("option");
+      option.value = exercise.id;
+      option.textContent = `${index + 1} · ${exercise.title}`;
+      return option;
+    }));
+    exerciseSelect.value = exercises[0].id;
+    exerciseSelect.disabled = false;
+    exerciseStatus.textContent = "";
+  })();
+  try {
+    await exerciseCatalogPromise;
+  } catch (error) {
+    exerciseCatalogPromise = null;
+    exerciseStatus.textContent = `Impossible de charger les exercices : ${error.message} Revenez au parcours guidé pour réessayer.`;
+    throw error;
+  }
+}
+
 async function loadExercise() {
+  const loadVersion = ++exerciseLoadVersion;
+  const requestModeVersion = modeVersion;
   useSolutionButton.disabled = true;
-  const response = await fetch(`content/exercises/${exerciseSelect.value}.json`);
-  currentExercise = await response.json();
-  const xmlResponse = await fetch(currentExercise.files.xml);
-  const xsltResponse = await fetch(currentExercise.files.entryXslt);
-  const solutionResponse = await fetch(currentExercise.solution);
-  if (!solutionResponse.ok) throw new Error(`Impossible de charger la solution : HTTP ${solutionResponse.status}`);
-  const solution = await solutionResponse.text();
-  xmlEditor.value = await xmlResponse.text();
+  validateExerciseButton.disabled = true;
+  const exercise = exerciseCatalog.get(exerciseSelect.value);
+  if (!exercise) throw new Error("Exercice absent du catalogue.");
+  const [xml, xslt, solution] = await Promise.all([
+    exercise.files.xml, exercise.files.entryXslt, exercise.solution,
+  ].map(async path => {
+    const response = await fetch(path);
+    if (!response.ok) throw new Error(`Chargement de ${path} : HTTP ${response.status}`);
+    return response.text();
+  }));
+  if (loadVersion !== exerciseLoadVersion || requestModeVersion !== modeVersion) return;
+  currentExercise = exercise;
+  xmlEditor.value = xml;
   xmlExample.loadedSource = xmlEditor.value;
   xmlExample.loadedFilename = "";
   xmlExample.select.value = "";
-  xsltEditor.value = await xsltResponse.text();
+  xsltEditor.value = xslt;
   xsltExample.loadedSource = xsltEditor.value;
   xsltExample.loadedFilename = "";
   xsltExample.select.value = "";
@@ -154,6 +206,8 @@ async function loadExercise() {
   solutionOutput.textContent = solution;
   useSolutionButton.disabled = false;
   validateExerciseButton.disabled = false;
+  exerciseStatus.textContent = "";
+  exerciseStatus.className = "exercise-status";
   await runTransformation();
 }
 
@@ -176,8 +230,10 @@ async function enterMode(mode) {
   exerciseStrip.hidden = mode !== "guided";
   updateModeButtons(mode);
   if (mode === "guided" && !guidedModeInitialized) {
-    guidedModeInitialized = true;
+    await loadExerciseCatalog();
+    if (enteredModeVersion !== modeVersion) return;
     await loadExercise();
+    if (enteredModeVersion === modeVersion) guidedModeInitialized = true;
     return;
   }
   if (mode === "free") {
