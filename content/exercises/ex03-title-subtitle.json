@@ -1,6 +1,6 @@
 {
   "id": "ex03-title-subtitle",
-  "order": 3,
+  "order": 4,
   "title": "Afficher le titre et le sous-titre",
   "concepts": ["XPath", "xsl:value-of", "xsl:text"],
   "instruction": "Récupérez 200$a et le premier 200$e, puis insérez le séparateur \" : \" entre les deux valeurs.",

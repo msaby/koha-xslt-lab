@@ -1,0 +1,19 @@
+{
+  "id": "ex-count-datafields",
+  "order": 2,
+  "title": "Compter les éléments datafield",
+  "concepts": ["namespace MARCXML", "XPath", "count()", "xsl:value-of"],
+  "instruction": "Remplacez le texte du paragraphe par le nombre d’éléments datafield présents dans la notice. Utilisez la fonction XPath count() dans xsl:value-of et affichez uniquement le nombre obtenu. La notice fournie contient trois éléments datafield ; ne comptez ni les controlfield ni les subfield.",
+  "files": {
+    "xml": "content/samples/count-datafields.xml",
+    "entryXslt": "content/xslt/count-datafields/main.xsl",
+    "projectFiles": ["content/xslt/count-datafields/main.xsl"]
+  },
+  "validation": [{"type": "textEquals", "value": "3"}],
+  "hints": [
+    "Chaque zone datafield compte une seule fois, quel que soit son nombre de sous-zones.",
+    "Depuis le template match=\"/\", le chemin marc:record/marc:datafield sélectionne ces éléments. Le préfixe marc est déjà déclaré.",
+    "Utilisez xsl:value-of avec select=\"count(marc:record/marc:datafield)\"."
+  ],
+  "solution": "content/solutions/count-datafields/main.xsl"
+}

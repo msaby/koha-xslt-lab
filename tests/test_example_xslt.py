@@ -16,6 +16,15 @@ def transform(name, document):
 
 
 class ExampleStylesheetsTest(unittest.TestCase):
+    def test_count_exercise_counts_fields_and_adapts_to_source(self):
+        source = etree.parse(str(SAMPLES / 'count-datafields.xml'))
+        fields = source.xpath('/m:record/m:datafield', namespaces=NS)
+        self.assertEqual(len(fields), 3)
+        engine = etree.XSLT(etree.parse(str(ROOT / 'content/solutions/count-datafields/main.xsl')))
+        self.assertEqual(''.join(engine(source).getroot().itertext()).strip(), '3')
+        source.getroot().remove(fields[0])
+        self.assertEqual(''.join(engine(source).getroot().itertext()).strip(), '2')
+
     def test_identity_preserves_all_sample_documents(self):
         for filename in json.loads((SAMPLES / "index.json").read_text()):
             with self.subTest(filename=filename):

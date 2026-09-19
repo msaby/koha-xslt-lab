@@ -1,4 +1,4 @@
 {
   "contentSchemaVersion": 3,
-  "exercises": ["ex01-identifier", "ex02-title", "ex03-title-subtitle", "ex04-all-subtitles"]
+  "exercises": ["ex01-identifier", "ex-count-datafields", "ex02-title", "ex03-title-subtitle", "ex04-all-subtitles"]
 }

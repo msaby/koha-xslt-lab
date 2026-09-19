@@ -1,6 +1,6 @@
 {
   "id": "ex02-title",
-  "order": 2,
+  "order": 3,
   "title": "Afficher le titre",
   "concepts": ["namespace MARCXML", "XPath", "xsl:value-of"],
   "instruction": "Le code initial crée une balise HTML p contenant \"Votre titre apparaîtra ici.\". L'objectif de l'exercice est de remplacer cette phrase par le contenu de la zone 200$a.",

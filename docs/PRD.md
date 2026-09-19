@@ -57,20 +57,21 @@ Vue pédagogique du pipeline : `notice UNIMARC -> traitements Koha -> MARCXML tr
 ## 6. Exercices MVP
 
 1. Afficher l'identifiant de la notice en zone `001` avec `xsl:value-of`.
-2. Afficher `200$a` avec `xsl:value-of`.
-3. Afficher `200$a` et le premier `200$e` dans un paragraphe unique avec un séparateur.
-4. Afficher `200$a` et tous les `200$e` avec `xsl:for-each` et des séparateurs.
-5. Afficher plusieurs données bibliographiques.
-6. Ajouter des libellés HTML.
-7. Afficher `330$a` conditionnellement avec `xsl:if`.
-8. Introduire `xsl:choose`.
-9. Afficher plusieurs sujets avec `xsl:for-each`.
-10. Refactorer avec `xsl:apply-templates` et `xsl:template match`.
-11. Traiter 600/601/606/607 avec une logique commune.
-12. Utiliser un template nommé et `xsl:call-template`.
-13. Déplacer un template dans `utils.xsl` et l'inclure.
-14. Modifier une mini-XSLT inspirée de Koha : libellé, suppression, ajout de 225.
-15. Lire un extrait authentique/adapté d'une XSLT Koha et identifier ses mécanismes.
+2. Compter les `datafield` avec `count()` sur une notice contenant exactement trois zones.
+3. Afficher `200$a` avec `xsl:value-of`.
+4. Afficher `200$a` et le premier `200$e` dans un paragraphe unique avec un séparateur.
+5. Afficher `200$a` et tous les `200$e` avec `xsl:for-each` et des séparateurs.
+6. Afficher plusieurs données bibliographiques.
+7. Ajouter des libellés HTML.
+8. Afficher `330$a` conditionnellement avec `xsl:if`.
+9. Introduire `xsl:choose`.
+10. Afficher plusieurs sujets avec `xsl:for-each`.
+11. Refactorer avec `xsl:apply-templates` et `xsl:template match`.
+12. Traiter 600/601/606/607 avec une logique commune.
+13. Utiliser un template nommé et `xsl:call-template`.
+14. Déplacer un template dans `utils.xsl` et l'inclure.
+15. Modifier une mini-XSLT inspirée de Koha : libellé, suppression, ajout de 225.
+16. Lire un extrait authentique/adapté d'une XSLT Koha et identifier ses mécanismes.
 
 ## 7. Confidentialité et sécurité
 

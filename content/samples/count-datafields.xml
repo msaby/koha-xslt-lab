@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Notice UNIMARC fictive : trois datafield et cinq subfield. -->
+<record xmlns="http://www.loc.gov/MARC21/slim">
+  <controlfield tag="001">COMPTE001</controlfield>
+  <datafield tag="200" ind1="1" ind2=" ">
+    <subfield code="a">Le jardin des nuages</subfield>
+    <subfield code="f">Lila Brume</subfield>
+  </datafield>
+  <datafield tag="210" ind1=" " ind2=" ">
+    <subfield code="c">Éditions du Cerf-volant</subfield>
+  </datafield>
+  <datafield tag="700" ind1=" " ind2="1">
+    <subfield code="a">Brume</subfield>
+    <subfield code="b">Lila</subfield>
+  </datafield>
+</record>

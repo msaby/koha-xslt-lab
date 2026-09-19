@@ -71,6 +71,12 @@ Vérifié sur le Chromium local le 18 septembre 2026. Les autres navigateurs et 
 
 ## 3. Tests de transformation
 
+L'exercice de comptage figure en deuxième position. Vérifier que sa notice dédiée
+contient trois `datafield`, que la solution retourne `3` puis `2` après retrait
+d'une zone, et que le validateur refuse `13`. Ces cas sont couverts par les tests
+Python et navigateur. Les 42 contrôles du spike Wasm documentés dans ADR-002
+constituent le corpus historique de la décision ; il précède cet exercice.
+
 Pour chaque exercice : XML + XSLT solution -> résultat attendu. Ajouter des cas : zone absente, répétée, caractères accentués, apostrophes, espaces, namespace manquant.
 
 Les trois tests de `tests/test_example_xslt.py` s’exécutent avec `python -m unittest discover -s tests -v` et nécessitent `lxml`. Ils vérifient les trois présentations HTML sur chaque notice, ainsi que la transformation identité sur les notices et sur un XML contenant champs répétés, ordre inhabituel, attributs, commentaires, espaces et instruction de traitement. Les comparaisons de l’identité utilisent une sérialisation XML canonique. Ces tests avec libxslt complètent les vérifications de `XSLTProcessor` dans les navigateurs.

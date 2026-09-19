@@ -12,6 +12,12 @@ Le laboratoire propose d'abord un choix entre utilisation libre et parcours guid
 Identifier `record`, `datafield`, `subfield`, `tag`, `code` et le namespace MARCXML.
 
 ### Niveau 1 — extraire
+Après l'identifiant, le deuxième exercice compte les éléments `datafield` avec
+`count(marc:record/marc:datafield)`. Sa notice dédiée contient exactement trois
+zones, avec cinq sous-zones et un `controlfield` pour distinguer les éléments
+comptés. La validation exige le résultat textuel `3`, sans imposer une écriture
+unique de la feuille. Les exercices de titre suivent ce comptage.
+
 `001`, puis `200$a`, puis la combinaison de `200$a` avec le premier `200$e`, avant de parcourir tous les `200$e`. L'exercice `001` commence sans sous-zone afin d'isoler la sélection d'une zone de contrôle ; les exercices suivants introduisent la sélection de plusieurs sous-zones, les séparateurs et la répétition avec `xsl:for-each`.
 
 ### Niveau 2 — présenter
