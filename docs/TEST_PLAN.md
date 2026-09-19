@@ -1,5 +1,11 @@
 # Plan de tests
 
+Le test `node tests/koha.browser.cjs` contrôle aussi les CSS de l’aperçu : contexte
+OPAC/pro selon les quatre choix, style calculé des champs, iframe toujours sandboxé
+et HTML brut sans ajout de CSS. Les 12 couples notice/style sont exécutés à la
+racine et sous un préfixe GitHub Pages, sans XSLT natif ni requête externe.
+Des captures des quatre aperçus sont produites dans `test-results/` (non versionné).
+
 ## 1. Spike navigateur
 
 Matrice cible Chrome/Firefox/Edge/Safari : parsing MARCXML namespace ; XSLT simple ; templates ; `include` ; `import` ; chemins relatifs ; GitHub Pages. Le spike natif historique est décrit dans ADR-001 ; la migration Wasm et ses limites sont décrites dans [ADR-002](ADR-002-xslt-wasm.md).

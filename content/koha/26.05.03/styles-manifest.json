@@ -1,0 +1,225 @@
+{
+  "version": "26.05.03",
+  "source": "https://download.koha-community.org/koha-26.05.03.tar.gz",
+  "archiveSha256": "e6a4fed2975cf5f9c3e202549b63bf12f778dd159b679dbaefd13f0ce0aa3418",
+  "files": {
+    "koha-tmpl/intranet-tmpl/prog/css/src/_flatpickr.scss": {
+      "bytes": 21467,
+      "sha256": "5465ea6a1ec24325fa625b37b9db217507bfc24b19f7acac2b143858a3ae9fde"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/_flatpickr_vars.scss": {
+      "bytes": 861,
+      "sha256": "fdfe1a1f84a29caff31d8b8da59153dcb7595ce0b231036cdebe4e29988eb9c9"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/_fonts.scss": {
+      "bytes": 1040,
+      "sha256": "aa444dcd375f4272c6630b1496bb7249e365ca699c1362838502a52a0bd158d4"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/_forms.scss": {
+      "bytes": 12496,
+      "sha256": "73e3b16e8bdb9891ce23c5430220f726176a05995957d6cdaa4f3537ba98b2de"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/_header.scss": {
+      "bytes": 9022,
+      "sha256": "1258636048818f349e127b810b447fd7640c489d5e262d9f768102b53e33f2f8"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/_mixins.scss": {
+      "bytes": 750,
+      "sha256": "ec8facc7ed8b13c1fb2e1f7ca35f692e3697347324accba07bc8eba5bcac152a"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/_tables.scss": {
+      "bytes": 19263,
+      "sha256": "b27dff3ae984039e01a9bf1490aa70ffe7ffd1d48f886d18506d71a3ce5a39b3"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/_toolbar.scss": {
+      "bytes": 2235,
+      "sha256": "7c5bc700b089feaa3d3246d952fc43c2a832ffc7f3b7adfc433018519a21a4c8"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/_variables.scss": {
+      "bytes": 69507,
+      "sha256": "dfab81461fdf9280392b25298bb5526f7bcb7032b9585468ad50875c5761a139"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/bookings.scss": {
+      "bytes": 335,
+      "sha256": "f1d96f654641fedaaa11de060c9a646d012d41c50fb098f01ba8902d2dba5807"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/calendar.scss": {
+      "bytes": 2370,
+      "sha256": "6a6bbf626ad7da94a4f29a73106d721a2417f0369407e4a74ec2c687d0154d03"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/edifact_interchange.scss": {
+      "bytes": 13868,
+      "sha256": "b06e9270fa71c7aa918665df8de2ecb05ca34149c4d024e6f18aa2c44598bbf3"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/holds.scss": {
+      "bytes": 594,
+      "sha256": "64f246ce4fa4ce1c1d0c73bff408e328b3c0049264878a48e8e1c3d61fa1de3c"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/ill-requests.scss": {
+      "bytes": 407,
+      "sha256": "42d636d7cb5ae03951bbaa816435c659b9262de5dbf08e96e2f289b40e8441ec"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/installer.scss": {
+      "bytes": 7515,
+      "sha256": "1f6d70f995458a966e1e76c2656b36845a5e4368ca36cfd310748a2995181eb2"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/mainpage.scss": {
+      "bytes": 2179,
+      "sha256": "c702bf608c1968c29761a3121c2f1d8b1a01dd9664dcb818bbdbdcf57f99363e"
+    },
+    "koha-tmpl/intranet-tmpl/prog/css/src/staff-global.scss": {
+      "bytes": 93413,
+      "sha256": "11c895cf6883da96b6f184a76f2fce0fd60c0b674c0eb532ed8b2024f8ac890a"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/_common.scss": {
+      "bytes": 34770,
+      "sha256": "aabcc96e2ff2cd948d1ee78f7d7f16655edd92e248d9d3f4011f90a097a2d9ad"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/_flatpickr.scss": {
+      "bytes": 18890,
+      "sha256": "eb7f2b0dc85a406b9d47de2643cf70ecd75c43aedbb8db946ef4ef487de36ac4"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/_flatpickr_vars.scss": {
+      "bytes": 864,
+      "sha256": "7eeb2a0bdf3ba297bf5496ba66a426d4c378698c0145ce24e064739de7cde08f"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/_fonts.scss": {
+      "bytes": 1083,
+      "sha256": "3e7c42034416bf0f6e17b515749794f4eb0259e429704d601b3b11a8639845da"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/_responsive.scss": {
+      "bytes": 10441,
+      "sha256": "ccc2d1e4f325fff8312dbafe111720d23f8ee39626401fdd072129743e6d0e5f"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/_variables.scss": {
+      "bytes": 60616,
+      "sha256": "bf8b0bd1da8899112ddf1bc0a189700bd6fc645bb8eba01ac65f1a33569bca9c"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/opac.scss": {
+      "bytes": 51502,
+      "sha256": "f4f0b0ae6ec073e3c9a6b8eeafafe6780b086f4e50012e17e3141a46c9b9bb7f"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/print.scss": {
+      "bytes": 5057,
+      "sha256": "3a7ad116e692bb7256ad8094952927920fcc6d8607cea21a8c93f2bbc03588a0"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/src/sco.scss": {
+      "bytes": 1236,
+      "sha256": "b68584ffccc1fa24a07a9908c78040eedeafea0f4c2d310aa757c2ee3707d186"
+    },
+    "gulpfile.js": {
+      "bytes": 17031,
+      "sha256": "eba31cdb220705a19ef800c5bb693f237e189fcb0ae2f2a6809828485f26da39"
+    },
+    "package.json": {
+      "bytes": 3928,
+      "sha256": "d015f242477cb37c4f67bd9c75bede41a45ab89492ef3461141497c1ded9841e"
+    },
+    "yarn.lock": {
+      "bytes": 534660,
+      "sha256": "dac4ccfed98c54475f179eefcff074ec20405122b42d7c8b2a3849b17ca89685"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/edit-tag.png": {
+      "bytes": 264,
+      "sha256": "ba4bff296defc8b6d11ed5c07f2e63119f1d1057902aa13e8180e0504e972c56"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/famfamfam/silk/page_white_acrobat.png": {
+      "bytes": 591,
+      "sha256": "27420ea72e036ea1511bf0a0a4b263a02a2bf52ecd0e297c05ea1d50e7bb218a"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/famfamfam/silk/page_white_code.png": {
+      "bytes": 603,
+      "sha256": "77a2b14114528eb6e3af76637f52c640c83cd80a3f5c72de76a3bbc5d79c1627"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/famfamfam/silk/page_white_excel.png": {
+      "bytes": 663,
+      "sha256": "c62c3e1b721c5d46e2756f4bedcea29251bf72acd29938342dfb50cda8dbbd59"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/item-bullet.svg": {
+      "bytes": 414,
+      "sha256": "d96384bcb624f50695b9ce34c74020b37dbd4611be8d6d4e9296fff834565b89"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/locked.png": {
+      "bytes": 230,
+      "sha256": "b8db0d1af72d60b9c149e211103ee364d63e58571dae460b035913737c981ffe"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/patron-blank.min.svg": {
+      "bytes": 744,
+      "sha256": "671005107ad4eb46413a74eade22ddde010ac7639b5ad00f27d82507cae67a28"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/progress.png": {
+      "bytes": 224,
+      "sha256": "625b824c33223073fbd384b9028869a2b96550732c67b6037f1e0bee1a2656ca"
+    },
+    "koha-tmpl/intranet-tmpl/prog/img/spinner-small.gif": {
+      "bytes": 1849,
+      "sha256": "2b4b0633e2783fc8e0efc14fd1ea88b5d88e870cdc0275e6063fc9745d25cbc2"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Bold-webfont.woff": {
+      "bytes": 22052,
+      "sha256": "c26685ed495cbd58ca51dbb5d33227e58e8c38be96b27fbc63f1a6a2216b4737"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Bold-webfont.woff2": {
+      "bytes": 17528,
+      "sha256": "7193138c146df4685c0291ba2d6a33d3aa8016b5a9f1f9c4f316adaffb44021b"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-BoldItalic-webfont.woff": {
+      "bytes": 23244,
+      "sha256": "4631a03d761b06ab2f683f1c02dd4c8087c88943c889ffeb9bd824c66f72f7af"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-BoldItalic-webfont.woff2": {
+      "bytes": 18424,
+      "sha256": "b69415d7de4012ada75bd8195f51fb6410122f903befc6f6bdad1be487521e07"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Italic-webfont.woff": {
+      "bytes": 23692,
+      "sha256": "4b984785ecac775b9bf967acc4444a469d53239467e14065d95eb7daea71e885"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Italic-webfont.woff2": {
+      "bytes": 18908,
+      "sha256": "86c4292c16e28698ed4dadcb7a2951a1e5efc3a5fdd9d21bda40bb6af3257a00"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Regular-webfont.woff": {
+      "bytes": 22288,
+      "sha256": "9697a91466417aa9efecdeb25ac51c52fc4439d278412d2f45bc2f3fbba7236f"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Regular-webfont.woff2": {
+      "bytes": 17696,
+      "sha256": "e0674764e8123cb25a55ee79c9dafbb7eab9aa598a19d18a1fc71be64c766c65"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/images/koha-green-logo.svg": {
+      "bytes": 3112,
+      "sha256": "5eb8f208be1dd10755ee196d0340189a0864b841f87eb563345ea4428b501983"
+    },
+    "koha-tmpl/opac-tmpl/bootstrap/images/spinner-small.gif": {
+      "bytes": 1849,
+      "sha256": "2b4b0633e2783fc8e0efc14fd1ea88b5d88e870cdc0275e6063fc9745d25cbc2"
+    },
+    "koha-tmpl/opac-tmpl/lib/fontawesome/webfonts/fa-brands-400.woff2": {
+      "bytes": 110088,
+      "sha256": "70c632ba73c7ad942141bb2f56994b8eddf0a284c01aab9f21e0cd10021530c4"
+    },
+    "koha-tmpl/opac-tmpl/lib/fontawesome/webfonts/fa-solid-900.woff2": {
+      "bytes": 114740,
+      "sha256": "ff58a6b0a01dbce082458f6e5a58719df4e80e0c2b50f744bb5871e21eca6878"
+    },
+    "debian/copyright": {
+      "bytes": 970,
+      "sha256": "9c5ba57ac336469f4ccdcff944d3a96d39e65fe248a9c3619d10d9705b4377c0"
+    },
+    "koha-tmpl/opac-tmpl/lib/fontawesome/LICENSE.txt": {
+      "bytes": 7427,
+      "sha256": "0aa8f86525273b2efa4f40f4272a188e187704252170e979dc06879adf68d43c"
+    }
+  },
+  "missingFonts": [
+    "koha-tmpl/intranet-tmpl/prog/css/fonts/poppins-bold-webfont.woff",
+    "koha-tmpl/intranet-tmpl/prog/css/fonts/poppins-bold-webfont.woff2",
+    "koha-tmpl/intranet-tmpl/prog/css/fonts/poppins-bolditalic-webfont.woff",
+    "koha-tmpl/intranet-tmpl/prog/css/fonts/poppins-bolditalic-webfont.woff2",
+    "koha-tmpl/intranet-tmpl/prog/css/fonts/poppins-italic-webfont.woff",
+    "koha-tmpl/intranet-tmpl/prog/css/fonts/poppins-italic-webfont.woff2",
+    "koha-tmpl/intranet-tmpl/prog/css/fonts/poppins-regular-webfont.woff",
+    "koha-tmpl/intranet-tmpl/prog/css/fonts/poppins-regular-webfont.woff2"
+  ]
+}

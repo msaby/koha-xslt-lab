@@ -3,6 +3,7 @@ import { validateResult } from "../exercises/validator.js";
 import { createXmlEditor, renderXmlOutput } from "../editor/xml-editor.bundle.js";
 import { kohaStyles } from "../transformer/koha-styles.js";
 import { transformKoha, cancelKohaTransformation } from "../transformer/koha-transformer.js";
+import { createKohaPreview } from "../preview/koha-preview.js";
 
 const xmlEditor = createXmlEditor("#xml-editor", "Éditeur MARCXML", () => runTransformation());
 const xsltEditor = createXmlEditor("#xslt-editor", "Éditeur XSLT", () => runTransformation());
@@ -135,12 +136,12 @@ function setError(error) {
   errorsTab.focus();
 }
 
-function setSuccess(html) {
+function setSuccess(html, previewDocument) {
   errorSummary.hidden = true;
   errorsOutput.textContent = "Aucune erreur.";
   renderXmlOutput(htmlOutput, html);
   latestHtml = html;
-  preview.srcdoc = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'"><style>body{font-family:system-ui,sans-serif;padding:1.5rem;color:#18212b}article{border-left:4px solid #d35f36;padding-left:1rem}h2{margin:.1rem 0 .4rem}</style></head><body>${html}</body></html>`;
+  preview.srcdoc = previewDocument ?? `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'"><style>body{font-family:system-ui,sans-serif;padding:1.5rem;color:#18212b}article{border-left:4px solid #d35f36;padding-left:1rem}h2{margin:.1rem 0 .4rem}</style></head><body>${html}</body></html>`;
   runStatus.textContent = "Transformé";
   runStatus.className = "run-status is-success";
 }
@@ -414,14 +415,17 @@ function validateExercise() {
 async function runTransformation() {
   const version = ++transformationVersion;
   const requestedMode = currentMode;
+  const requestedStyle = kohaStyleSelect.value;
   transformButton.disabled = true;
   runStatus.textContent = "Transformation...";
   try {
     const html = requestedMode === 'koha'
-      ? await transformKoha(xmlEditor.value, kohaStyleSelect.value)
+      ? await transformKoha(xmlEditor.value, requestedStyle)
       : transformSources(xmlEditor.value, xsltEditor.value);
     if (version !== transformationVersion) return;
-    setSuccess(html);
+    const previewDocument = requestedMode === 'koha' ? await createKohaPreview(html, requestedStyle) : undefined;
+    if (version !== transformationVersion) return;
+    setSuccess(html, previewDocument);
   } catch (error) {
     if (version === transformationVersion) setError(error);
   } finally {

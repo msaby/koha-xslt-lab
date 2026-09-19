@@ -40,6 +40,7 @@ function setup() {
     kohaStyles: [{ id: 'opac-detail', label: 'Détail OPAC' }],
     cancelKohaTransformation() {},
     transformKoha: async () => '<h2>Koha</h2>',
+    createKohaPreview: async html => html,
     window: { confirm: () => true },
     fetch: async (url) => ({
       ok: true,

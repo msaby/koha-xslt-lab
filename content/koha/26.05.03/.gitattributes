@@ -1,2 +1,9 @@
 *.xsl -text
 LICENSE -text
+*.scss -text
+*.css -text
+*.js -text
+*.json -text
+*.lock -text
+*.txt -text
+copyright -text

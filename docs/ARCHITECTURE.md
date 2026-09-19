@@ -45,6 +45,22 @@ un échec du moteur embarqué lors de la validation de la migration.
 
 ## 3. Modules proposés
 
+### Présentation Koha
+
+`src/preview/koha-preview.js` charge et mémorise le CSS OPAC ou professionnel
+compilé depuis la même archive Koha 26.05.03 que les XSLT. Il construit uniquement
+le document d’aperçu ; le résultat brut de transformation reste intact. Un
+chargement de CSS en échec est signalé dans l’onglet d’erreur et peut être retenté.
+Les réponses tardives sont ignorées après changement de mode ou de transformation.
+
+Les styles sont confinés à l’iframe sans privilèges. Sa CSP autorise les styles
+intégrés et les images/polices `data:`, sans scripts ni ressources distantes.
+Les autres modes gardent leur aperçu habituel. Ce rendu reste partiel : les
+polices Poppins manquent dans l’archive officielle et utilisent le repli standard ;
+les pages, scripts, widgets et préférences Koha ne sont pas reproduits.
+La provenance et les étapes de compilation sont décrites dans
+[le dossier des styles](../content/koha/26.05.03/preview/README.md).
+
 ```text
 src/
   app/

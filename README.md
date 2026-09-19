@@ -120,6 +120,10 @@ Transformer. Les choix et le XML Koha sont conservés séparément des sources d
 autres modes. L'aperçu ne reproduit pas tout le contexte ou l'habillage de Koha.
 Voir [le fonctionnement et les limites](docs/XSLT_KOHA.md).
 
+L’aperçu Koha applique les CSS standard OPAC ou professionnels de la même version
+26.05.03. Les ressources sont locales ; le rendu reste partiel, notamment avec
+une police de secours pour l’interface professionnelle.
+
 ## Documents du projet
 
 - [Mode XSLT Koha](docs/XSLT_KOHA.md) — utilisation, références UNIMARC 26.05.03, fonctionnement et limites.

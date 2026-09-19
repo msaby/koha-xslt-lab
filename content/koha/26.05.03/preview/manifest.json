@@ -1,0 +1,19 @@
+{
+  "koha": "26.05.03",
+  "sass": "dart-sass\t1.98.0\t(Sass Compiler)\t[Dart]\ndart2js\t3.11.2\t(Dart Compiler)\t[Dart]",
+  "bootstrap": "5.3.8",
+  "fontawesome": "7.2.0",
+  "processing": "Dart Sass compressed, local asset URLs embedded as data; no autoprefixer or RTL pass. Poppins font-face rules omitted: font files absent from the release archive; standard fallback fonts apply.",
+  "outputs": {
+    "opac": {
+      "bytes": 917511,
+      "sha256": "1d255b84a66f6ac77ab51d3d7d19c654d87e5f4ddf24f2fbdc31f67df1acd133",
+      "compiledSha256": "47b7b01379a6d49c5eb2cb1e8a8bb776973dbdce9fb3a29065db15f84551a3df"
+    },
+    "staff": {
+      "bytes": 327589,
+      "sha256": "08b229f1253cc6be767aa7425f307ed9294256cf5a2dc6d35d7a981d668e8b39",
+      "compiledSha256": "bb2da82eef6671ee9dd001f552b0e417bccfebdf04a0b8b32e524a3e5430a868"
+    }
+  }
+}

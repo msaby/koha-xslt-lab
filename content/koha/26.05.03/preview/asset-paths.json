@@ -1,0 +1,23 @@
+[
+  "koha-tmpl/intranet-tmpl/prog/img/edit-tag.png",
+  "koha-tmpl/intranet-tmpl/prog/img/famfamfam/silk/page_white_acrobat.png",
+  "koha-tmpl/intranet-tmpl/prog/img/famfamfam/silk/page_white_code.png",
+  "koha-tmpl/intranet-tmpl/prog/img/famfamfam/silk/page_white_excel.png",
+  "koha-tmpl/intranet-tmpl/prog/img/item-bullet.svg",
+  "koha-tmpl/intranet-tmpl/prog/img/locked.png",
+  "koha-tmpl/intranet-tmpl/prog/img/patron-blank.min.svg",
+  "koha-tmpl/intranet-tmpl/prog/img/progress.png",
+  "koha-tmpl/intranet-tmpl/prog/img/spinner-small.gif",
+  "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Bold-webfont.woff",
+  "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Bold-webfont.woff2",
+  "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-BoldItalic-webfont.woff",
+  "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-BoldItalic-webfont.woff2",
+  "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Italic-webfont.woff",
+  "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Italic-webfont.woff2",
+  "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Regular-webfont.woff",
+  "koha-tmpl/opac-tmpl/bootstrap/css/fonts/NotoSans-Regular-webfont.woff2",
+  "koha-tmpl/opac-tmpl/bootstrap/images/koha-green-logo.svg",
+  "koha-tmpl/opac-tmpl/bootstrap/images/spinner-small.gif",
+  "koha-tmpl/opac-tmpl/lib/fontawesome/webfonts/fa-brands-400.woff2",
+  "koha-tmpl/opac-tmpl/lib/fontawesome/webfonts/fa-solid-900.woff2"
+]

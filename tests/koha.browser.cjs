@@ -46,6 +46,19 @@ const server = http.createServer((req, res) => {
           if (await page.locator('#koha-style-select').inputValue() === style) await page.locator('#transform-button').click();
           else await page.locator('#koha-style-select').selectOption(style);
           await waitResult();
+          const frame = page.frameLocator('#preview');
+          const context = style.startsWith('opac') ? 'opac' : 'staff';
+          await frame.locator(`style[data-context="${context}"]`).waitFor({ state: 'attached' });
+          const summary = frame.locator('.results_summary').first();
+          await summary.waitFor();
+          assert.equal(await summary.evaluate(el => getComputedStyle(el).display), 'block');
+          assert.equal(await summary.evaluate(el => getComputedStyle(el).color), 'rgb(32, 32, 32)');
+          assert.equal(await page.locator('#preview').getAttribute('sandbox'), '');
+          assert.doesNotMatch(await page.locator('#html-output').textContent(), /koha-standard-styles/);
+          if (index === 0 && !prefix) {
+            fs.mkdirSync(path.join(root, 'test-results'), { recursive: true });
+            await page.locator('#preview').screenshot({ path: path.join(root, `test-results/koha-${style}.png`) });
+          }
           assert.match(await page.locator('#html-output').textContent(), new RegExp(authors[index]));
           assert.equal(await page.locator('#sample-select').inputValue(), sample);
           assert.equal(await page.locator('#koha-style-select').inputValue(), style);
