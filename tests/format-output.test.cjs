@@ -20,3 +20,18 @@ test('contenu mixte, espaces significatifs, CDATA et texte inchangés', () => {
 test('commentaires et caractères > dans les attributs', () => {
   assert.equal(formatOutput('<x><!-- note --><a test="1 > 0"/></x>'), '<x>\n  <!-- note -->\n  <a test="1 > 0"/>\n</x>');
 });
+
+test('régression : fragment interface pro signalé par l’utilisateur', () => {
+  const source = '<h1>Le jardin des nuages : roman / Lila Brume</h1><span class="results_summary author main_author"><span class="label">Main Author: </span><span class="value"><a href="/cgi-bin/koha/catalogue/search.pl?q=au:Brume%20Lila">Brume, Lila</a></span></span><span class="results_summary publication"><span class="label">Publication: </span><span class="value">Clairvallon : <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:%C3%89ditions%20du%20Cerf-volant" title="Search for publisher">Éditions du Cerf-volant</a>, 2024</span></span><span class="results_summary description"><span class="label">Description: </span>184 p.</span>';
+  const result = formatOutput(source);
+  assert.match(result, /<\/h1>\n<span/);
+  assert.match(result, /\n  <span class="label">Main Author: /);
+  assert.match(result, /\n    <a href=/);
+  assert.ok(result.includes('Clairvallon : <a'));
+});
+
+test('liste Koha : texte entre les éléments racines', () => {
+  const result = formatOutput('<a href="x">Titre</a> : roman / Lila Brume <span class="results_summary"><span class="label">Publication: </span><span>Éditeur</span></span>');
+  assert.match(result, /\n  <span class="label">/);
+  assert.ok(result.includes(' : roman / Lila Brume '));
+});

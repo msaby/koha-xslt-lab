@@ -23,7 +23,11 @@ export function formatOutput(source) {
   function format(node, depth) {
     if (typeof node === 'string') return node;
     if (/^(?:pre|textarea|script|style)$/i.test(node.name || '') || /\bxml:space\s*=\s*(["'])preserve\1/.test(node.open || '') ||
-        node.children.some(child => typeof child === 'string' && ((!child.startsWith('<') && child.trim()) || child.startsWith('<![CDATA[')))) return raw(node);
+        (node.open && node.children.some(child => typeof child === 'string' && ((!child.startsWith('<') && child.trim()) || child.startsWith('<![CDATA['))))) return raw(node);
+    // A fragment can contain both top-level text and elements (Koha result
+    // lists). Format its element subtrees instead of returning the whole
+    // fragment verbatim. Plain text output still stays untouched.
+    if (!node.open && node.children.every(child => typeof child === 'string' && !child.startsWith('<'))) return source;
     const children = node.children.filter(child => typeof child !== 'string' || child.trim());
     if (!children.length) return node.open ? raw(node) : source;
     const indent = '  '.repeat(depth);

@@ -55,6 +55,7 @@ const server = http.createServer((req, res) => {
           assert.equal(await summary.evaluate(el => getComputedStyle(el).color), 'rgb(32, 32, 32)');
           assert.equal(await page.locator('#preview').getAttribute('sandbox'), '');
           assert.doesNotMatch(await page.locator('#html-output').textContent(), /koha-standard-styles/);
+          assert.match(await page.locator('#html-output').textContent(), /\n  +</, `Indented output for ${style}`);
           if (index === 0 && !prefix) {
             fs.mkdirSync(path.join(root, 'test-results'), { recursive: true });
             await page.locator('#preview').screenshot({ path: path.join(root, `test-results/koha-${style}.png`) });
