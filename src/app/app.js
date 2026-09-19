@@ -4,6 +4,7 @@ import { createXmlEditor, renderXmlOutput } from "../editor/xml-editor.bundle.js
 import { kohaStyles } from "../transformer/koha-styles.js";
 import { transformKoha, cancelKohaTransformation } from "../transformer/koha-transformer.js";
 import { createKohaPreview } from "../preview/koha-preview.js";
+import { formatOutput } from "../preview/format-output.js";
 
 const xmlEditor = createXmlEditor("#xml-editor", "Éditeur MARCXML", () => runTransformation());
 const xsltEditor = createXmlEditor("#xslt-editor", "Éditeur XSLT", () => runTransformation());
@@ -139,7 +140,7 @@ function setError(error) {
 function setSuccess(html, previewDocument) {
   errorSummary.hidden = true;
   errorsOutput.textContent = "Aucune erreur.";
-  renderXmlOutput(htmlOutput, html);
+  renderXmlOutput(htmlOutput, formatOutput(html));
   latestHtml = html;
   preview.srcdoc = previewDocument ?? `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'"><style>body{font-family:system-ui,sans-serif;padding:1.5rem;color:#18212b}article{border-left:4px solid #d35f36;padding-left:1rem}h2{margin:.1rem 0 .4rem}</style></head><body>${html}</body></html>`;
   runStatus.textContent = "Transformé";

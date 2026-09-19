@@ -41,6 +41,7 @@ function setup() {
     cancelKohaTransformation() {},
     transformKoha: async () => '<h2>Koha</h2>',
     createKohaPreview: async html => html,
+    formatOutput: source => source,
     window: { confirm: () => true },
     fetch: async (url) => ({
       ok: true,

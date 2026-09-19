@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build:editor": "node scripts/build-editor.cjs",
-    "test": "node tests/sample-loading.test.cjs",
+    "test": "node tests/sample-loading.test.cjs && node tests/format-output.test.cjs",
     "test:browser": "node tests/editors.browser.cjs"
   },
   "devDependencies": {

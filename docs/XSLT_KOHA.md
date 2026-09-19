@@ -29,7 +29,7 @@ contexte d'une liste ; le laboratoire n'exécute pas de recherche Koha.
 L’aperçu applique automatiquement les styles standard OPAC ou professionnels
 de Koha 26.05.03, compilés depuis l’archive officielle et stockés dans le dépôt.
 Les styles et leurs ressources sont intégrés uniquement dans l’iframe ; le HTML
-de l’onglet de code reste inchangé. Les fichiers Poppins manquent dans l’archive,
+de l’onglet de code est indenté pour la lecture, sans ajout des CSS. Les fichiers Poppins manquent dans l’archive,
 donc l’interface professionnelle utilise sa police de secours. Ce rendu ne
 reconstitue pas une page Koha complète ni ses fonctions interactives.
 Voir [la provenance et la compilation des CSS](../content/koha/26.05.03/preview/README.md).
