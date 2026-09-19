@@ -59,6 +59,10 @@ départage des égalités et la reprise après erreur HTTP sans perte des source
 
 ### Tests navigateur des éditeurs
 
+Vérifier également les couleurs du code généré, la copie exacte du texte depuis
+l'onglet de sortie et le rendu inerte des balises et attributs HTML potentiellement
+exécutables. Ces contrôles complètent les tests de l'aperçu iframe, sans les remplacer.
+
 `npm run test:browser` exécute `tests/editors.browser.cjs` avec Playwright Core. Démarrer le serveur HTTP local au préalable. Définir `BROWSER_EXECUTABLE` si le Chromium installé n’est pas celui attendu par Playwright, et éventuellement `LAB_URL` pour tester une autre adresse.
 
 Le scénario vérifie les couleurs distinctes et numéros de ligne des deux entrées, un véritable collage via le presse-papiers, l’annulation, Ctrl+Entrée, les erreurs de transformation, le chargement et la validation d’un exercice, Tab entre éditeurs et l’absence de débordement à 390 pixels. Il vérifie également l’absence d’erreurs JavaScript et de requêtes externes. Une capture mobile est déposée dans `test-results/`, exclu de Git.

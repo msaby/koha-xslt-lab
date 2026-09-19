@@ -36,6 +36,7 @@ function setup() {
   const context = vm.createContext({
     document,
     createXmlEditor: (selector) => document.querySelector(selector),
+    renderXmlOutput: (element, source) => { element.textContent = source; },
     window: { confirm: () => true },
     fetch: async (url) => ({
       ok: true,

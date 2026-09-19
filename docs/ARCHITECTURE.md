@@ -81,6 +81,12 @@ Tab conserve son rôle de navigation entre champs. Ctrl+Entrée/Cmd+Entrée lanc
 
 ## 5. Parsing
 
+L'onglet « XML ou HTML généré » utilise le parseur XML Lezer déjà embarqué avec
+CodeMirror pour colorer balises, attributs, valeurs et commentaires. Le résultat
+reste dans un `pre` en lecture seule ; seuls des nœuds texte et des `span` sont
+créés, sans injection de HTML. La coloration conserve exactement le texte sérialisé
+pour la sélection et la copie et réutilise les couleurs des éditeurs d'entrée.
+
 Utiliser `DOMParser` pour XML/XSLT lorsque pertinent. Vérifier explicitement les `parsererror`. Ne jamais injecter directement le résultat XSLT dans le DOM principal.
 
 ## 6. Aperçu sécurisé

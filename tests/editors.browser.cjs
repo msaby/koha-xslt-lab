@@ -33,6 +33,32 @@ async function main() {
     }
     console.log('OK: both free-mode editors have highlighting and line numbers.');
 
+    await page.locator('[data-tab="html-panel"]').click();
+    await page.locator('#html-output .syntax-tag').first().waitFor();
+    const outputColors = await page.locator('#html-output').evaluate(host =>
+      ['syntax-tag', 'syntax-attribute', 'syntax-value', 'syntax-comment'].map(name => getComputedStyle(host.querySelector(`.${name}`)).color));
+    assert.equal(new Set(outputColors).size, 4);
+    await page.locator('#html-output').focus();
+    await page.locator('#html-output').evaluate(host => {
+      const range = document.createRange();
+      range.selectNodeContents(host);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+    await page.keyboard.press('Control+c');
+    // Windows converts clipboard line endings to CRLF.
+    assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, '\n'), await page.locator('#html-output').textContent());
+    const inert = await page.evaluate(async () => {
+      const { renderXmlOutput } = await import('./src/editor/xml-editor.bundle.js');
+      const host = document.createElement('pre');
+      const source = '<p onclick="alert(1)">Été &amp; café</p><script>window.outputExecuted = true</script>';
+      renderXmlOutput(host, source);
+      return { exact: host.textContent === source, unsafeElements: host.querySelectorAll('script,p,[onclick]').length };
+    });
+    assert.deepEqual(inert, { exact: true, unsafeElements: 0 });
+    console.log('OK: generated output is highlighted, copied exactly and rendered as inert text.');
+
     const copiedXml = '<?xml version="1.0"?><record xmlns="http://www.loc.gov/MARC21/slim"><!-- test --><controlfield tag="001">COLLÉ &amp; édité</controlfield></record>';
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.evaluate((text) => navigator.clipboard.writeText(text), copiedXml);

@@ -1,6 +1,6 @@
 import { transformSources } from "../transformer/transformer.js";
 import { validateResult } from "../exercises/validator.js";
-import { createXmlEditor } from "../editor/xml-editor.bundle.js";
+import { createXmlEditor, renderXmlOutput } from "../editor/xml-editor.bundle.js";
 
 const xmlEditor = createXmlEditor("#xml-editor", "Éditeur MARCXML", () => runTransformation());
 const xsltEditor = createXmlEditor("#xslt-editor", "Éditeur XSLT", () => runTransformation());
@@ -122,7 +122,7 @@ function setError(error) {
 function setSuccess(html) {
   errorSummary.hidden = true;
   errorsOutput.textContent = "Aucune erreur.";
-  htmlOutput.textContent = html;
+  renderXmlOutput(htmlOutput, html);
   latestHtml = html;
   preview.srcdoc = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>body{font-family:system-ui,sans-serif;padding:1.5rem;color:#18212b}article{border-left:4px solid #d35f36;padding-left:1rem}h2{margin:.1rem 0 .4rem}</style></head><body>${html}</body></html>`;
   runStatus.textContent = "Transformé";
