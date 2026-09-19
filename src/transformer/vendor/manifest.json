@@ -1,0 +1,9 @@
+{
+  "input": "spike/wasm/experimental/patched.js",
+  "inputSha256": "4c5e186c41b9633cf2645f063898211a816c9f9c93608ba3f38357b7b35d622b",
+  "output": "src/transformer/vendor/koha-xslt-wasm.js",
+  "outputSha256": "56a0b0ed309a67fec0cb0859e406f95676bc756f115914bc50791bd266438f34",
+  "bytes": 1497145,
+  "upstreamManifest": "spike/wasm/vendor/manifest.json",
+  "buildManifest": "spike/wasm/experimental/manifest.json"
+}

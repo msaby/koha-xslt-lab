@@ -14,7 +14,8 @@ Public principal : bibliothécaires et administrateurs fonctionnels Koha connais
 
 ## 4. Modes
 
-Au lancement, l'utilisateur choisit l'un des deux modes. Aucun exercice n'est affiché avant ce choix.
+Au lancement, l'utilisateur choisit Utilisation libre, Parcours guidé ou XSLT Koha.
+Aucun exercice n'est affiché avant le choix du parcours guidé.
 
 ### Laboratoire libre
 Deux éditeurs principaux : MARCXML et XSLT. Transformation à la demande, aperçu HTML, XML ou HTML généré et erreurs. Import/export de `.xml` et `.xsl`.
@@ -38,9 +39,16 @@ remplace la XSLT par la correction affichée et place le focus dans l’éditeur
 sans modifier la notice XML. Il faut ensuite lancer la transformation ; le résultat
 précédent est effacé pour éviter de valider une sortie devenue obsolète.
 
-Les deux modes restent accessibles à tout moment depuis l'en-tête. Le changement de mode conserve les sources XML/XSLT actuellement éditées.
+Les trois modes restent accessibles à tout moment depuis l'en-tête. Les modes
+libre et guidé partagent les éditeurs ; XSLT Koha conserve son XML séparément
+et laisse la XSLT des deux autres modes intacte.
 
 ### Comprendre Koha
+
+Le mode **XSLT Koha** propose une notice XML et un menu regroupant Détail OPAC,
+Liste OPAC, Détail interface pro et Liste interface pro. La XSLT officielle n'est
+pas affichée ni modifiable. Le résultat utilise les onglets communs. Le mode
+garde ses choix et son XML indépendamment des sources des deux autres modes.
 Vue pédagogique du pipeline : `notice UNIMARC -> traitements Koha -> MARCXML transmis au XSLT -> HTML`. La V1 explique notamment `ExpandCodedFields` sans prétendre le simuler complètement.
 
 ## 5. Fonctionnalités MVP

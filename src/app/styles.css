@@ -22,14 +22,14 @@ h1, h2, p { margin-top: 0; }
 h1 { width: 100%; margin-bottom: 0; font-size: clamp(1.4rem, 2vw, 1.8rem); line-height: 1.2; font-weight: 700; }
 h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .privacy-note { max-width: 13rem; margin-bottom: .2rem; color: var(--muted); font: .9rem/1.4 ui-sans-serif, system-ui, sans-serif; }
-.mode-toolbar { display: flex; gap: .35rem; }
+.mode-toolbar { display: flex; flex-wrap: wrap; gap: .35rem; }
 .mode-button { border: 1px solid var(--line); border-radius: 2px; padding: .55rem .7rem; color: var(--muted); background: var(--panel); cursor: pointer; font: 700 .72rem ui-sans-serif, system-ui, sans-serif; }
 .mode-button:hover, .mode-button.is-active { border-color: var(--blue); color: var(--blue); }
 .mode-button[aria-pressed="true"] { background: #e5eee9; }
 .mode-choice { max-width: 70rem; margin: 0 auto; padding: 7rem 5vw 8rem; text-align: center; }
 .mode-choice h2 { margin-bottom: .75rem; font-size: clamp(1.8rem, 4vw, 3rem); }
 .mode-choice > p:not(.eyebrow) { max-width: 38rem; margin: 0 auto 2rem; color: var(--muted); font: 1rem/1.5 ui-sans-serif, system-ui, sans-serif; }
-.mode-choice-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 48rem; margin: 0 auto; }
+.mode-choice-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; max-width: 60rem; margin: 0 auto; }
 .mode-card { display: flex; flex-direction: column; gap: .6rem; min-height: 9rem; border: 1px solid var(--line); border-top: 4px solid var(--accent); padding: 1.5rem; color: var(--ink); background: rgba(255, 253, 248, .88); cursor: pointer; text-align: left; }
 .mode-card:hover { border-color: var(--blue); border-top-color: var(--blue); background: var(--panel); }
 .mode-card strong { font: 700 1.15rem Georgia, "Times New Roman", serif; }
@@ -62,6 +62,8 @@ h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .primary-button:disabled { opacity: .65; cursor: wait; }
 .primary-button span { display: block; margin-top: .2rem; font-size: .68rem; font-weight: 400; opacity: .8; }
 .editors { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.editors.is-koha { grid-template-columns: minmax(0, 1fr); }
+.koha-context-note { color: var(--muted); font: .85rem/1.5 ui-sans-serif, system-ui, sans-serif; }
 .sample-pickers { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 1rem; }
 .sample-picker { display: flex; flex-direction: column; align-items: flex-start; gap: .5rem; margin-bottom: 1rem; font: .85rem/1.4 ui-sans-serif, system-ui, sans-serif; }
 .sample-picker label { color: var(--blue); font-weight: 700; }

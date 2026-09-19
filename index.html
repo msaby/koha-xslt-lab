@@ -14,6 +14,7 @@
         <nav id="mode-toolbar" class="mode-toolbar" aria-label="Changer de mode" hidden>
           <button id="free-mode-button" class="mode-button" type="button">Utilisation libre</button>
           <button id="guided-mode-button" class="mode-button" type="button">Parcours guidé</button>
+          <button id="koha-mode-button" class="mode-button" type="button">XSLT Koha</button>
         </nav>
         <p class="privacy-note">Les données restent dans ce navigateur.</p>
       </div>
@@ -21,7 +22,7 @@
     <section id="mode-choice" class="mode-choice" aria-labelledby="mode-choice-title">
       <p class="eyebrow">Commencer</p>
       <h2 id="mode-choice-title">Comment souhaitez-vous travailler ?</h2>
-      <p>Choisissez un espace libre pour expérimenter ou un parcours guidé pour apprendre pas à pas.</p>
+      <p>Expérimentez librement, suivez les exercices ou appliquez les feuilles de style de Koha.</p>
       <div class="mode-choice-actions">
         <button id="choose-free-mode" class="mode-card" type="button">
           <strong>Utilisation libre</strong>
@@ -30,6 +31,10 @@
         <button id="choose-guided-mode" class="mode-card" type="button">
           <strong>Parcours guidé</strong>
           <span>Suivez les exercices progressifs avec indices et validation.</span>
+        </button>
+        <button id="choose-koha-mode" class="mode-card" type="button">
+          <strong>XSLT Koha</strong>
+          <span>Choisissez une notice et un affichage OPAC ou interface professionnelle.</span>
         </button>
       </div>
     </section>
@@ -62,7 +67,7 @@
       <section class="editor-panel" aria-labelledby="editor-title">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Laboratoire libre</p>
+            <p id="workspace-mode-label" class="eyebrow">Laboratoire libre</p>
             <h2 id="editor-title">Sources de transformation</h2>
           </div>
           <button id="transform-button" class="primary-button" type="button">Transformer <span>Ctrl+Entrée</span></button>
@@ -75,6 +80,10 @@
             </select>
             <p id="sample-status" role="status"></p>
           </div>
+          <div id="koha-style-picker" class="sample-picker" hidden>
+            <label for="koha-style-select">Type de transformation</label>
+            <select id="koha-style-select"></select>
+          </div>
           <div id="xslt-sample-picker" class="sample-picker" hidden>
             <span id="xslt-sample-label" class="sample-picker-label">Charger une feuille XSLT d’exemple</span>
             <button id="xslt-sample-toggle" class="sample-toggle" type="button" aria-expanded="false" aria-controls="xslt-sample-options" aria-labelledby="xslt-sample-label xslt-sample-toggle" aria-describedby="xslt-sample-description" disabled>Choisir une feuille XSLT…</button>
@@ -86,12 +95,13 @@
             <p id="xslt-sample-status" role="status"></p>
           </div>
         </div>
-        <div class="editors">
+        <p id="koha-context-note" class="koha-context-note" hidden>Feuilles officielles Koha 26.05.03 (UNIMARC). L’aperçu ne reproduit pas tout l’habillage ni les données complémentaires de Koha.</p>
+        <div id="source-editors" class="editors">
           <div class="editor-card">
             <span class="editor-label">MARCXML UNIMARC</span>
             <div id="xml-editor" class="code-editor"></div>
           </div>
-          <div class="editor-card">
+          <div id="xslt-editor-card" class="editor-card">
             <span class="editor-label">Feuille XSLT 1.0</span>
             <div id="xslt-editor" class="code-editor"></div>
           </div>

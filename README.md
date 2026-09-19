@@ -7,7 +7,8 @@ Application pédagogique statique pour apprendre XSLT 1.0 dans le contexte **Koh
 Un [essai isolé de moteur XSLT WebAssembly](spike/wasm/README.md) prépare la sortie
 du moteur natif des navigateurs : la copie corrigée réussit les 42 contrôles,
 y compris les quatre vues Koha et les paramètres de templates importés.
-Il n'est pas encore intégré aux modes du laboratoire.
+Le mode **XSLT Koha** utilise désormais cette copie corrigée dans un Worker.
+Les modes libre et guidé utilisent encore le moteur natif.
 
 L'[ADR-002](docs/ADR-002-xslt-wasm.md) explique le choix du moteur, le correctif
 local à maintenir et les vérifications encore nécessaires avant production.
@@ -33,7 +34,7 @@ En mode « Utilisation libre », le menu « Charger une notice d’exemple » re
 
 Les trois notices fictives sont stockées dans `content/samples/` et répertoriées dans `content/samples/index.json`. Pour ajouter une notice, placez son fichier XML dans ce dossier et ajoutez son nom au tableau JSON. Le menu affiche automatiquement le nom du fichier sans l’extension `.xml`.
 
-Les fichiers proposés sont `jardin-des-nuages.xml`, `atlas-des-iles-imaginaires.xml` et `cuisine-des-etoiles.xml`. Le menu est réservé au mode libre ; les exercices chargent leur propre notice. En cas d’annulation ou d’échec du chargement, le XML actuel est conservé.
+Les fichiers proposés sont `jardin-des-nuages.xml`, `atlas-des-iles-imaginaires.xml` et `cuisine-des-etoiles.xml`. Le menu est disponible en mode libre et XSLT Koha ; les exercices chargent leur propre notice. En cas d’annulation ou d’échec du chargement, le XML actuel est conservé.
 
 Dans les menus de notices et de feuilles XSLT, le fichier chargé reste sélectionné. Une annulation ou une erreur rétablit la sélection précédente. Le chargement d’un exercice réinitialise les deux menus, puisque les sources sont remplacées par celles de l’exercice.
 
@@ -106,9 +107,22 @@ recharger la page. Voir le [guide d'ajout des exercices](docs/DATA_FORMATS.md#aj
 
 Chaque exercice affiche une consigne unique, puis le bouton « Valider le résultat », aligné à gauche. « Afficher les indices » et « Afficher la solution » sont deux blocs dépliables, utilisables également au clavier. En cas d’erreur de transformation, l’onglet « Erreurs » est sélectionné, reçoit le focus et affiche le message.
 
+## XSLT Koha
+
+Le troisième mode permet de choisir une notice puis Détail OPAC, Liste OPAC,
+Détail interface pro ou Liste interface pro. Les feuilles officielles Koha
+26.05.03 UNIMARC sont appliquées sans afficher leur code. Le XML reste éditable.
+Les trois onglets de résultat sont les mêmes que dans les autres modes.
+
+La première notice et Détail OPAC sont utilisés au premier accès. Changer le
+type transforme automatiquement ; après chargement d'une notice, cliquer sur
+Transformer. Les choix et le XML Koha sont conservés séparément des sources des
+autres modes. L'aperçu ne reproduit pas tout le contexte ou l'habillage de Koha.
+Voir [le fonctionnement et les limites](docs/XSLT_KOHA.md).
+
 ## Documents du projet
 
-- [Préparation du mode XSLT Koha](docs/XSLT_KOHA.md) — références officielles UNIMARC 26.05.03 et questions de conception du futur troisième mode.
+- [Mode XSLT Koha](docs/XSLT_KOHA.md) — utilisation, références UNIMARC 26.05.03, fonctionnement et limites.
 
 - [PRD](docs/PRD.md) — exigences produit et critères d'acceptation.
 - [Architecture](docs/ARCHITECTURE.md) — architecture technique et décisions.

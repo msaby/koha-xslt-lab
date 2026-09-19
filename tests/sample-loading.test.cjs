@@ -37,6 +37,9 @@ function setup() {
     document,
     createXmlEditor: (selector) => document.querySelector(selector),
     renderXmlOutput: (element, source) => { element.textContent = source; },
+    kohaStyles: [{ id: 'opac-detail', label: 'Détail OPAC' }],
+    cancelKohaTransformation() {},
+    transformKoha: async () => '<h2>Koha</h2>',
     window: { confirm: () => true },
     fetch: async (url) => ({
       ok: true,

@@ -6,7 +6,11 @@
 Cette décision remplace l'orientation native de [l'ADR-001](ADR-001-xslt-engine.md).
 Elle ne signifie pas que la migration a été réalisée : les modes libre et guidé
 utilisent encore `src/transformer/transformer.js` et `XSLTProcessor` natif.
-La copie Wasm corrigée fonctionne uniquement dans le banc `spike/wasm/`.
+Depuis le 19 septembre 2026, la copie Wasm corrigée est intégrée uniquement au
+mode XSLT Koha : Worker interruptible, quatre feuilles fixes, URL autorisées
+explicitement. Voir [le périmètre de cette intégration](XSLT_KOHA.md). Les limites
+de l'essai ci-dessous restent la référence pour une migration générale ; le
+succès du troisième mode ne certifie pas les feuilles utilisateur arbitraires.
 
 ## Besoin et raisons du choix
 
@@ -50,7 +54,8 @@ Le [cas minimal](../spike/wasm/fixtures/author-parameter/README.md) et le
 
 Les appels sont sérialisés car le module Asyncify suspend un seul appel à la fois.
 **Asynchrone ne signifie pas exécuté hors du thread de l'interface** : le calcul
-peut encore bloquer la page. Aucun Worker interruptible n'est implémenté dans cet essai.
+peut encore bloquer la page dans le spike. L'intégration Koha utilise désormais
+un Worker séparé par appel, terminé après réponse, annulation ou délai de 15 s.
 
 ## Preuves et portée de la validation
 
@@ -78,7 +83,7 @@ déclaration XML : l'identité conserve les données testées, pas tous les octe
 | --- | --- |
 | Chromium seul testé | Exécuter la matrice Chrome, Edge, Firefox et Safari retenue pour le produit. Ne pas annoncer la compatibilité 2027 sur la seule base de ce test. |
 | Sous-chemin simulé localement | Tester le véritable hébergement GitHub Pages, les chemins et la politique de sécurité. |
-| Calcul dans le thread principal, pas de plafond validé | Prévoir un Worker interruptible, un délai maximal et des limites d'entrée/sortie ; tester récursion excessive, gros documents et répétitions. Les valeurs restent à déterminer. |
+| Limites générales non validées | Le mode Koha dispose d'un Worker, d'un délai de 15 s et de limites 2 Mio en entrée / 10 Mio en sortie après calcul. La mémoire totale, les sources arbitraires et les appareils limités restent à évaluer. |
 | Sources utilisateur arbitraires non auditées | Revoir les options de parsing, notamment `XML_PARSE_HUGE`, les entités et les limites de ressources ; le confinement Wasm ne suffit pas à garantir la robustesse. |
 | Chargeur de ressources expérimental | Définir une liste de ressources autorisées et tester fichiers absents, cycles, redirections, `document()` et accès externes. Le filtre fetch du banc n'est pas le chargeur définitif. |
 | Pas d'aperçu HTML réel dans le banc | Maintenir un iframe sandboxé sans scripts lors de l'intégration. Tester aussi événements, formulaires, navigation et chargements de ressources du résultat. Le test de texte inerte ne prouve pas la sûreté d'un aperçu. |

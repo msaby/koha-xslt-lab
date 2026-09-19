@@ -13,8 +13,8 @@ statique sans transmettre les notices à un serveur. Le retrait annoncé du mote
 natif rend l'ancienne orientation de l'[ADR-001](ADR-001-xslt-engine.md) insuffisante.
 
 **État actuel :** les modes libre et guidé utilisent encore `XSLTProcessor` natif.
-Le moteur corrigé est isolé dans `spike/wasm/` ; il n'est pas intégré au produit
-et n'est pas encore validé pour la production. Il réussit 42/42 contrôles sur
+Le troisième mode XSLT Koha utilise la copie corrigée dans un Worker dédié par
+transformation. Les autres modes ne sont pas encore migrés. Le spike réussit 42/42 contrôles sur
 Chromium avec XSLT natif désactivé, contre 35/42 avant correction.
 
 Le correctif rétablit le dictionnaire partagé entre feuilles, nécessaire aux
@@ -27,12 +27,15 @@ de pages du polyfill. Les imports restent interprétés par libxslt, sans concat
 
 - Les résultats valident un corpus limité dans Chromium, pas tous les navigateurs,
   tous les usages XSLT ou une émulation complète de Koha.
-- Le calcul peut bloquer le thread principal : un Worker interruptible et des
-  limites de ressources restent à implémenter avant exposition de sources arbitraires.
-- Le chargeur définitif doit contrôler les dépendances et `document()` ; le
-  filtre réseau expérimental ne constitue pas une garantie de confidentialité générale.
-- Le banc conserve le résultat HTML comme texte. La sûreté de l'aperçu réel
-  reste à vérifier pendant l'intégration avec l'iframe sandboxé.
+- Le mode Koha dispose d'un Worker interruptible (15 s), d'une limite d'entrée de
+  2 Mio et de sortie de 10 Mio. Cette dernière est vérifiée après calcul ; ce
+  n'est pas une limite de mémoire totale. Les feuilles sont fixes, non éditables.
+- Le chargeur Koha autorise exactement les six URL des feuilles de référence,
+  sans redirections ni identifiants de connexion ; les DOCTYPE des notices sont
+  refusés. L'extension à des feuilles arbitraires nécessitera une nouvelle revue.
+- L'aperçu partagé reste sandboxé sans scripts et impose une CSP interdisant
+  les ressources externes et les formulaires. La fidélité visuelle complète de
+  Koha et la validation de tous les navigateurs restent hors de la preuve actuelle.
 - La variante locale impose compilation reproductible, suivi de sécurité et
   tests à chaque mise à jour. Le correctif n'a pas encore été accepté en amont.
 

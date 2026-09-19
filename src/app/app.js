@@ -1,6 +1,8 @@
 import { transformSources } from "../transformer/transformer.js";
 import { validateResult } from "../exercises/validator.js";
 import { createXmlEditor, renderXmlOutput } from "../editor/xml-editor.bundle.js";
+import { kohaStyles } from "../transformer/koha-styles.js";
+import { transformKoha, cancelKohaTransformation } from "../transformer/koha-transformer.js";
 
 const xmlEditor = createXmlEditor("#xml-editor", "Éditeur MARCXML", () => runTransformation());
 const xsltEditor = createXmlEditor("#xslt-editor", "Éditeur XSLT", () => runTransformation());
@@ -26,6 +28,15 @@ const chooseFreeModeButton = document.querySelector("#choose-free-mode");
 const chooseGuidedModeButton = document.querySelector("#choose-guided-mode");
 const freeModeButton = document.querySelector("#free-mode-button");
 const guidedModeButton = document.querySelector("#guided-mode-button");
+const kohaModeButton = document.querySelector("#koha-mode-button");
+const kohaStyleSelect = document.querySelector("#koha-style-select");
+kohaStyleSelect.replaceChildren(...kohaStyles.map(style => {
+  const option = document.createElement('option');
+  option.value = style.id;
+  option.textContent = style.label;
+  return option;
+}));
+kohaStyleSelect.value = kohaStyles[0].id;
 const xmlExample = {
   picker: document.querySelector("#sample-picker"),
   select: document.querySelector("#sample-select"),
@@ -47,6 +58,11 @@ const xsltExample = {
   confirmation: "Remplacer la XSLT que vous avez modifiée par cette feuille d’exemple ?",
 };
 let modeVersion = 0;
+let currentMode = null;
+let transformationVersion = 0;
+let regularXmlState = null;
+let kohaXmlState = { value: '', loadedSource: '', loadedFilename: '' };
+let kohaInitialized = false;
 let currentExercise = null;
 let latestHtml = "";
 let guidedModeInitialized = false;
@@ -124,7 +140,7 @@ function setSuccess(html) {
   errorsOutput.textContent = "Aucune erreur.";
   renderXmlOutput(htmlOutput, html);
   latestHtml = html;
-  preview.srcdoc = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>body{font-family:system-ui,sans-serif;padding:1.5rem;color:#18212b}article{border-left:4px solid #d35f36;padding-left:1rem}h2{margin:.1rem 0 .4rem}</style></head><body>${html}</body></html>`;
+  preview.srcdoc = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'"><style>body{font-family:system-ui,sans-serif;padding:1.5rem;color:#18212b}article{border-left:4px solid #d35f36;padding-left:1rem}h2{margin:.1rem 0 .4rem}</style></head><body>${html}</body></html>`;
   runStatus.textContent = "Transformé";
   runStatus.className = "run-status is-success";
 }
@@ -216,19 +232,67 @@ function updateModeButtons(mode) {
   guidedModeButton.setAttribute("aria-pressed", String(mode === "guided"));
   freeModeButton.classList.toggle("is-active", mode === "free");
   guidedModeButton.classList.toggle("is-active", mode === "guided");
+  kohaModeButton.setAttribute('aria-pressed', String(mode === 'koha'));
+  kohaModeButton.classList.toggle('is-active', mode === 'koha');
+}
+
+function invalidateTransformation() {
+  transformationVersion += 1;
+  cancelKohaTransformation();
+  transformButton.disabled = false;
+  latestHtml = '';
+  preview.srcdoc = '';
+  htmlOutput.textContent = 'Cliquez sur Transformer pour afficher le résultat.';
+  errorsOutput.textContent = 'Aucune erreur.';
+  errorSummary.hidden = true;
+  runStatus.textContent = 'À transformer';
+  runStatus.className = 'run-status';
 }
 
 async function enterMode(mode) {
   modeVersion += 1;
+  const snapshot = () => ({ value: xmlEditor.value, loadedSource: xmlExample.loadedSource, loadedFilename: xmlExample.loadedFilename });
+  const restore = state => {
+    xmlEditor.value = state.value;
+    xmlExample.loadedSource = state.loadedSource;
+    xmlExample.loadedFilename = state.loadedFilename;
+    xmlExample.select.value = state.loadedFilename;
+  };
+  if (mode === 'koha' && currentMode !== 'koha') {
+    regularXmlState = snapshot();
+    restore(kohaXmlState);
+  } else if (currentMode === 'koha' && mode !== 'koha') {
+    kohaXmlState = snapshot();
+    restore(regularXmlState);
+  }
+  currentMode = mode;
+  invalidateTransformation();
   closeXsltMenu();
   const enteredModeVersion = modeVersion;
-  xmlExample.picker.hidden = mode !== "free";
+  xmlExample.picker.hidden = mode === "guided";
   xsltExample.picker.hidden = mode !== "free";
   modeChoice.hidden = true;
   modeToolbar.hidden = false;
   workspace.hidden = false;
   exerciseStrip.hidden = mode !== "guided";
+  document.querySelector('#koha-style-picker').hidden = mode !== 'koha';
+  document.querySelector('#koha-context-note').hidden = mode !== 'koha';
+  document.querySelector('#xslt-editor-card').hidden = mode === 'koha';
+  document.querySelector('#source-editors').classList.toggle('is-koha', mode === 'koha');
+  document.querySelector('#workspace-mode-label').textContent = mode === 'koha' ? 'XSLT Koha' : mode === 'guided' ? 'Parcours guidé' : 'Laboratoire libre';
   updateModeButtons(mode);
+  if (mode === 'koha') {
+    if (!xmlExample.catalogLoaded) await loadSampleCatalog(xmlExample);
+    if (enteredModeVersion !== modeVersion || !xmlExample.catalogLoaded) return;
+    if (!kohaInitialized) {
+      xmlExample.select.value = xmlExample.select.options[1]?.value || '';
+      await loadSample(xmlExample);
+      if (enteredModeVersion !== modeVersion || !xmlEditor.value) return;
+      kohaInitialized = true;
+    }
+    await runTransformation();
+    return;
+  }
   if (mode === "guided" && !guidedModeInitialized) {
     await loadExerciseCatalog();
     if (enteredModeVersion !== modeVersion) return;
@@ -257,6 +321,7 @@ async function enterMode(mode) {
     if (!xmlEditor.value || !xsltEditor.value) return;
     await runTransformation();
   }
+  if (mode === 'guided' && guidedModeInitialized) await runTransformation();
 }
 
 async function loadSampleCatalog(example = xmlExample) {
@@ -311,6 +376,7 @@ async function loadSample(example = xmlExample) {
     editor.value = source;
     example.loadedSource = editor.value;
     example.loadedFilename = filename;
+    invalidateTransformation();
     latestHtml = "";
     preview.srcdoc = "";
     htmlOutput.textContent = "Cliquez sur Transformer pour afficher le résultat.";
@@ -346,15 +412,20 @@ function validateExercise() {
 }
 
 async function runTransformation() {
+  const version = ++transformationVersion;
+  const requestedMode = currentMode;
   transformButton.disabled = true;
   runStatus.textContent = "Transformation...";
   try {
-    const html = transformSources(xmlEditor.value, xsltEditor.value);
+    const html = requestedMode === 'koha'
+      ? await transformKoha(xmlEditor.value, kohaStyleSelect.value)
+      : transformSources(xmlEditor.value, xsltEditor.value);
+    if (version !== transformationVersion) return;
     setSuccess(html);
   } catch (error) {
-    setError(error);
+    if (version === transformationVersion) setError(error);
   } finally {
-    transformButton.disabled = false;
+    if (version === transformationVersion) transformButton.disabled = false;
   }
 }
 
@@ -400,6 +471,14 @@ chooseFreeModeButton.addEventListener("click", () => enterMode("free").catch(set
 chooseGuidedModeButton.addEventListener("click", () => enterMode("guided").catch(setError));
 freeModeButton.addEventListener("click", () => enterMode("free").catch(setError));
 guidedModeButton.addEventListener("click", () => enterMode("guided").catch(setError));
+document.querySelector('#choose-koha-mode').addEventListener('click', () => enterMode('koha').catch(setError));
+kohaModeButton.addEventListener('click', () => enterMode('koha').catch(setError));
+kohaStyleSelect.addEventListener('change', () => {
+  if (currentMode === 'koha') {
+    invalidateTransformation();
+    runTransformation();
+  }
+});
 validateExerciseButton.addEventListener("click", validateExercise);
 document.addEventListener("keydown", (event) => {
   if (event.defaultPrevented) return;

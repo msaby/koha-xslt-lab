@@ -121,6 +121,30 @@ async function main() {
     assert.equal(await xslt.evaluate((el) => el === document.activeElement), true);
     console.log('OK: guided-mode loading, solution editing, validation and keyboard navigation.');
 
+    const savedXml = await xml.innerText();
+    const savedXslt = await xslt.innerText();
+    await page.locator('#koha-mode-button').click();
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
+    assert.equal(await page.locator('#xslt-editor-card').isVisible(), false);
+    await page.locator('#sample-select').selectOption('cuisine-des-etoiles.xml');
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'À transformer');
+    await page.locator('#koha-style-select').selectOption('staff-detail');
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
+    assert.match(await page.locator('#html-output').textContent(), /Comète/);
+    await page.locator('#free-mode-button').click();
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
+    assert.equal(await xml.innerText(), savedXml);
+    assert.equal(await xslt.innerText(), savedXslt);
+    await page.locator('#koha-mode-button').click();
+    assert.equal(await page.locator('#sample-select').inputValue(), 'cuisine-des-etoiles.xml');
+    assert.equal(await page.locator('#koha-style-select').inputValue(), 'staff-detail');
+    await page.locator('#guided-mode-button').click();
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
+    assert.equal(await xml.innerText(), savedXml);
+    assert.equal(await xslt.innerText(), savedXslt);
+    assert.equal(await page.locator('#koha-style-picker').isVisible(), false);
+    console.log('OK: Koha mode preserves its selection and restores the other modes sources.');
+
     await page.setViewportSize({ width: 390, height: 844 });
     await xml.scrollIntoViewIfNeeded();
     await page.waitForTimeout(150);

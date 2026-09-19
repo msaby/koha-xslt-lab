@@ -80,6 +80,16 @@ Vérifié sur le Chromium local le 18 septembre 2026. Les autres navigateurs et 
 
 ## 3. Tests de transformation
 
+### Mode XSLT Koha
+
+`node tests/koha.browser.cjs` (avec `BROWSER_EXECUTABLE`) teste le nouveau mode
+à la racine et sous `/koha-xslt-lab/`, avec XSLT natif désactivé. Il vérifie les
+quatre choix sur les trois notices (dont les auteurs), la XSLT masquée, les
+sélections persistantes, la coloration du résultat, les erreurs XML et de
+dépendance, leur récupération, le refus des DOCTYPE, le mobile et l'absence de
+requêtes externes. `tests/editors.browser.cjs` vérifie aussi les transitions
+avec les modes libre/guidé et la restauration des sources.
+
 L'exercice de comptage figure en deuxième position. Vérifier que sa notice dédiée
 contient trois `datafield`, que la solution retourne `3` puis `2` après retrait
 d'une zone, et que le validateur refuse `13`. Ces cas sont couverts par les tests
