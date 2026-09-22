@@ -3,11 +3,12 @@
 ## Phase 0 — Spike moteur (bloquant)
 
 - [ ] Créer une page minimale XML/XSLT/résultat.
-- [ ] Tester `XSLTProcessor` sur Chrome/Firefox/Edge.
-- [ ] Tester namespace MARCXML.
-- [ ] Tester `xsl:include` et `xsl:import` en HTTP local.
+- [x] Valider le moteur WebAssembly sur Chromium avec XSLT natif désactivé (42/42 contrôles à la racine et sous un sous-chemin local).
+- [ ] Étendre la matrice de validation aux navigateurs cibles (Chrome/Edge/Firefox/Safari).
+- [x] Vérifier namespace MARCXML, templates et transformations simples dans le banc WebAssembly.
+- [x] Vérifier `xsl:include`, `xsl:import` et les chemins relatifs en HTTP local à la racine et sous un sous-chemin.
 - [ ] Tester sur GitHub Pages.
-- [ ] Rédiger ADR-001 et choisir l'architecture.
+- [x] Rédiger ADR-002 et retenir l'architecture WebAssembly.
 
 ## Phase 1 — Laboratoire MVP
 
