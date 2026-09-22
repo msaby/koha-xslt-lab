@@ -11,21 +11,21 @@ Procéder par incréments vérifiables. Le premier travail de Codex doit être l
 ### Prompt 1 — initialisation
 
 ```text
-Lis README.md, PRD.md, ARCHITECTURE.md, PEDAGOGY.md, TEST_PLAN.md et AGENTS.md.
+Lis README.md, PRD.md, ARCHITECTURE.md, PEDAGOGY.md, TEST_PLAN.md, ADR-002-xslt-wasm.md et AGENTS.md.
 Ne développe pas encore l'application complète.
-Propose l'architecture minimale du spike Phase 0 permettant de tester XSLTProcessor avec MARCXML UNIMARC, xsl:include et xsl:import sur Chrome, Firefox et Edge, puis initialise uniquement ce spike et ses tests. Le résultat doit pouvoir être servi par un simple serveur HTTP statique et être compatible avec le futur déploiement GitHub Pages.
+Propose l'architecture minimale du spike Phase 0 permettant de valider le moteur WebAssembly retenu avec MARCXML UNIMARC, xsl:include et xsl:import, en réutilisant l'adaptateur Worker existant et les contraintes documentées dans ADR-002. Initialise uniquement ce spike et ses tests. Le résultat doit pouvoir être servi par un simple serveur HTTP statique et rester compatible avec le futur déploiement GitHub Pages.
 ```
 
 ### Prompt 2 — exécuter et documenter le spike
 
 ```text
-Exécute les tests possibles localement. Vérifie séparément transformation simple, namespace MARCXML, template, xsl:include, xsl:import et chemins relatifs. Documente précisément les résultats et limites dans docs/ADR-001-xslt-engine.md. Ne choisis une stratégie de fallback qu'à partir des résultats observés.
+Exécute les tests possibles localement. Vérifie séparément transformation simple, namespace MARCXML, template, xsl:include, xsl:import et chemins relatifs avec le moteur WebAssembly et l'adaptateur Worker commun. Documente précisément les résultats observés et les limites restantes dans docs/ADR-002-xslt-wasm.md, sans annoncer de compatibilité non testée.
 ```
 
 ### Prompt 3 — squelette MVP
 
 ```text
-À partir de ADR-001, implémente le plus petit laboratoire utilisable : éditeur XML, éditeur XSLT, bouton Transformer, raccourci Ctrl+Entrée, onglet Aperçu sandboxé, onglet HTML et zone d'erreurs. N'ajoute pas encore le système d'exercices. Ajoute les tests nécessaires et vérifie le build GitHub Pages.
+À partir de ADR-002 et de l'architecture actuelle, implémente le plus petit laboratoire utilisable autour du moteur WebAssembly via l'adaptateur Worker existant : éditeur XML, éditeur XSLT, bouton Transformer, raccourci Ctrl+Entrée, onglet Aperçu sandboxé, onglet HTML et zone d'erreurs. Respecte les contraintes documentées dans ADR-002. N'ajoute pas encore le système d'exercices. Ajoute les tests nécessaires et vérifie le build GitHub Pages.
 ```
 
 ### Prompt 4 — exercices
@@ -37,7 +37,7 @@ Implémente le schéma d'exercice décrit dans DATA_FORMATS.md, le chargeur, les
 ### Prompt 5 — multifichier
 
 ```text
-Implémente l'exercice de modularisation main.xsl + utils.xsl conformément à ADR-001. L'utilisateur doit voir et modifier les fichiers séparément. Ajoute un test E2E de cet exercice et documente toute différence avec le comportement d'un processeur XSLT/libxslt réel.
+Implémente l'exercice de modularisation main.xsl + utils.xsl sur le moteur WebAssembly retenu, en conservant l'adaptateur Worker existant et les contraintes de chargement documentées dans ADR-002. L'utilisateur doit voir et modifier les fichiers séparément. Ajoute un test E2E de cet exercice et documente toute différence avec le comportement de libxslt ou du moteur utilisé dans Koha.
 ```
 
 ### Prompt 6 — couche Koha
