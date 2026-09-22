@@ -1,28 +1,26 @@
 # Koha XSLT Lab
 
-Application pédagogique statique pour apprendre XSLT 1.0 dans le contexte **Koha + UNIMARC/MARCXML**. L'application doit être publiable sur GitHub Pages et fonctionner sans backend : édition MARCXML/XSLT, transformation locale, aperçu HTML, exercices progressifs, aide UNIMARC/XSLT et préparation de prompts pour un LLM.
+Application pédagogique statique pour apprendre XSLT 1.0 dans le contexte **Koha + UNIMARC/MARCXML**. L'application peut être publiable sur GitHub Pages et fonctionner sans serveur backend.
 
 ## Objectif
 
-Un [essai isolé de moteur XSLT WebAssembly](spike/wasm/README.md) prépare la sortie
-du moteur natif des navigateurs : la copie corrigée réussit les 42 contrôles,
-y compris les quatre vues Koha et les paramètres de templates importés.
-Le mode **XSLT Koha** utilise désormais cette copie corrigée dans un Worker.
-Les modes libre et guidé utilisent encore le moteur natif.
+Koha XSLT Lab propose trois façons d'apprendre :
 
-L'[ADR-002](docs/ADR-002-xslt-wasm.md) explique le choix du moteur, le correctif
-local à maintenir et les vérifications encore nécessaires avant production.
+- une **utilisation libre**, pour expérimenter à partir d'exemples de documents XML (dont notices en MARCXML) et de feuilles de feuilles XSLT, ou à partir de documents et feuilles de styles fournies par l'utilisateur ;
+- un **parcours guidé**, avec des exercices progressifs, des indices et des solutions ;
+- un mode **XSLT Koha**, pour observer, sans les modifier, les feuilles XSLT officielles de Koha appliquées à des exemples de notices MARCXML, dans les vues OPAC et interface professionnelle.
 
-Réduire la distance entre « je ne connais pas XSLT » et « je peux comprendre et modifier prudemment une feuille XSLT d'affichage de Koha ».
+L'apprentissage se fait toujours dans le navigateur, notice par notice, sans jamais envoyer de données à un serveur.
 
 ## Contraintes structurantes
 
-- GitHub Pages, application 100 % statique.
-- XSLT 1.0 en priorité.
-- UNIMARC uniquement en V1.
+- Application 100 % statique, exécutable par exemple depuis GitHub Pages.
 - Transformation dans le navigateur ; aucune notice envoyée à un serveur.
+- Le moteur XSLT repose sur WebAssembly. L'[ADR-002](docs/ADR-002-xslt-wasm.md) explique le choix du moteur et le correctif local à maintenir
+- XSLT 1.0 uniquement.
+- Support de l'UNIMARC uniquement (et non du MARC21 ou d'autres schémas de métaonnées)
 - Support de Chrome, Firefox et Edge récents.
-- Gestion pédagogique de plusieurs fichiers XSLT (`xsl:include` / `xsl:import`).
+- Gestion de plusieurs fichiers XSLT (`xsl:include` / `xsl:import`).
 - Le site n'émule pas Koha intégralement.
 - L'aperçu HTML doit être isolé (`iframe sandbox`).
 
@@ -96,16 +94,11 @@ python -m unittest discover -s tests -v
 
 ## Parcours guidé
 
-Le menu est généré à partir de `content/exercises/index.json` et des fiches JSON.
-Le champ numérique `order` détermine la position ; `title` fournit le titre,
-et la numérotation 1, 2, 3… est automatique.
+Le menu est généré à partir de `content/exercises/index.json` et des fiches JSON. Le champ numérique `order` détermine la position ; `title` fournit le titre, et la numérotation 1, 2, 3… est automatique.
 
-Pour ajouter un exercice, créer sa fiche et ses fichiers XML/XSLT, puis ajouter
-son identifiant au catalogue. **Aucune modification du HTML n'est nécessaire.**
-Pour le déplacer, changer uniquement `order` (10, 20, 30… sont possibles), puis
-recharger la page. Voir le [guide d'ajout des exercices](docs/DATA_FORMATS.md#ajouter-un-exercice-à-la-main).
+Pour ajouter un exercice, créer sa fiche et ses fichiers XML/XSLT, puis ajouter son identifiant au catalogue. **Aucune modification du HTML n'est nécessaire.** Pour le déplacer, changer uniquement `order` (10, 20, 30… sont possibles), puis recharger la page. Voir le [guide d'ajout des exercices](docs/DATA_FORMATS.md#ajouter-un-exercice-à-la-main).
 
-Chaque exercice affiche une consigne unique, puis le bouton « Valider le résultat », aligné à gauche. « Afficher les indices » et « Afficher la solution » sont deux blocs dépliables, utilisables également au clavier. En cas d’erreur de transformation, l’onglet « Erreurs » est sélectionné, reçoit le focus et affiche le message.
+Chaque exercice affiche une consigne unique, puis le bouton « Valider le résultat ». « Afficher les indices » et « Afficher la solution » sont deux blocs dépliables, utilisables indépendamment. En cas d’erreur de transformation, l’onglet « Erreurs » est sélectionné, reçoit le focus et affiche le message.
 
 ## XSLT Koha
 
@@ -127,7 +120,6 @@ une police de secours pour l’interface professionnelle.
 ## Documents du projet
 
 - [Mode XSLT Koha](docs/XSLT_KOHA.md) — utilisation, références UNIMARC 26.05.03, fonctionnement et limites.
-
 - [PRD](docs/PRD.md) — exigences produit et critères d'acceptation.
 - [Architecture](docs/ARCHITECTURE.md) — architecture technique et décisions.
 - [Pédagogie](docs/PEDAGOGY.md) — progression pédagogique et exercices.
@@ -139,4 +131,8 @@ une police de secours pour l’interface professionnelle.
 
 ## Démarrage du développement
 
-Le spike initial est conservé dans `spike/` et accessible à <http://127.0.0.1:8000/spike/> lorsque le serveur local tourne. Il vérifie le namespace MARCXML, `xsl:include` et `xsl:import` avec le moteur partagé. La décision provisoire et les vérifications navigateur et GitHub Pages restant à effectuer sont décrites dans [ADR-001](docs/ADR-001-xslt-engine.md).
+Le spike initial est conservé dans `spike/` et accessible à <http://127.0.0.1:8000/spike/> lorsque le serveur local tourne. Il vérifie le namespace MARCXML, `xsl:include` et `xsl:import` avec le moteur natif du navigateur.
+
+## Processus de éveloppement
+
+Architecture définie par CODEX d'OpenAI. Code réalisé pour l'essentiel par CODEX et Github Copilot.
