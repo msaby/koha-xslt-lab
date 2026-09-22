@@ -6,6 +6,7 @@ const { chromium } = require('playwright-core');
 async function main() {
   const browser = await chromium.launch({
     headless: true,
+    args: ['--disable-blink-features=XSLT'],
     ...(process.env.BROWSER_EXECUTABLE ? { executablePath: process.env.BROWSER_EXECUTABLE } : {}),
   });
   try {
@@ -19,6 +20,7 @@ async function main() {
       if (new URL(request.url()).origin !== new URL(base).origin) externalRequests.push(request.url());
     });
     await page.goto(base);
+    assert.equal(await page.evaluate(() => typeof XSLTProcessor), 'undefined');
     await page.locator('#choose-free-mode').click();
     await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
     const xml = page.getByRole('textbox', { name: 'Éditeur MARCXML', exact: true });
@@ -94,6 +96,7 @@ async function main() {
     await page.locator('#validate-exercise').click();
     assert.equal(await page.locator('#exercise-status').textContent(), "Transformez d'abord les sources.");
     await xslt.press('Control+Enter');
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
     await page.locator('#validate-exercise').click();
     assert.equal(await page.locator('#exercise-status').textContent(), 'Exercice réussi.');
     assert.equal(await page.locator('#exercise-select option').nth(1).getAttribute('value'), 'ex-count-datafields');
@@ -101,11 +104,13 @@ async function main() {
     await page.waitForFunction(() => document.querySelector('#exercise-title').textContent === 'Compter les éléments datafield');
     await page.locator('#use-solution').click();
     await xslt.press('Control+Enter');
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
     await page.locator('#validate-exercise').click();
     assert.equal(await page.locator('#exercise-status').textContent(), 'Exercice réussi.');
     const countSolution = fs.readFileSync(path.join(__dirname, '../content/solutions/count-datafields/main.xsl'), 'utf8');
     await xslt.fill(countSolution.replace('count(marc:record/marc:datafield)', '13'));
     await xslt.press('Control+Enter');
+    await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
     await page.locator('#validate-exercise').click();
     assert.match(await page.locator('#exercise-status').textContent(), /Résultat incorrect/);
     console.log('OK: second exercise counts datafields and rejects 13 instead of 3.');

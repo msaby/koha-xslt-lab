@@ -1,4 +1,4 @@
-import { transformSources } from "../transformer/transformer.js";
+import { transformSources, cancelTransformation } from "../transformer/transformer.js";
 import { validateResult } from "../exercises/validator.js";
 import { createXmlEditor, renderXmlOutput } from "../editor/xml-editor.bundle.js";
 import { kohaStyles } from "../transformer/koha-styles.js";
@@ -240,6 +240,7 @@ function updateModeButtons(mode) {
 
 function invalidateTransformation() {
   transformationVersion += 1;
+  cancelTransformation();
   cancelKohaTransformation();
   transformButton.disabled = false;
   latestHtml = '';
@@ -417,12 +418,17 @@ async function runTransformation() {
   const version = ++transformationVersion;
   const requestedMode = currentMode;
   const requestedStyle = kohaStyleSelect.value;
+  const stylesheetUrl = requestedMode === "guided"
+    ? currentExercise?.files?.entryXslt
+    : xsltExample.loadedFilename
+      ? `${xsltExample.directory}/${encodeURIComponent(xsltExample.loadedFilename)}`
+      : document.baseURI;
   transformButton.disabled = true;
   runStatus.textContent = "Transformation...";
   try {
     const html = requestedMode === 'koha'
       ? await transformKoha(xmlEditor.value, requestedStyle)
-      : transformSources(xmlEditor.value, xsltEditor.value);
+      : await transformSources(xmlEditor.value, xsltEditor.value, { stylesheetUrl });
     if (version !== transformationVersion) return;
     const previewDocument = requestedMode === 'koha' ? await createKohaPreview(html, requestedStyle) : undefined;
     if (version !== transformationVersion) return;
