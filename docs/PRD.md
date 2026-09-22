@@ -17,38 +17,32 @@ Public principal : bibliothécaires et administrateurs fonctionnels Koha connais
 Au lancement, l'utilisateur choisit Utilisation libre, Parcours guidé ou XSLT Koha.
 Aucun exercice n'est affiché avant le choix du parcours guidé.
 
-### Laboratoire libre
-Deux éditeurs principaux : MARCXML et XSLT. Transformation à la demande, aperçu HTML, XML ou HTML généré et erreurs. Import/export de `.xml` et `.xsl`.
+### Utilisation libre
+Deux "éditeurs" (zone de saisie) contenant respectivement un document XML (MARCXML ou un autre schéma) et une feuille de style XSLT. Transformation à la demande, aperçu HTML, code XML ou HTML généré, erreurs éventuelles. Pas de fonction import/export de `.xml` ni de `.xsl`.
 
-Le menu « Charger une notice d’exemple », réservé au mode libre, propose les fichiers du catalogue `content/samples/index.json` sous leur nom sans extension. La sélection remplace uniquement le XML, avec confirmation si celui-ci a été modifié ; le copier-coller reste possible. Une annulation ou une erreur de chargement conserve le XML actuel. La transformation reste déclenchée par l’utilisateur.
+Le menu « Charger une notice d’exemple », réservé au mode libre, propose les fichiers du catalogue `content/samples/index.json` sous leur nom sans extension. La sélection remplace le code XML éventuellement déjà présent dans l'éditeur XML, avec confirmation si le contenu a été modifié ; le copier-coller reste possible. Une annulation ou une erreur de chargement conserve le XML contenu précédemment. La transformation reste déclenchée par l’utilisateur.
 
-Le mode libre propose aussi « Charger une feuille XSLT d’exemple », avec les mêmes règles de sélection et de protection des saisies. Seule la XSLT est remplacée. Le catalogue comprend une transformation identité conservant les données et l’ordre des nœuds XML, ainsi que des présentations HTML simples.
+Le mode libre propose aussi « Charger une feuille XSLT d’exemple », avec les mêmes règles de sélection et de protection des saisies. Seule le code XSLT éventuellement présent dans l'éditeur XSLT est remplacé. Le catalogue comprend une transformation identité conservant les données et l’ordre des nœuds XML, ainsi que des présentations HTML simples.
 
-### Exercices
+### Parcours guidé
 
-Le sélecteur est généré depuis le catalogue et les fiches JSON : tri par `order`
-numérique croissant, titres issus de `title` et numérotation continue. Le premier
-exercice selon ce tri est chargé par défaut. Ajouter ou déplacer un exercice
-ne nécessite aucune modification HTML.
+Comme pour le mode Utilisation libre, deux "éditeurs" (zone de saisie) contenant respectivement un document XML (MARCXML ou un autre schéma) et une feuille de style XSLT. Transformation à la demande, aperçu HTML, code XML ou HTML généré, erreurs éventuelles. Pas de fonction import/export de `.xml` ni de `.xsl`.
+
+Un sélecteur permet de choisir un exercice présent dans le dépôt. Chaque exercice se compose d'un fichier XML et d'une feuille de style XSLT. Le sélecteur est généré depuis le catalogue et les fiches JSON : tri par `order` numérique croissant, titres issus de `title` et numérotation continue. Le premier exercice selon ce tri est chargé par défaut. Ajouter ou déplacer un exercice ne nécessite aucune modification HTML.
+
 Parcours progressif avec consigne, fichiers de départ, validation du résultat, trois niveaux d'indices, solution consultable et progression enregistrée localement. L'exercice 1 est sélectionné et chargé par défaut lorsque le parcours guidé est choisi. Un sélecteur permet ensuite de charger les exercices disponibles.
 
 La consigne unique est suivie du bouton de validation aligné à gauche. Les indices et la solution sont consultables dans deux blocs dépliables au comportement identique. En cas d’erreur de transformation, l’onglet « Erreurs » s’ouvre et reçoit le focus.
 
-Le bloc solution propose « Copier la solution dans l’éditeur XSLT ». Le bouton
-remplace la XSLT par la correction affichée et place le focus dans l’éditeur,
-sans modifier la notice XML. Il faut ensuite lancer la transformation ; le résultat
-précédent est effacé pour éviter de valider une sortie devenue obsolète.
+Le bloc solution propose « Copier la solution dans l’éditeur XSLT ». Le bouton remplace la XSLT par la correction affichée et place le focus dans l’éditeur, sans modifier la notice XML. Il faut ensuite lancer la transformation ; le résultat précédent est effacé pour éviter de valider une sortie devenue obsolète.
 
-Les trois modes restent accessibles à tout moment depuis l'en-tête. Les modes
-libre et guidé partagent les éditeurs ; XSLT Koha conserve son XML séparément
+Les trois modes restent accessibles à tout moment depuis l'en-tête. Le mode libre et le mode parcours guidé partagent les zones de saise ; Le mode XSLT Koha conserve son XML séparément
 et laisse la XSLT des deux autres modes intacte.
 
-### Comprendre Koha
+### XSLT Koha
 
-Le mode **XSLT Koha** propose une notice XML et un menu regroupant Détail OPAC,
-Liste OPAC, Détail interface pro et Liste interface pro. La XSLT officielle n'est
-pas affichée ni modifiable. Le résultat utilise les onglets communs. Le mode
-garde ses choix et son XML indépendamment des sources des deux autres modes.
+Le mode **XSLT Koha** propose une notice MARCXML et un menu permettant de choisir une de ces 4 transformations : Détail OPAC, Liste OPAC, Détail interface pro et Liste interface pro. La XSLT n'est pas affichée ni modifiable. Le résultat utilise les onglets communs. Le mode garde ses choix et son XML indépendamment des sources des deux autres modes.
+
 Vue pédagogique du pipeline : `notice UNIMARC -> traitements Koha -> MARCXML transmis au XSLT -> HTML`. La V1 explique notamment `ExpandCodedFields` sans prétendre le simuler complètement.
 
 ## 5. Fonctionnalités MVP
@@ -57,15 +51,16 @@ Vue pédagogique du pipeline : `notice UNIMARC -> traitements Koha -> MARCXML tr
 2. Éditeur XSLT avec mêmes fonctions.
 3. Transformation XSLT 1.0 locale, bouton et raccourci `Ctrl+Entrée`.
 4. Aperçu HTML isolé ; onglet XML ou HTML généré ; onglet erreurs.
-5. Corpus de notices UNIMARC.
-6. Au moins 10 exercices progressifs.
-7. Validation fondée sur le résultat, pas sur une solution XSLT unique.
-8. Aide UNIMARC limitée aux zones des exercices.
-9. Aide-mémoire XSLT/XPath.
-10. Sauvegarde automatique locale et réinitialisation.
-11. Gestion pédagogique multifichier, au minimum `main.xsl -> xsl:include -> utils.xsl`.
-12. Générateur de prompt LLM sans appel API.
-13. Interface clavier et accessibilité visée WCAG 2.2 AA / RGAA pertinent.
+5. Corpus de fichiers XML et de feuilles de styles XSLT pour le mode libre
+6. Au moins 10 exercices progressifs (fichiers XML et XSLT) pour le parcours guidé.
+7. Corpus de notices UNIMARC pour le mode XSLT Koha
+8. Feuilles de style XSLT Koha récentes et officielles pour le mode XSLT Koha
+9. Validation fondée sur le résultat, pas sur une solution XSLT unique.
+10. Aide-mémoire XSLT/XPath.
+11. Sauvegarde automatique locale et réinitialisation.
+12. Gestion pédagogique multifichier, au minimum `main.xsl -> xsl:include -> utils.xsl`.
+13. Générateur de prompt LLM sans appel API.
+14. Interface clavier et accessibilité visée WCAG 2.2 AA / RGAA pertinent.
 
 ## 6. Exercices MVP
 
@@ -92,11 +87,42 @@ Aucun contenu des éditeurs n'est transmis par défaut. Toute télémétrie futu
 
 ## 8. Hors périmètre MVP
 
-Backend, comptes, base de données, collaboration, exécution Perl, connexion à Koha, émulation exacte de `ExpandCodedFields`, MARC21, XSLT 2/3, API LLM, éditeur MARC complet.
+Backend, comptes, base de données, collaboration, exécution Perl, connexion à Koha, émulation exacte de `ExpandCodedFields`, MARC21, XSLT 2/3, API LLM, éditeur MARC complet, assistance ou documentation sur le format UNIMARC ou les normes de catalogage, validation du schéma MARCXML à la saisie.
 
 ## 9. Critères d'acceptation MVP
 
-Depuis l'URL GitHub Pages, un utilisateur doit pouvoir ouvrir un exercice, modifier XML/XSLT, transformer, voir résultat ou erreur, obtenir des indices, valider l'exercice, restaurer sa progression après rechargement, consulter l'aide et effectuer un exercice multifichier. Tout doit fonctionner sans compte ni backend.
+Depuis l'URL GitHub Pages, un utilisateur doit pouvoir :  
+- sélectionner chacun des 3 modes (libre, parcours guidé, xslt Koha)
+- passer d'un mode à l'autre
+
+Pour le mode parcours guidé un utilisateur doit pouvoir :
+- ouvrir un exercice
+- obtenir des indices
+- obtenir la solution
+- appliquer la transformation
+- valider l'exercice
+- restaurer sa progression après rechargement,
+
+Pour le mode libre un utilisateur doit pouvoir : 
+- sélectionner un fichier XML et une feuille XSLT présentes dans le dépot
+- modifier ces fichiers dans les éditeurs XML et XSLT
+- saisir ex nihilo du code XML et XSLT
+- appliquer la transformation
+- voir le résultat (aperçu HTML, code XML ou HTML généré, erreurs éventuelles)
+
+Pour le mode XSLT Koha un utilisateur doit pouvoir : 
+- sélectionner depuis un menu une notice MARCXML présente dans le dépot
+- modifier la notice MARCXML dans l'éditeur
+- saisir ex nihilo une notice MARCXML
+- choisir un type de transformation correspondant aux 4 affichages Koha : Détail OPAC, Liste OPAC, Détail interface pro ou Liste interface pro
+- appliquer la transformation
+- voir le résultat (aperçu HTML, code XML ou HTML généré, erreurs éventuelles)
+
+Tout doit fonctionner sans compte ni backend.
+
+L'application doit être accessible, en particulier être utilisable au clavier.
+
+Pour le MVP pas de recherche d'affichage sur smartphone ni tablette.
 
 ## 10. Mesures de qualité
 
