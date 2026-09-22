@@ -12,10 +12,10 @@ Construire un laboratoire pédagogique statique XSLT 1.0 pour Koha/UNIMARC, dép
 6. Dépendances minimales.
 
 ## Règles impératives
-- Lire `PRD.md`, `ARCHITECTURE.md`, `PEDAGOGY.md` et `TEST_PLAN.md` avant une modification substantielle.
+- Lire `PRD.md`, `ARCHITECTURE.md`, `PEDAGOGY.md`,`DATA_FORMATS.md` et `TEST_PLAN.md` avant une modification substantielle.
 - Ne pas commencer l'UI complète avant d'avoir terminé le spike moteur et ADR-001.
-- Cibler XSLT 1.0 dans le contenu pédagogique.
-- Utiliser UNIMARC en V1 ; ne pas introduire MARC21 sans demande explicite.
+- Cibler XSLT 1.0, éviter à tout prix les versons ultérieures
+- Utiliser UNIMARC exclusivement ; ne pas introduire MARC21 sans demande explicite.
 - Ne jamais prétendre émuler exactement Koha si ce n'est pas le cas.
 - Ne jamais envoyer XML/XSLT utilisateur vers un service distant.
 - Isoler le HTML transformé dans un iframe sandboxé.
