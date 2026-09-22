@@ -1,16 +1,13 @@
 # ADR-002 — libxslt embarqué en WebAssembly pour l'objectif 2027
 
-## Statut au 18 septembre 2026
+## Statut au 22 septembre 2026
 
-**Orientation retenue pour la migration, validation de production encore incomplète.**
+**Orientation retenue pour la migration générale, validation de production encore incomplète.**
 Cette décision remplace l'orientation native de [l'ADR-001](ADR-001-xslt-engine.md).
-Elle ne signifie pas que la migration a été réalisée : les modes libre et guidé
-utilisent encore `src/transformer/transformer.js` et `XSLTProcessor` natif.
-Depuis le 19 septembre 2026, la copie Wasm corrigée est intégrée uniquement au
-mode XSLT Koha : Worker interruptible, quatre feuilles fixes, URL autorisées
-explicitement. Voir [le périmètre de cette intégration](XSLT_KOHA.md). Les limites
-de l'essai ci-dessous restent la référence pour une migration générale ; le
-succès du troisième mode ne certifie pas les feuilles utilisateur arbitraires.
+Depuis le 22 septembre 2026, les trois modes (libre, guidé, XSLT Koha) utilisent
+la copie Wasm corrigée via un adaptateur Worker commun ; aucun chemin applicatif
+ne repose sur `XSLTProcessor`. Voir [le périmètre Koha](XSLT_KOHA.md) et les
+restrictions explicites de chargement des dépendances en modes libre/guidé.
 
 ## Besoin et raisons du choix
 
@@ -53,9 +50,8 @@ Le [cas minimal](../spike/wasm/fixtures/author-parameter/README.md) et le
 [protocole de reconstruction](../spike/wasm/experimental/README.md) documentent la preuve.
 
 Les appels sont sérialisés car le module Asyncify suspend un seul appel à la fois.
-**Asynchrone ne signifie pas exécuté hors du thread de l'interface** : le calcul
-peut encore bloquer la page dans le spike. L'intégration Koha utilise désormais
-un Worker séparé par appel, terminé après réponse, annulation ou délai de 15 s.
+L'application utilise un Worker séparé par appel pour les trois modes, terminé
+après réponse, erreur, annulation, changement de mode ou délai de 15 s.
 
 ## Preuves et portée de la validation
 
@@ -83,9 +79,9 @@ déclaration XML : l'identité conserve les données testées, pas tous les octe
 | --- | --- |
 | Chromium seul testé | Exécuter la matrice Chrome, Edge, Firefox et Safari retenue pour le produit. Ne pas annoncer la compatibilité 2027 sur la seule base de ce test. |
 | Sous-chemin simulé localement | Tester le véritable hébergement GitHub Pages, les chemins et la politique de sécurité. |
-| Limites générales non validées | Le mode Koha dispose d'un Worker, d'un délai de 15 s et de limites 2 Mio en entrée / 10 Mio en sortie après calcul. La mémoire totale, les sources arbitraires et les appareils limités restent à évaluer. |
+| Limites générales non validées | Les trois modes appliquent 15 s, 2 Mio XML, 2 Mio XSLT et 10 Mio sortie (contrôle après calcul). La mémoire totale, les sources arbitraires et les appareils limités restent à évaluer. |
 | Sources utilisateur arbitraires non auditées | Revoir les options de parsing, notamment `XML_PARSE_HUGE`, les entités et les limites de ressources ; le confinement Wasm ne suffit pas à garantir la robustesse. |
-| Chargeur de ressources expérimental | Définir une liste de ressources autorisées et tester fichiers absents, cycles, redirections, `document()` et accès externes. Le filtre fetch du banc n'est pas le chargeur définitif. |
+| Chargeur de ressources en modes libre/guidé | Politique explicite appliquée : même origine, `.xsl/.xslt`, pas de query/hash, redirections refusées, credentials omis. Tester encore cycles, `document()` et cas limites d’URI dynamiques. |
 | Pas d'aperçu HTML réel dans le banc | Maintenir un iframe sandboxé sans scripts lors de l'intégration. Tester aussi événements, formulaires, navigation et chargements de ressources du résultat. Le test de texte inerte ne prouve pas la sûreté d'un aperçu. |
 | Contexte Koha partiel | Les notices ne reproduisent pas toutes les préférences, variables, exemplaires ni préparations Perl. Valider toute personnalisation dans un Koha de test. |
 | Couverture XSLT limitée | XSLT 1.0 visé ; quelques fonctions EXSLT vérifiées. XSLT 2/3 et les extensions non testées ne sont pas promis. |

@@ -12,10 +12,11 @@ Ce choix permet de conserver XSLT 1.0, les véritables imports Koha et l'héberg
 statique sans transmettre les notices à un serveur. Le retrait annoncé du moteur
 natif rend l'ancienne orientation de l'[ADR-001](ADR-001-xslt-engine.md) insuffisante.
 
-**État actuel :** les modes libre et guidé utilisent encore `XSLTProcessor` natif.
-Le troisième mode XSLT Koha utilise la copie corrigée dans un Worker dédié par
-transformation. Les autres modes ne sont pas encore migrés. Le spike réussit 42/42 contrôles sur
-Chromium avec XSLT natif désactivé, contre 35/42 avant correction.
+**État actuel :** les trois modes utilisent la copie Wasm corrigée via
+`src/transformer/wasm-transformer.js` (orchestrateur) et
+`src/transformer/wasm-worker.js` (exécution). Aucun chemin applicatif ne dépend
+de `XSLTProcessor`. Le spike réussit 42/42 contrôles sur Chromium avec XSLT
+natif désactivé, contre 35/42 avant correction.
 
 Le correctif rétablit le dictionnaire partagé entre feuilles, nécessaire aux
 paramètres des templates importés dans les cas testés. Les feuilles Koha restent
@@ -27,9 +28,9 @@ de pages du polyfill. Les imports restent interprétés par libxslt, sans concat
 
 - Les résultats valident un corpus limité dans Chromium, pas tous les navigateurs,
   tous les usages XSLT ou une émulation complète de Koha.
-- Le mode Koha dispose d'un Worker interruptible (15 s), d'une limite d'entrée de
-  2 Mio et de sortie de 10 Mio. Cette dernière est vérifiée après calcul ; ce
-  n'est pas une limite de mémoire totale. Les feuilles sont fixes, non éditables.
+- Les trois modes utilisent un Worker interruptible (15 s), avec limites 2 Mio XML,
+  2 Mio XSLT et 10 Mio sortie (vérifiée après calcul, pas mémoire totale).
+  Le mode Koha conserve des feuilles fixes non éditables.
 - Le chargeur Koha autorise exactement les six URL des feuilles de référence,
   sans redirections ni identifiants de connexion ; les DOCTYPE des notices sont
   refusés. L'extension à des feuilles arbitraires nécessitera une nouvelle revue.

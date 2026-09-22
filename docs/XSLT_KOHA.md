@@ -4,7 +4,8 @@
 
 Le troisième mode est disponible depuis l'accueil et la barre des modes. Il
 utilise les références officielles UNIMARC de [content/koha/26.05.03](../content/koha/26.05.03/README.md)
-avec le moteur WebAssembly corrigé. Les autres modes utilisent encore le moteur natif.
+avec le moteur WebAssembly corrigé. Les trois modes partagent désormais le même
+adaptateur Worker + Wasm ; le mode Koha garde son périmètre de ressources figées.
 
 ## Utilisation
 
@@ -35,11 +36,12 @@ reconstitue pas une page Koha complète ni ses fonctions interactives.
 Voir [la provenance et la compilation des CSS](../content/koha/26.05.03/preview/README.md).
 
 `src/transformer/koha-styles.js` associe les quatre choix aux fichiers officiels.
-`koha-transformer.js` démarre un Worker par transformation, puis le termine après
-réponse, erreur, changement de mode ou nouvelle transformation. Délai maximal :
-15 secondes ; entrée XML : 2 Mio ; résultat transmis à l'interface : 10 Mio.
-Ces limites ne sont pas un plafond de mémoire interne : la sortie est vérifiée
-après sa production. Les performances et consommations restent à mesurer plus largement.
+`src/transformer/wasm-transformer.js` centralise l’orchestration (Worker par
+transformation, annulation, timeout, limites), et `src/transformer/wasm-worker.js`
+exécute libxslt/libxml2. Le Worker est terminé après réponse, erreur, annulation,
+changement de mode ou nouvelle transformation. Délai maximal : 15 secondes ;
+entrée XML : 2 Mio ; sortie : 10 Mio. Ces limites ne sont pas un plafond de
+mémoire interne : la sortie est vérifiée après sa production.
 
 Le Worker ne charge que les quatre feuilles et leurs deux utilitaires, via une
 liste d'URL exactes sans redirection ni identifiants de connexion. Les DOCTYPE
@@ -47,6 +49,11 @@ des notices sont refusés. L'aperçu est sandboxé sans scripts ; une CSP interd
 les ressources externes et les formulaires. Les liens Koha ne reproduisent pas
 un site Koha opérationnel. Ce périmètre limité ne valide pas l'exécution future
 de feuilles XSLT arbitraires éditées par l'utilisateur.
+
+Pour les modes libre/guidé, le même Worker Wasm est utilisé avec une politique
+explicite : dépendances XSLT uniquement (`.xsl`/`.xslt`), même origine, sans
+query/hash, sans redirection, sans credentials. Les DOCTYPE sont refusés pour
+XML et XSLT ; limites explicites : 2 Mio XML, 2 Mio XSLT, 10 Mio sortie, 15 s.
 
 `tests/koha.browser.cjs` teste les douze couples notice/transformation, la sortie
 colorée, la récupération après XML invalide et dépendance absente, le refus des

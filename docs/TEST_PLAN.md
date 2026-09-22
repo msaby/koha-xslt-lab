@@ -6,6 +6,13 @@ et HTML brut sans ajout de CSS. Les 12 couples notice/style sont exécutés à l
 racine et sous un préfixe GitHub Pages, sans XSLT natif ni requête externe.
 Des captures des quatre aperçus sont produites dans `test-results/` (non versionné).
 
+`node tests/modes-wasm.browser.cjs` vérifie en plus les trois modes à la racine
+et sous `/koha-xslt-lab/` avec XSLT natif désactivé : identité XML, sortie HTML
+et texte, XML/XSLT invalides, imports imbriqués, précédence import/include,
+paramètre transmis à un template importé, dépendance absente, reprise après
+erreur, timeout 15 s, annulation (nouvelle transformation/changement de mode),
+et transitions entre modes.
+
 ## 1. Spike navigateur
 
 Matrice cible Chrome/Firefox/Edge/Safari : parsing MARCXML namespace ; XSLT simple ; templates ; `include` ; `import` ; chemins relatifs ; GitHub Pages. Le spike natif historique est décrit dans ADR-001 ; la migration Wasm et ses limites sont décrites dans [ADR-002](ADR-002-xslt-wasm.md).
@@ -71,7 +78,7 @@ exécutables. Ces contrôles complètent les tests de l'aperçu iframe, sans les
 
 `npm run test:browser` exécute `tests/editors.browser.cjs` avec Playwright Core. Démarrer le serveur HTTP local au préalable. Définir `BROWSER_EXECUTABLE` si le Chromium installé n’est pas celui attendu par Playwright, et éventuellement `LAB_URL` pour tester une autre adresse.
 
-Le scénario vérifie les couleurs distinctes et numéros de ligne des deux entrées, un véritable collage via le presse-papiers, l’annulation, Ctrl+Entrée, les erreurs de transformation, le chargement et la validation d’un exercice, Tab entre éditeurs et l’absence de débordement à 390 pixels. Il vérifie également l’absence d’erreurs JavaScript et de requêtes externes. Une capture mobile est déposée dans `test-results/`, exclu de Git.
+Le scénario vérifie les couleurs distinctes et numéros de ligne des deux entrées, un véritable collage via le presse-papiers, l’annulation, Ctrl+Entrée, les erreurs de transformation, le chargement et la validation d’un exercice, Tab entre éditeurs et l’absence de débordement à 390 pixels. Il vérifie également l’absence de XSLT natif, d’erreurs JavaScript et de requêtes externes. Une capture mobile est déposée dans `test-results/`, exclu de Git.
 
 Vérifié sur le Chromium local le 18 septembre 2026. Les autres navigateurs et technologies d’assistance restent à vérifier.
 
@@ -104,7 +111,7 @@ constituent le corpus historique de la décision ; il précède cet exercice.
 
 Pour chaque exercice : XML + XSLT solution -> résultat attendu. Ajouter des cas : zone absente, répétée, caractères accentués, apostrophes, espaces, namespace manquant.
 
-Les trois tests de `tests/test_example_xslt.py` s’exécutent avec `python -m unittest discover -s tests -v` et nécessitent `lxml`. Ils vérifient les trois présentations HTML sur chaque notice, ainsi que la transformation identité sur les notices et sur un XML contenant champs répétés, ordre inhabituel, attributs, commentaires, espaces et instruction de traitement. Les comparaisons de l’identité utilisent une sérialisation XML canonique. Ces tests avec libxslt complètent les vérifications de `XSLTProcessor` dans les navigateurs.
+Les trois tests de `tests/test_example_xslt.py` s’exécutent avec `python -m unittest discover -s tests -v` et nécessitent `lxml`. Ils vérifient les trois présentations HTML sur chaque notice, ainsi que la transformation identité sur les notices et sur un XML contenant champs répétés, ordre inhabituel, attributs, commentaires, espaces et instruction de traitement. Les comparaisons de l’identité utilisent une sérialisation XML canonique. Ces tests avec libxslt complètent les vérifications navigateur du moteur Wasm.
 
 ## 4. Sécurité
 
