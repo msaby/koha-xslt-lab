@@ -2,7 +2,7 @@ import { kohaStyles } from './koha-styles.js';
 import { cancelWasmTransformation, transformWithWasm } from './wasm-transformer.js';
 
 export function cancelKohaTransformation() {
-  cancelWasmTransformation('Transformation annulée.');
+  cancelWasmTransformation('Transformation annulée.', 'koha');
 }
 
 export function transformKoha(xml, styleId) {
@@ -11,21 +11,20 @@ export function transformKoha(xml, styleId) {
   const style = kohaStyles.find(candidate => candidate.id === styleId);
   const root = new URL('../../', import.meta.url);
   const stylesheetUrl = new URL(style.path, root);
-  const allowedUrls = [stylesheetUrl.href, new URL('UNIMARCslimUtils.xsl', stylesheetUrl).href];
-  return fetch(stylesheetUrl.href, { credentials: 'omit', redirect: 'error' })
-    .then(response => {
-      if (!response.ok) throw new Error(`Feuille Koha inaccessible : HTTP ${response.status}`);
-      return response.text();
-    })
-    .then(stylesheet => transformWithWasm({
-      xml,
-      stylesheet,
-      stylesheetUrl: stylesheetUrl.href,
-      policy: { type: 'exact', allowedUrls },
-      xmlLabel: 'les notices Koha',
-      stylesheetLabel: 'les feuilles Koha',
-      rejectStylesheetDoctype: false
-    }))
+  const allowedUrls = kohaStyles.flatMap(candidate => {
+    const url = new URL(candidate.path, root);
+    return [url.href, new URL('UNIMARCslimUtils.xsl', url).href];
+  });
+  return transformWithWasm({
+    xml,
+    stylesheetUrl: stylesheetUrl.href,
+    fetchStylesheet: true,
+    policy: { type: 'exact', allowedUrls },
+    xmlLabel: 'les notices Koha',
+    stylesheetLabel: 'les feuilles Koha',
+    rejectStylesheetDoctype: false,
+    cancelKey: 'koha'
+  })
     .then(result => result.content)
     .catch(error => Promise.reject(error instanceof Error ? error : new Error(String(error))));
 }

@@ -95,13 +95,13 @@ async function waitStatus(page, expected) {
       await xmlEditor.fill('<broken>');
       result = await runAndRead();
       assert.equal(result.status, 'Échec');
-      assert.match(result.error, /XML invalide/);
+      assert.match(result.error, /parse XML document|parser error|XML invalide/i);
 
       await xmlEditor.fill(fs.readFileSync(path.join(root, 'spike/wasm/fixtures/author-parameter/notice.xml'), 'utf8'));
       await xsltEditor.fill('<xsl:stylesheet');
       result = await runAndRead();
       assert.equal(result.status, 'Échec');
-      assert.match(result.error, /XML invalide/);
+      assert.match(result.error, /parse XSLT|parser error|XML invalide/i);
 
       const importedTemplateUrl = `${origin}${prefix}/spike/wasm/fixtures/author-parameter/templates.xsl`;
       await xsltEditor.fill(

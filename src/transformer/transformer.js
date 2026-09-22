@@ -9,7 +9,7 @@ async function loadText(url) {
 }
 
 export function cancelTransformation() {
-  cancelWasmTransformation('Transformation annulée.');
+  cancelWasmTransformation('Transformation annulée.', 'regular');
 }
 
 export async function transformSources(
@@ -29,7 +29,8 @@ export async function transformSources(
     params,
     policy: { type: 'same-origin-stylesheet' },
     xmlLabel: 'la notice MARCXML',
-    stylesheetLabel: 'la feuille XSLT'
+    stylesheetLabel: 'la feuille XSLT',
+    cancelKey: 'regular'
   });
   return content;
 }

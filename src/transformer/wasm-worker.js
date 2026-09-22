@@ -14,7 +14,8 @@ function buildFetchGuard(policy, root) {
   const allowed = new Set(policy.allowedUrls || []);
   const rootUrl = new URL(root);
   return async (input, options = {}) => {
-    const method = options.method || (input && input.method) || 'GET';
+    const method = (options.method || (input && input.method) || 'GET').toUpperCase();
+    const signal = options.signal || (input && input.signal);
     if (method !== 'GET') throw new Error('Méthode de chargement non autorisée.');
     const url = guardUrl(input, rootUrl);
     if (!/^https?:$/.test(url.protocol)) throw new Error('Schéma d’URL non autorisé.');
@@ -27,7 +28,7 @@ function buildFetchGuard(policy, root) {
     } else {
       throw new Error('Politique de chargement inconnue.');
     }
-    const response = await originalFetch(url.href, { credentials: 'omit', redirect: 'error' });
+    const response = await originalFetch(url.href, { credentials: 'omit', redirect: 'error', signal });
     if (!response.ok) throw new Error(`Ressource inaccessible : HTTP ${response.status}`);
     return response;
   };
@@ -42,6 +43,9 @@ self.onmessage = async ({ data }) => {
     params = {},
     policy,
     outputLimitBytes = 10 * 1024 * 1024,
+    stylesheetLimitBytes = 2 * 1024 * 1024,
+    rejectStylesheetDoctype = true,
+    fetchStylesheet = false,
     root = self.location.href
   } = data;
   let engine;
@@ -74,13 +78,19 @@ self.onmessage = async ({ data }) => {
       paramPointers.push(namePointer, valuePointer);
     }
     if (paramArrayPointer) {
-      const heap32 = new Int32Array((engine.wasmMemory || engine.HEAPU8).buffer);
+      const heap32 = engine.HEAP32 || new Int32Array((engine.wasmMemory || engine.HEAPU8).buffer);
       const base = paramArrayPointer / 4;
       for (const [index, pointer] of paramPointers.entries()) heap32[base + index] = pointer;
       heap32[base + paramPointers.length] = 0;
     }
+    const stylesheetContent = fetchStylesheet
+      ? await (await fetch(stylesheetUrl)).text()
+      : stylesheet;
+    const stylesheetSize = textEncoder.encode(stylesheetContent).length;
+    if (stylesheetSize > stylesheetLimitBytes) throw new Error('La feuille XSLT dépasse la limite autorisée.');
+    if (rejectStylesheetDoctype && /<!DOCTYPE/i.test(stylesheetContent)) throw new Error('Les déclarations DOCTYPE ne sont pas acceptées pour la feuille XSLT.');
     const [xmlPointer, xmlLength] = bytes(xml);
-    const [xslPointer, xslLength] = bytes(stylesheet);
+    const [xslPointer, xslLength] = bytes(stylesheetContent);
     const [urlPointer] = bytes(stylesheetUrl);
     const mimeBuffer = engine._malloc(128);
     if (!mimeBuffer) throw new Error('Mémoire WebAssembly insuffisante.');
@@ -92,8 +102,10 @@ self.onmessage = async ({ data }) => {
     if (!output) throw new Error(diagnostics.join('\n') || 'Échec de la transformation WebAssembly.');
     const bytesView = heap();
     let end = output;
-    while (bytesView[end] !== 0) end += 1;
-    if (end - output > outputLimitBytes) throw new Error('Le résultat dépasse la limite autorisée.');
+    while (bytesView[end] !== 0) {
+      end += 1;
+      if (end - output > outputLimitBytes) throw new Error('Le résultat dépasse la limite autorisée.');
+    }
     const content = textDecoder.decode(bytesView.subarray(output, end));
     self.postMessage({ content, mimeType: engine.UTF8ToString(mimeBuffer) });
   } catch (error) {
