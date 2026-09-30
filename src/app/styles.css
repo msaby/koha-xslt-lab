@@ -13,7 +13,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-body { margin: 0; min-width: 20rem; color: var(--ink); background: radial-gradient(circle at 12% 0%, #fffdf6 0, var(--paper) 38%, #e8eee9 100%); }
+body { margin: 0; min-width: 20rem; color: var(--ink); background: var(--panel); }
 button, textarea { font: inherit; }
 .topbar { display: flex; flex-direction: column; align-items: stretch; gap: .75rem; width: 100%; padding: 1.25rem 5vw; border-bottom: 1px solid var(--line); }
 .topbar-side { display: flex; justify-content: space-between; align-items: center; gap: 1rem; width: 100%; }
