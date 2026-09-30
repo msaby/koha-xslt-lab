@@ -4,7 +4,7 @@
 
 Le troisième mode est disponible depuis l'accueil et la barre des modes. Il
 utilise les références officielles UNIMARC de [content/koha/26.05.03](../content/koha/26.05.03/README.md)
-avec le moteur WebAssembly corrigé. Les autres modes utilisent encore le moteur natif.
+avec le moteur WebAssembly officiel xslt-polyfill 1.0.30. Les autres modes utilisent encore le moteur natif.
 
 ## Utilisation
 
@@ -64,7 +64,7 @@ Les feuilles sont issues des répertoires `en` de l’archive : décider ultéri
 ## Constats techniques avant conception
 
 1. Les quatre feuilles compilent avec leurs dépendances sous `lxml` / libxslt et
-   fonctionnent dans Chromium avec la copie Wasm corrigée, y compris les fonctions
+   fonctionnent dans Chromium avec la version Wasm amont, y compris les fonctions
    EXSLT utilisées sur le corpus testé. La matrice des autres navigateurs reste à compléter.
 2. Les XPath des feuilles lisent notamment `marc:sysprefs`, `marc:variables` et, pour les exemplaires, le namespace `http://www.koha-community.org/items`. Une notice MARCXML simple ne fournit pas tout ce contexte.
 3. L’inspection de `C4/XSLT.pm` dans l’archive montre une préparation de la notice avec `ExpandCodedFields`, puis l’ajout de préférences, variables et, selon le contexte, données d’exemplaires avant transformation. Ce fichier Perl a été consulté ; il n’est pas copié ni exécuté dans le laboratoire.

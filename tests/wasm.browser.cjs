@@ -4,8 +4,6 @@ const path = require('node:path');
 const http = require('node:http');
 const { chromium } = require('playwright-core');
 const root = path.resolve(__dirname, '..');
-const variant = process.env.WASM_VARIANT || 'vendor';
-assert.ok(['vendor', 'original', 'patched'].includes(variant));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.xsl': 'application/xml', '.xml': 'application/xml' };
 const server = http.createServer((req, res) => {
   const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname).replace(/^\/koha-xslt-lab\//, '/');
@@ -32,12 +30,9 @@ const server = http.createServer((req, res) => {
       page.on('pageerror', error => errors.push(error.message));
       await page.route('**/*', route => {
         if (new URL(route.request().url()).origin !== origin) { external.push(route.request().url()); return route.abort(); }
-        if (variant === 'original' && route.request().url().endsWith('/vendor/xslt-polyfill.min.js')) {
-          return route.fulfill({ contentType: 'text/javascript', body: fs.readFileSync(path.join(root, `spike/wasm/experimental/${variant}.js`)) });
-        }
         return route.continue();
       });
-      await page.goto(`${origin}${prefix}/spike/wasm/${variant === 'patched' ? 'patched' : 'index'}.html`);
+      await page.goto(`${origin}${prefix}/spike/wasm/index.html`);
       const deadline = Date.now() + 90000;
       while (!(await page.evaluate(() => Boolean(window.wasmReport)))) {
         if (Date.now() > deadline) throw new Error(`Timeout: ${errors.join('; ')}`);
@@ -45,9 +40,9 @@ const server = http.createServer((req, res) => {
       }
       const report = await page.evaluate(() => window.wasmReport);
       report.browser = browser.version(); report.pageErrors = errors; report.externalRequests = external;
-      report.variant = variant;
+      report.variant = 'upstream-1.0.30';
       fs.mkdirSync(path.join(root, 'test-results'), { recursive: true });
-      fs.writeFileSync(path.join(root, `test-results/wasm${variant === 'vendor' ? '' : '-' + variant}${prefix ? '-subpath' : ''}.json`), JSON.stringify(report, null, 2));
+      fs.writeFileSync(path.join(root, `test-results/wasm${prefix ? '-subpath' : ''}.json`), JSON.stringify(report, null, 2));
       console.log(JSON.stringify({ prefix, passed: report.passed, failed: report.failed, probe: report.probe, errors, failures: report.cases.filter(c => !c.passed), fatal: report.errors }, null, 2));
       assert.equal(report.probe.nativeAvailable, false, 'Native XSLT must be disabled');
       assert.ok(report.probe.wasmCompilations > 0, 'Real WebAssembly compilation required');
@@ -57,6 +52,6 @@ const server = http.createServer((req, res) => {
       assert.deepEqual(external, []);
       await page.close();
     }
-    assert.equal(failures, variant === 'original' ? 14 : 0, 'Comparison failures: see both reports in test-results');
+    assert.equal(failures, 0, 'Comparison failures: see both reports in test-results');
   } finally { if (browser) await browser.close(); server.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

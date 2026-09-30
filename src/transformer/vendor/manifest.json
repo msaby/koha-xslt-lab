@@ -1,9 +1,8 @@
 {
-  "input": "spike/wasm/experimental/patched.js",
-  "inputSha256": "4c5e186c41b9633cf2645f063898211a816c9f9c93608ba3f38357b7b35d622b",
+  "input": "spike/wasm/vendor/xslt-polyfill.min.js",
+  "inputSha256": "6ad580316e69fcdd58aa7e937726aea3b2ff88da23b84cb8c951719fbc01d249",
   "output": "src/transformer/vendor/koha-xslt-wasm.js",
-  "outputSha256": "56a0b0ed309a67fec0cb0859e406f95676bc756f115914bc50791bd266438f34",
-  "bytes": 1497145,
-  "upstreamManifest": "spike/wasm/vendor/manifest.json",
-  "buildManifest": "spike/wasm/experimental/manifest.json"
+  "outputSha256": "83473cfacd5c97df27391107705333a415cc66fb1f0c1786349d3468f96a9008",
+  "bytes": 1436966,
+  "upstreamManifest": "spike/wasm/vendor/manifest.json"
 }

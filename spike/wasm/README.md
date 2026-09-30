@@ -1,5 +1,17 @@
 # Essai limité XSLT WebAssembly
 
+## Validation de la version amont 1.0.30, 30 septembre 2026
+
+Le bundle officiel au commit `9ee67e848ef8ce2ad3b0bac4814b5a87db38a939`
+réussit **42/42 contrôles** à la racine et sous `/koha-xslt-lab/` dans Chromium,
+avec XSLT natif désactivé. Le mode Koha réussit ses 12 transformations sur
+chacun des deux chemins, y compris les auteurs des vues détaillées. Le moteur
+du projet est désormais extrait de ce bundle sans patch local. Le cas minimal
+des paramètres importés reste dans le banc de régression.
+
+Les résultats ci-dessous décrivent l'expérience historique du 18 septembre
+sur la version 1.0.28 ; ils ne décrivent plus le moteur embarqué actuel.
+
 ## Conclusion après correction du 18 septembre 2026
 
 **42/42 contrôles réussis avec la copie corrigée**, XSLT natif désactivé,
@@ -9,10 +21,9 @@ La copie témoin reconstruite avec les mêmes outils reproduit les sept échecs
 le chargeur de dépendances. Les paramètres importés et les vues Koha passent
 désormais les comparaisons, sans modifier les feuilles officielles.
 
-Ouvrir [le banc corrigé](patched.html), ou consulter la
-[procédure de reconstruction et de comparaison](experimental/README.md).
+Les rapports de cette comparaison historique sont conservés dans `results/`.
 Cette réussite ne remplace pas la validation des autres navigateurs et des
-ressources utilisateur arbitraires. L'application principale reste inchangée.
+ressources utilisateur arbitraires.
 
 ## Résultats initiaux, avant correction
 
@@ -41,7 +52,7 @@ sur chacune des trois notices. Le bloc `results_summary author main_author`
 présent dans la référence libxslt manque dans le résultat Wasm. Les six vues
 brèves passent la comparaison. À ce stade, la cause précise restait à isoler ;
 ni les feuilles officielles ni les résultats attendus n'ont été modifiés pour la masquer.
-Le test du bundle amont termine volontairement en échec tant que ces écarts subsistent.
+Le bundle amont 1.0.28 échouait ; la version 1.0.30 corrige ces écarts.
 
 ## Exécuter
 
@@ -66,11 +77,11 @@ transformations navigateur : les résultats de référence sont des fichiers sta
 ## Moteur et provenance
 
 Le bundle officiel de [xslt_polyfill](https://github.com/mfreed7/xslt_polyfill),
-version 1.0.28, est figé au commit `75d5220d1f3473f1fb79b036b839c344c465b703`.
+version 1.0.30, est figé au commit `9ee67e848ef8ce2ad3b0bac4814b5a87db38a939`.
 Il contient libxml2/libxslt compilés en Wasm avec Asyncify. Les fichiers amont
 sont conservés sans modification dans `vendor/`, avec sources d'enveloppe,
 licences et empreintes dans `vendor/manifest.json`.
-Le fichier chargé pèse 1 454 266 octets avant compression HTTP.
+Le fichier chargé pèse 1 456 506 octets avant compression HTTP.
 
 L'essai utilise la fabrique Wasm et un petit adaptateur **asynchrone** (`engine.js`).
 Il n'installe pas le remplacement synchrone de `XSLTProcessor` ni la transformation
@@ -96,5 +107,5 @@ Les transformations sont mises en file, car Asyncify suspend un seul appel à la
   absentes et documents externes, prévoir un Worker interruptible et des limites
   de ressources, puis vérifier les navigateurs cibles et la maintenance du moteur.
 
-Le moteur de l'application principale reste inchangé. Cet essai ne rend donc
-pas encore l'application principale compatible avec la suppression de XSLT natif.
+Le mode Koha de l'application utilise le moteur Wasm amont. Les modes libre et
+guidé utilisent encore XSLT natif.

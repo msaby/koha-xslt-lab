@@ -1,7 +1,7 @@
 {
   "source": "https://github.com/mfreed7/xslt_polyfill",
-  "commit": "75d5220d1f3473f1fb79b036b839c344c465b703",
-  "version": "1.0.28",
+  "commit": "9ee67e848ef8ce2ad3b0bac4814b5a87db38a939",
+  "version": "1.0.30",
   "libxml2": "c34742f3017f6d39f3e4ccae4f70172238160ef8",
   "libxslt": "923903c59d668af42e3144bc623c9190a0f65988",
   "files": [
@@ -27,38 +27,38 @@
     },
     {
       "name": "Makefile",
-      "bytes": 3361,
-      "sha256": "858a705c6c1c7c7e4c512b315de9b32ad4e3041546dacec0a28013f1e675a42d"
+      "bytes": 3454,
+      "sha256": "e1a2989faec1aa0ebe819220d231f5f7f2f98768a404910377d1f7ea2bd70142"
     },
     {
       "name": "package.json",
-      "bytes": 992,
-      "sha256": "07d31b7ed9af4514a882c44c4dcacc9c3630d912522cb3f0c47c3c4832387605"
+      "bytes": 1034,
+      "sha256": "52805c846862da1782f63c312498123f7f15203e3eeba84e1a67ec81c71e73e5"
     },
     {
       "name": "README.md",
-      "bytes": 11681,
-      "sha256": "d594d931e169a53a1809513daff776b8a2862d1710c85d55defc7b6f0b4c27c3"
+      "bytes": 12348,
+      "sha256": "ecf9750b62de14b86c53baa46d74b4593137aeb226d723c5ab7981ba6203c173"
     },
     {
       "name": "REVISION",
-      "bytes": 40,
-      "sha256": "204962ea6ff18450d2fa0f7879d97c4eaab77508495ddd31f79c9c1fa553e38a"
+      "bytes": 42,
+      "sha256": "acd782118e28bcb4dacae0348d5162fc32da91a0a58a96ba496e90c75d5ce199"
     },
     {
       "name": "transform.c",
-      "bytes": 23409,
-      "sha256": "061abac9e2fb764ee4a3639140dba13e38380830bf071d746d7e43a1dbf7b892"
+      "bytes": 24689,
+      "sha256": "f1284c38bf49f00425c1a96acdbc7c7ea1004eee7477c0e1b7ab4e6a327df89b"
     },
     {
       "name": "xslt-polyfill-src.js",
-      "bytes": 44816,
-      "sha256": "647ac2b60c9daae6b2bd82d046bd144cf2c75b1ed5638a1d3627307d5c378e0a"
+      "bytes": 46419,
+      "sha256": "b91d82bfe4a69e0433bf247dd5b087fe792c44acde1dbf56ac86802e56ae58dd"
     },
     {
       "name": "xslt-polyfill.min.js",
-      "bytes": 1454266,
-      "sha256": "294c3572a9ccd6decf451e6b527a3f013b774e4ef1f298a671dd8291af428044"
+      "bytes": 1456506,
+      "sha256": "6ad580316e69fcdd58aa7e937726aea3b2ff88da23b84cb8c951719fbc01d249"
     }
   ]
 }

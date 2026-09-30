@@ -13,11 +13,8 @@ Matrice cible Chrome/Firefox/Edge/Safari : parsing MARCXML namespace ; XSLT simp
 ### Banc WebAssembly existant
 
 `tests/wasm.browser.cjs` démarre son propre serveur HTTP et teste la racine puis
-`/koha-xslt-lab/`. Définir `BROWSER_EXECUTABLE` vers Chromium et `WASM_VARIANT` :
-
-- `patched` : exige 42/42 contrôles réussis avec la copie corrigée ;
-- `original` : exige la reproduction des sept écarts par chemin dans le témoin reconstruit ;
-- variable absente : teste le bundle amont, dont les sept écarts font échouer le runner.
+`/koha-xslt-lab/`. Définir `BROWSER_EXECUTABLE` vers Chromium. Le bundle
+officiel xslt-polyfill 1.0.30 doit réussir les 42 contrôles sur chaque chemin.
 
 Le runner désactive XSLT natif, vérifie son absence, une compilation Wasm réelle,
 l'absence d'erreurs JavaScript de page et de requêtes externes. Les rapports
@@ -32,7 +29,7 @@ d'un aperçu iframe. Les notices Koha n'incluent pas tout le contexte enrichi.
 
 ### Conditions d'acceptation de la migration en production
 
-- Réussite du corpus corrigé et des parcours libre/guidé sur les navigateurs retenus,
+- Réussite du corpus et des parcours libre/guidé sur les navigateurs retenus,
   sans recours au moteur natif ; même vérification sur le déploiement GitHub Pages réel.
 - Cas de dépendance absente, cycle, redirection, URI interdite et `document()` ;
   vérifier aussi qu'aucune donnée saisie ne peut être transmise par une URI construite.
@@ -43,7 +40,7 @@ d'un aperçu iframe. Les notices Koha n'incluent pas tout le contexte enrichi.
   lors de transformations répétées ; essais sur appareils aux ressources limitées.
 - Aperçu réel : scripts, événements, navigation, formulaires et ressources externes
   confinés selon la politique définie. Un résultat HTML ne doit pas accéder au DOM hôte.
-- Relecture du correctif, traçabilité des artefacts et procédure de mise à jour
+- Traçabilité des artefacts et procédure de mise à jour
   documentées. Rejouer les régressions après toute mise à jour du moteur.
 
 Ces conditions sont à vérifier ; les 42 succès actuels ne les valident pas toutes.

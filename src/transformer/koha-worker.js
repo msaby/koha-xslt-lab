@@ -31,8 +31,9 @@ self.onmessage = async ({ data: { xml, styleId } }) => {
       const pointer = engine._malloc(data.length + 1);
       if (!pointer) throw new Error('Mémoire insuffisante.');
       pointers.push(pointer);
-      engine.HEAPU8.set(data, pointer);
-      engine.HEAPU8[pointer + data.length] = 0;
+      const memory = new Uint8Array((engine.wasmMemory || engine.HEAPU8).buffer);
+      memory.set(data, pointer);
+      memory[pointer + data.length] = 0;
       return [pointer, data.length];
     }
     const [xmlPointer, xmlLength] = bytes(xml);

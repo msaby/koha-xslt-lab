@@ -7,17 +7,17 @@ Application statique : HTML/CSS/JavaScript + ressources JSON/XML/XSL. Un outil d
 ## 2. Moteur retenu pour 2027 et état de l'intégration
 
 L'[ADR-002 — moteur WebAssembly](ADR-002-xslt-wasm.md) retient **libxslt/libxml2
-embarqués dans le navigateur**, avec un correctif local du chargeur de dépendances.
+embarqués dans le navigateur** via xslt-polyfill 1.0.30.
 Ce choix permet de conserver XSLT 1.0, les véritables imports Koha et l'hébergement
 statique sans transmettre les notices à un serveur. Le retrait annoncé du moteur
 natif rend l'ancienne orientation de l'[ADR-001](ADR-001-xslt-engine.md) insuffisante.
 
 **État actuel :** les modes libre et guidé utilisent encore `XSLTProcessor` natif.
-Le troisième mode XSLT Koha utilise la copie corrigée dans un Worker dédié par
+Le troisième mode XSLT Koha utilise le moteur amont dans un Worker dédié par
 transformation. Les autres modes ne sont pas encore migrés. Le spike réussit 42/42 contrôles sur
-Chromium avec XSLT natif désactivé, contre 35/42 avant correction.
+Chromium avec XSLT natif désactivé, sur deux chemins de déploiement.
 
-Le correctif rétablit le dictionnaire partagé entre feuilles, nécessaire aux
+Le correctif amont rétablit le dictionnaire partagé entre feuilles, nécessaire aux
 paramètres des templates importés dans les cas testés. Les feuilles Koha restent
 intactes. L'adaptateur utilise une entrée asynchrone du module Wasm et sérialise
 les transformations ; il ne charge pas les fonctions de remplacement automatique
@@ -36,8 +36,7 @@ de pages du polyfill. Les imports restent interprétés par libxslt, sans concat
 - L'aperçu partagé reste sandboxé sans scripts et impose une CSP interdisant
   les ressources externes et les formulaires. La fidélité visuelle complète de
   Koha et la validation de tous les navigateurs restent hors de la preuve actuelle.
-- La variante locale impose compilation reproductible, suivi de sécurité et
-  tests à chaque mise à jour. Le correctif n'a pas encore été accepté en amont.
+- La dépendance amont impose suivi de sécurité, provenance et tests à chaque mise à jour.
 
 Les conditions détaillées de production, le coût du moteur et les raisons du
 choix sont consignés dans l'ADR-002. La disponibilité native ne doit pas masquer
