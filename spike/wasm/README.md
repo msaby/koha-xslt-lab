@@ -6,39 +6,10 @@ Le bundle officiel au commit `9ee67e848ef8ce2ad3b0bac4814b5a87db38a939`
 réussit **42/42 contrôles** à la racine et sous `/koha-xslt-lab/` dans Chromium,
 avec XSLT natif désactivé. Le mode Koha réussit ses 12 transformations sur
 chacun des deux chemins, y compris les auteurs des vues détaillées. Le moteur
-du projet est désormais extrait de ce bundle sans patch local. Le cas minimal
+du projet est extrait de ce bundle. Le cas minimal
 des paramètres importés reste dans le banc de régression.
 
-Les résultats ci-dessous décrivent l'expérience historique du 18 septembre
-sur la version 1.0.28 ; ils ne décrivent plus le moteur embarqué actuel.
-
-## Conclusion après correction du 18 septembre 2026
-
-**42/42 contrôles réussis avec la copie corrigée**, XSLT natif désactivé,
-dans Chromium 153.0.8010.12, à la racine et sous `/koha-xslt-lab/`.
-La copie témoin reconstruite avec les mêmes outils reproduit les sept échecs
-(35/42). Le changement testé rétablit le dictionnaire partagé de libxml2 dans
-le chargeur de dépendances. Les paramètres importés et les vues Koha passent
-désormais les comparaisons, sans modifier les feuilles officielles.
-
-Les rapports de cette comparaison historique sont conservés dans `results/`.
-Cette réussite ne remplace pas la validation des autres navigateurs et des
-ressources utilisateur arbitraires.
-
-## Résultats initiaux, avant correction
-
-**Faisabilité démontrée, candidat non validé pour une intégration générale.**
-Dans Chromium 153.0.8010.12, avec `--disable-blink-features=XSLT`, le banc obtient
-**35 réussites sur 41 contrôles**, à la racine comme sous `/koha-xslt-lab/`.
-Une compilation WebAssembly est observée, l'API XSLT native est absente,
-aucune requête externe et aucune erreur JavaScript de page ne sont observées.
-Les rapports conservés sont dans `results/`.
-
-Ajout d'un [cas minimal de paramètres importés](fixtures/author-parameter/README.md) :
-le bilan avant correction est **35/42**, le nouveau contrôle reproduisant le défaut.
-Les paramètres restent corrects dans un template local, mais arrivent vides
-dans le template importé, quelle que soit leur forme (fragment, chaîne, nombre).
-Les rapports `results/` incluent désormais ce diagnostic et ses sorties complètes.
+## Résultats du banc
 
 Les quatre solutions d'exercices, les douze couples notice/feuille d'exemple,
 l'identité (ordre, espaces internes, commentaires, instruction de traitement),
@@ -47,12 +18,9 @@ imbriquées, les fonctions EXSLT testées et la sortie texte passent.
 Les trois erreurs attendues, la reprise et la sérialisation des appels simultanés passent aussi.
 Le résultat HTML reste du texte : son JavaScript n'est jamais injecté dans la page.
 
-Les six écarts sont les vues **OPAC détail et interface professionnelle détail**,
-sur chacune des trois notices. Le bloc `results_summary author main_author`
-présent dans la référence libxslt manque dans le résultat Wasm. Les six vues
-brèves passent la comparaison. À ce stade, la cause précise restait à isoler ;
-ni les feuilles officielles ni les résultats attendus n'ont été modifiés pour la masquer.
-Le bundle amont 1.0.28 échouait ; la version 1.0.30 corrige ces écarts.
+Les quatre vues Koha sont comparées sur chacune des trois notices, y compris
+les auteurs des vues détaillées. Le [cas minimal des paramètres importés](fixtures/author-parameter/README.md)
+fait partie du banc.
 
 ## Exécuter
 

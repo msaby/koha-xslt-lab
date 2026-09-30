@@ -45,12 +45,9 @@ des pages XML du polyfill. Les imports sont chargés relativement à l'URL réel
 de la feuille et interprétés par libxslt ; aucune concaténation de feuilles
 ni substitution d'`import` par `include` n'est autorisée.
 
-Le chargeur de la version 1.0.28 ignorait le dictionnaire libxml2 fourni pour les
-dépendances. Des paramètres transmis à un template importé arrivaient vides.
-La version officielle 1.0.30 partage ce dictionnaire ; aucun patch local n'est
-désormais appliqué. Les feuilles Koha restent intactes.
-Le [cas minimal](../spike/wasm/fixtures/author-parameter/README.md) et le
-[résultats historiques](../spike/wasm/results/) documentent le défaut initial.
+La version officielle 1.0.30 est utilisée sans modification locale. Les feuilles
+Koha restent intactes. Un [cas minimal](../spike/wasm/fixtures/author-parameter/README.md)
+vérifie les paramètres transmis aux templates importés.
 
 Les appels sont sérialisés car le module Asyncify suspend un seul appel à la fois.
 **Asynchrone ne signifie pas exécuté hors du thread de l'interface** : le calcul
@@ -63,12 +60,10 @@ Chromium 153, XSLT natif désactivé, à la racine et sous un sous-chemin local 
 
 | Variante | Résultat par chemin |
 | --- | --- |
-| Version officielle 1.0.28, résultat historique | 35/42 |
 | Version officielle 1.0.30, 30 septembre 2026 | 42/42 |
 
-La correction amont résout le diagnostic de paramètres et six comparaisons Koha
-(OPAC détail et interface professionnelle détail × trois notices). Les autres
-contrôles couvrent notamment identité, exercices, imports imbriqués, précédence,
+Les contrôles couvrent notamment les paramètres des templates importés, les
+quatre vues Koha, l'identité, les exercices, les imports imbriqués, la précédence,
 quelques fonctions EXSLT, sortie texte et reprise après erreur.
 
 Ce sont **42 contrôles du corpus**, pas une certification XSLT ou Koha. La
@@ -100,8 +95,6 @@ politique de même origine ne constitue pas une garantie d'absence d'exfiltratio
 
 L'auteur présente le polyfill comme une solution de transition. Nous suivons
 donc les versions officielles et conservons leurs sources, licences et empreintes.
-Le correctif du dictionnaire est intégré à la version 1.0.30 ; le patch local
-historique a été retiré après validation du banc et du mode Koha.
 
 Avant publication du laboratoire :
 
