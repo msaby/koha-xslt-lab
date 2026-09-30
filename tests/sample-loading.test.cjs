@@ -39,6 +39,7 @@ function setup() {
     renderXmlOutput: (element, source) => { element.textContent = source; },
     kohaStyles: [{ id: 'opac-detail', label: 'Détail OPAC' }],
     cancelKohaTransformation() {},
+    cancelTransformation() {},
     transformKoha: async () => '<h2>Koha</h2>',
     createKohaPreview: async html => html,
     formatOutput: source => source,
@@ -48,7 +49,7 @@ function setup() {
       json: async () => JSON.parse(fs.readFileSync(path.join(root, url), 'utf8')),
       text: async () => fs.readFileSync(path.join(root, url), 'utf8'),
     }),
-    transformSources: () => '<p>Résultat</p>',
+    transformSources: async () => '<p>Résultat</p>',
   });
   vm.runInContext(source, context);
   document.querySelector('#exercise-select').value = 'ex01-identifier';

@@ -4,7 +4,8 @@
   "scripts": {
     "build:editor": "node scripts/build-editor.cjs",
     "test": "node tests/sample-loading.test.cjs && node tests/format-output.test.cjs",
-    "test:browser": "node tests/editors.browser.cjs"
+    "test:browser": "node tests/editors.browser.cjs",
+    "test:browser:wasm": "node tests/modes-wasm.browser.cjs"
   },
   "devDependencies": {
     "@codemirror/commands": "6.11.1",

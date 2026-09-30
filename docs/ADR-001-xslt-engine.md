@@ -3,13 +3,13 @@
 ## Statut
 
 **Décision historique, remplacée pour l'objectif 2027 par l'[ADR-002](ADR-002-xslt-wasm.md).**
-Les modes libre et guidé utilisent encore cette approche en attendant leur migration.
-Les sections suivantes conservent le raisonnement et les observations du spike initial.
+Les trois modes utilisent désormais le moteur WebAssembly. Les sections suivantes
+conservent le raisonnement et les observations du spike natif initial.
 
 Actualisation du 30 septembre 2026 : ce choix ne convient pas à l'objectif 2027
 en raison du retrait annoncé de XSLT natif. Un [essai WebAssembly](../spike/wasm/README.md)
 réussit 42/42 contrôles dans Chromium avec la version officielle 1.0.30,
-qui alimente le mode Koha. La validation des autres navigateurs
+qui alimente les trois modes. La validation des autres navigateurs
 et des limites de ressources reste nécessaire.
 
 ## Contexte
