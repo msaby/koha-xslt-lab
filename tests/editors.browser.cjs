@@ -21,6 +21,21 @@ async function main() {
     await page.goto(base);
     await page.locator('#choose-free-mode').click();
     await page.waitForFunction(() => document.querySelector('#run-status').textContent === 'Transformé');
+    const viewButton = (view) => page.locator(`[data-workspace-view="${view}"]`);
+    await viewButton('editor').click();
+    assert.equal(await page.locator('#result-panel').isVisible(), false);
+    assert.equal(await page.locator('#editor-panel').isVisible(), true);
+    assert.equal(await viewButton('editor').getAttribute('aria-pressed'), 'true');
+    const workspaceWidth = await page.locator('#workspace').evaluate(element => element.getBoundingClientRect().width);
+    const editorWidth = await page.locator('#editor-panel').evaluate(element => element.getBoundingClientRect().width);
+    assert.ok(Math.abs(editorWidth - workspaceWidth) < 2);
+    await viewButton('result').click();
+    assert.equal(await page.locator('#editor-panel').isVisible(), false);
+    assert.equal(await page.locator('#result-panel').isVisible(), true);
+    await viewButton('both').click();
+    assert.equal(await page.locator('#editor-panel').isVisible(), true);
+    assert.equal(await page.locator('#result-panel').isVisible(), true);
+    console.log('OK: each panel can fill the workspace and the two-panel view returns.');
     const xml = page.getByRole('textbox', { name: 'Éditeur MARCXML', exact: true });
     const xslt = page.getByRole('textbox', { name: 'Éditeur XSLT', exact: true });
     for (const id of ['xml-editor', 'xslt-editor']) {

@@ -26,6 +26,20 @@ const modeChoice = document.querySelector("#mode-choice");
 const modeToolbar = document.querySelector("#mode-toolbar");
 const exerciseStrip = document.querySelector("#exercise-strip");
 const workspace = document.querySelector("#workspace");
+const editorPanel = document.querySelector("#editor-panel");
+const resultPanel = document.querySelector("#result-panel");
+const workspaceViewButtons = [...document.querySelectorAll("[data-workspace-view]")];
+for (const button of workspaceViewButtons) {
+  button.addEventListener("click", () => {
+    const view = button.dataset.workspaceView;
+    editorPanel.hidden = view === "result";
+    resultPanel.hidden = view === "editor";
+    workspace.classList.toggle("is-single-panel", view !== "both");
+    for (const candidate of workspaceViewButtons) {
+      candidate.setAttribute("aria-pressed", String(candidate === button));
+    }
+  });
+}
 const chooseFreeModeButton = document.querySelector("#choose-free-mode");
 const chooseGuidedModeButton = document.querySelector("#choose-guided-mode");
 const freeModeButton = document.querySelector("#free-mode-button");

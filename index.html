@@ -64,7 +64,12 @@
       </details>
     </section>
     <main id="workspace" class="workspace" hidden>
-      <section class="editor-panel" aria-labelledby="editor-title">
+      <div class="workspace-view" role="group" aria-label="Affichage du workspace">
+        <button class="workspace-view-button" type="button" data-workspace-view="editor" aria-pressed="false">Agrandir l’éditeur</button>
+        <button class="workspace-view-button" type="button" data-workspace-view="both" aria-pressed="true">Afficher les deux panneaux</button>
+        <button class="workspace-view-button" type="button" data-workspace-view="result" aria-pressed="false">Agrandir le résultat</button>
+      </div>
+      <section id="editor-panel" class="editor-panel" aria-labelledby="editor-title">
         <div class="section-heading">
           <div>
             <p id="workspace-mode-label" class="eyebrow">Laboratoire libre</p>
@@ -108,7 +113,7 @@
         </div>
         <p id="error-summary" class="error-summary" role="alert" hidden></p>
       </section>
-      <section class="result-panel" aria-labelledby="result-title">
+      <section id="result-panel" class="result-panel" aria-labelledby="result-title">
         <div class="section-heading compact">
           <div>
             <p class="eyebrow">Résultat local</p>
