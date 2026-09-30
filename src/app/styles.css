@@ -53,8 +53,8 @@ h2 { margin-bottom: 0; font-size: 1.7rem; font-weight: 500; }
 .exercise-help li { margin: .3rem 0; }
 .solution-help { min-width: 0; }
 .solution-help pre { min-height: 0; margin: .75rem 0; overflow-wrap: anywhere; }
-.workspace { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .85fr); gap: 1px; max-width: 90rem; min-height: calc(100vh - 12rem); margin: 0 auto; background: var(--line); }
-.editor-panel, .result-panel { padding: 2rem 5vw; background: rgba(255, 253, 248, .88); }
+.workspace { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .85fr); gap: 1px; width: 90vw; min-height: calc(100vh - 12rem); margin: 0 5vw; background: var(--line); }
+.editor-panel, .result-panel { padding: 2vw; background: rgba(255, 253, 248, .88); }
 .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 1.25rem; }
 .section-heading.compact { align-items: center; }
 .primary-button { border: 0; border-radius: 2px; padding: .8rem 1rem; color: #fffdf8; background: var(--accent); cursor: pointer; font: 700 .9rem ui-sans-serif, system-ui, sans-serif; }
@@ -109,7 +109,7 @@ textarea:focus, button:focus-visible, select:focus-visible { outline: 3px solid 
 .tab-panel:not(.is-visible) { display: none; }
 iframe { display: block; width: 100%; min-height: 31rem; border: 1px solid var(--line); background: #fff; }
 pre { min-height: 31rem; margin: 0; padding: 1rem; overflow: auto; white-space: pre-wrap; font: .8rem/1.55 Consolas, "Courier New", monospace; }
-@media (max-width: 56rem) { .topbar { align-items: start; flex-direction: column; } .topbar-side { align-items: start; flex-direction: column; } .exercise-strip { grid-template-columns: 1fr; } .workspace { grid-template-columns: 1fr; } .editor-panel, .result-panel { padding: 1.5rem 5vw; } }
+@media (max-width: 56rem) { .topbar { align-items: start; flex-direction: column; } .topbar-side { align-items: start; flex-direction: column; } .exercise-strip { grid-template-columns: 1fr; } .workspace { grid-template-columns: 1fr; } }
 @media (max-width: 38rem) { .section-heading { align-items: start; flex-direction: column; } .editors { grid-template-columns: 1fr; } textarea, .tab-panel, iframe, pre { min-height: 20rem; } }
 @media (max-width: 38rem) { .mode-choice-actions { grid-template-columns: 1fr; } }
 @media (max-width: 38rem) { .sample-pickers { grid-template-columns: 1fr; } }
